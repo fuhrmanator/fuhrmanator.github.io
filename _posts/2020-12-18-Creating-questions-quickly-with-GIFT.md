@@ -51,7 +51,7 @@ I've used this extension to make lots of questions and it works very well.
 
 #### Browser-based GIFT editor
 
-If you don't want to install VSCode, there's also a [light version of an editor](https://fuhrmanator.github.io/GIFT-grammar-PEG.js/docs/editor/editor.html) based on the grammar that runs in a modern web browser. 
+If you don't want to install VSCode, there's also a [light version of an editor](https://fuhrmanator.github.io/GIFT-grammar-PEG.js/editor/editor.html) based on the grammar that runs in a modern web browser. 
 There's no function to save your work, but you copy the contents of the editor and save them to your own text file. 
 It has a drop-down menu of sample questions, and it gives some hints if you have syntax errors. Finally you can preview what your questions look like, and even print the page (to PDF) for a hard-copy of a quiz.
 
