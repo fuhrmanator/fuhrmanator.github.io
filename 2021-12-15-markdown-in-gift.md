@@ -12,9 +12,10 @@ GIFT uses two blank lines to separate questions. Otherwise line breaks are just 
 
 Which should produce a question with the line breaks as follows:
 
-> How much is
-> 
-> 2 + 2
+>How much is
+>
+>2 + 2
+
 
 ### Indentation
 
@@ -32,4 +33,5 @@ In the example above, there's actually the need to specify line breaks *and* ind
 To do it in GIFT, you need to actually paste a non-breaking space (I'm not aware of how one can use `&nbsp;` or some other textual represenation inside GIFT):
 
 ```
-[markdown]Here's a nested list:\n\n- Item A\n  - Item A.1\n  = Item A.2\n-Item B
+[markdown]This is a nested list:\n\n- Item A\n  - Item A.1\n  = Item A.2\n-Item B{TRUE}
+```
