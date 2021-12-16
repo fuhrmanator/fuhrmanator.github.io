@@ -142,8 +142,6 @@ The above GIFT with markdown produces a multiple-choice question that displays l
 
 [![Preview of imported GIFT question in Moodle, markdown format for code blocks in the question stem and answers]({{site.baseurl}}/img/posts/MoodlePreviewCodeBlocksStemAnswers.png){:class="img-responsive"}]({{site.baseurl}}/img/posts/MoodlePreviewCodeBlocksStemAnswers.png)
 
-> There's [apparently another way](https://stackoverflow.com/a/29810608/1168342) to format code blocks in markdown in GIFT without using non-breaking spaces. Maybe it's more intuitive?
-
 To help you as a mere mortal to create the markdown inside GIFT (especially with the non-breaking space in the right place), the VSCode GIFT extension provides a nice feature:
 - Select source code you want to format in markdown for GIFT
 - **<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> > Gift: Escape code block (Markdown)**
