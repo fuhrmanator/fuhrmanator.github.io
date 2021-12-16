@@ -1,57 +1,76 @@
 ---
 layout: post
 comments: true
-published: false
+published: true
 title: Getting the most of markdown in GIFT
-header-img: img/posts/questions.jpg
-background: '/img/posts/questions.jpg'
+header-img: img/posts/MarkdownGIFT.png
+background: '/img/posts/MarkdownGIFT.png'
 ---
 
 ## Getting the most of markdown in GIFT
 
-Markdown is a format supported in GIFT, which can be used for simple formatting text in a question, in answers and feedback:
+Markdown <i class="fab fa-markdown"></i> is a format supported within GIFT (see: [Creating questions quickly in Moodle with GIFT]({% post_url 2020-12-18-Creating-questions-quickly-with-GIFT %})), which can be used for simple formatting text in a question, in answers and feedback:
 
 ```gift
 ::Simple markdown::
-[markdown]If you're standing somewhere on the quator, the **sun** rises in the\: {=*east*#**Super!** ~*west* ~*north* ~*south*}
+[markdown]If you're standing somewhere on the equator, the **sun** 
+rises in the\: {=*east*#**Super!** ~*west* ~*north* ~*south*}
 ```
 
-But, formatting code blocks or nested lists in Moodle requires some deeper understanding, because of differences in formats between GIFT and markdown. The solutions complicate the formatting of GIFT files, so it's recommended to use a smart editor, such as the [GIFT Format Pack extension in VSCode](https://marketplace.visualstudio.com/items?itemName=ethan-ou.vscode-gift-pack).
+But, formatting code blocks or nested lists in Moodle requires some deeper understanding, because of the meanings of characters in the two formats. The solutions require escaping certain characters, and this complicate the GIFT files. The good news is that using a smart editor, such as the [GIFT Format Pack extension in VSCode](https://marketplace.visualstudio.com/items?itemName=ethan-ou.vscode-gift-pack) can make it less painful.
 
 ### Moodle markdown is not GitHub markdown
 
-Please see [Moodle's documentation on markdown](https://docs.moodle.org/311/en/Markdown) for various specificities. There are significant differences from GitHub's markdown (or other flavors), so it's best to look at the Moodle documentation.
+When you want to format questions for Moodle, the markdown is Moodle-specific. 
+Please see [Moodle's documentation on markdown](https://docs.moodle.org/311/en/Markdown) for various specificities. 
+There are differences from GitHub's markdown (see the bulleted list example below), so it's best to look at the Moodle documentation if something's not formatting the way you expect.
+Another trouble is that the Moodle GIFT parser doesn't really care if the text labeled as `[markdown]` is in the right markdown format.
+It's just a tag that gets passed to the question engine (and other parts of Moodle that display it) *after* the GIFT parsing occurs.
 
-### GIFT's control characters
+### Where can I use markdown format in GIFT?
 
-Even when specifying a question stem in markdown format, you might still have to escape GIFT's control characters if they're part of the question stem (or answer or feedback). For example:
+Markdown can be used in a question stem, the text of an answer and even in feedback. 
+But it does not apply to matching answers, which appear in drop-down menus as unformatted text.
+As long as you start a GIFT question (stem) with `[markdown]`, the formatable elements will expect the markdown syntax.
+
+> You can actually specify a different format (markdown, html, etc.) for the stem, each answer and feedback by labeling the respective text with the tag of the format you want. 
+> However, that usage is out of the scope of this blog post.
+
+### Reminder: GIFT's control characters
+
+It's necessary to escape any GIFT control characters in the text, regardless of markdown.
+For example:
 
 ```gift
-::Escaped character that is special::
+::Escaped control character::
 [markdown]Two plus two\: {=four =4}
 ```
 
-Notice the `\:` inside the question stem. This is necessary because `:` is one of [GIFT's special characters `~ = # { } :`](https://docs.moodle.org/311/en/GIFT_format#Special_Characters_.7E_.3D_.23_.7B_.7D), which generally must be escaped. Again, tools will help with this.
+Notice the `\:` inside the question stem. This is necessary because `:` is one of [GIFT's special characters `~ = # { } :`](https://docs.moodle.org/311/en/GIFT_format#Special_Characters_.7E_.3D_.23_.7B_.7D), which generally must be escaped.
+Again, using a tool that understands GIFT will help with this.
+> Escaping is actually not always needed depending on context (I think you don't need to escape `=` in a stem). But since it doesn't hurt to escape control characters when they aren't supposed to take their GIFT meaning, it's simpler to just do it 👑.
 
 ### Line breaks
 
-In GIFT, line breaks are just white space and don't mean anything (unless there are two in succession - a blank line - which means a new question is coming). 
-Since, markdown *does* use line breaks as part of its formatting, there's a way to specify them inside of GIFT. The Moodle parser will convert the text `\n` into a line break (for markdown) after the GIFT import. Here's an example:
+In GIFT, line breaks are considered white space and don't mean anything, unless there are two in succession - a blank line - the separator between questions. 
+Since markdown *does* use line breaks as part of its formatting, there must be a way to escape them so they don't get processed as GIFT.
+The Moodle GIFT parser will convert the text `\n` (two characters) of a markdown text into a line break. Here's an example:
 
 ```
 ::Multi-line question stem::
 [markdown]How much is\n\n2 + 2?{=four =4}
 ```
 
-This should produce a question with the line breaks as follows:
+This produces a question with the line breaks as follows:
 
->How much is
->
->2 + 2
+     How much is
+
+     2 + 2
 
 ### Indentation
 
-Markdown is sensitive to white space when it comes to indentation. For example, nested lists must be indented:
+Markdown is sensitive to white space, e.g. when it comes to indentation. 
+Nested lists, for instance, must be indented:
 
 ```markdown
 - Item A
@@ -60,35 +79,41 @@ Markdown is sensitive to white space when it comes to indentation. For example, 
 - Item B
 ```
 
-In the example above, there's actually the need to specify line breaks *and* indentation. Also, [Moodle's documentation on markdown](https://docs.moodle.org/311/en/Markdown#Bullet_point_lists) states it uses `*` as bullet list character.
+In the example above, there's actually the need to specify line breaks *and* indentation. 
+It's also an example of some differences in markdown, because [Moodle's documentation on markdown](https://docs.moodle.org/311/en/Markdown#Bullet_point_lists) states it uses `*` (rather than `-`) as the character for bulleted lists.
 
 Here's an example of a nested, bulleted list in markdown that displays properly inside of Moodle (v.311):
 
 ```
-::Nested List::
+::Nested bulleted list::
 [markdown]This is a nested list\:\n\n* Item A\n  * Item A.1\n  * Item A.2\n* Item B{TRUE}
 ```
 
-> Here's a (somewhat tedious) heuristic I used to debug markdown in GIFT with Moodle:
-> - try a question with markdown format then import it as GIFT,
-> - if it doesn't preview properly, change it inside of Moodle's editor (making sure that the format is still `markdown` in the web editor) until it previews properly
-> - export the question to GIFT again
+The `:` is escaped (normal GIFT), there are several `\n` to indicate line breaks, and the number of spaces after the `\n` specifies how much indentation occurs.
+
+I purposefully didn't use real line breaks in the GIFT (within the nested list markdown), because it interfered with the formatting finally when I imported it.
+That makes it less readable, but I know it works like this.
 
 ### Inline code
 
-This formatting is very straightforward. Here's an example:
+Inline code formatting is very straightforward. Here's an example:
 
 ```gift
 ::Inline code question::
-[markdown]What's the result of the following expression in JavaScript\: `3 % 2`? {=`1` ~`5` ~`NaN`}
+[markdown]What's the result of the following expression in JavaScript\: 
+`3 % 2`?
+{=`1` ~`5` ~`NaN`}
 ```
 
 This makes a question that looks something like:
 
-> What's the result of the following expression in JavaScript: `3 % 2`?
-> * `1` 
-> * `5`
-> * `NaN`
+     What's the result of the following expression in JavaScript: `3 % 2`?  
+       🔘 `1`   
+       🔘 `5`  
+       🔘 `NaN`  
+
+It's worth noting that the inline formatting on my Moodle is different than the formatting of code blocks (see below). 
+This may be due to how the Moodle theme (Cascading Style Sheets?) is configured on my Moodle.
 
 ### Code blocks (fences)
 
@@ -96,12 +121,14 @@ I teach courses in software engineering, so many of my quizzes have snippets of 
 
 There's an additional twist with code blocks in Moodle with respect to indenting: multiple blank spaces will be ignored when displaying code, unless a [non-breaking space](https://en.wikipedia.org/wiki/Non-breaking_space) "&nbsp;" is the first character of the line. Furthermore, the non-breaking space has to be a character, **not** some HTML `&nbsp;` or unicode `U+00A0` specification that can be entered by keyboard.
 
-Let's see a complicated example:
+Let's see a complicated 😱 example.
 
 ````
 ::Code blocks in stem and answers::
 [markdown]
-Complete the following TypeScript class so it has a method named `go` that accepts a string argument and always returns true.
+// Warning: there are some non-breaking spaces (look like normal spaces)
+Complete the following TypeScript class so it has a method named `go` 
+that accepts a string argument and always returns true.
 \n```\nexport class A \{\n    // complete\n\}\n```
 {
     =\n```\ngo(a\: string) \{\n    return true;\n\}\n\n```
@@ -113,17 +140,40 @@ The above GIFT with markdown produces a multiple-choice question that displays l
 
 [![Preview of imported GIFT question in Moodle, markdown format for code blocks in the question stem and answers]({{site.baseurl}}/img/posts/MoodlePreviewCodeBlocksStemAnswers.png){:class="img-responsive"}]({{site.baseurl}}/img/posts/MoodlePreviewCodeBlocksStemAnswers.png)
 
-To help you to format the markdown inside GIFT, the VSCode GIFT extension provides a nice feature:
-- Select source code you want to fromat in markdown for GIFT
-- **Ctrl-Shift-P > Gift: Escape code block (Markdown)**
+To help you as a mere mortal to create the markdown inside GIFT (especially with the non-breaking space in the right place), the VSCode GIFT extension provides a nice feature:
+- Select source code you want to format in markdown for GIFT
+- **<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> > Gift: Escape code block (Markdown)**
 
-Here's a demo of how I used it to prepare the question above:
+Here's a demo of how I used it to prepare the question above (click to view in full screen):
 
 [![Escaping code blocks for GIFT markdown in VSCode with the GIFT extension]({{site.baseurl}}/img/posts/EscapingCodeBlocksWithVSCodeGIFT.gif){:class="img-responsive"}]({{site.baseurl}}/img/posts/EscapingCodeBlocksWithVSCodeGIFT.gif)
 
-You can "undo" the operation (if you want to change you code block embedded in the question) by using the **Ctrl-Shift-P > Gift:  Unescape code block (Markdown)**.
+You can undo the escape operation if you want to change your block of code embedded in the question:  
+**<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> > Gift:  Unescape code block (Markdown)**.
+
+### But I don't like tools...
+
+If you want to escape everything by hand (and insert the hard space as the first character of each indented line of code blocks), you might find it useful to know how to enter a non-breaking space on your keyboard:
+
+| OS         | Input method                      |
+|------------| ----------------------------------|
+| MacOS      | <kbd>Option</kbd>+<kbd>space</kbd> (<kbd>Alt</kbd>+<kbd>space</kbd>)          |
+| Linux      | <kbd>Compose</kbd> <kbd>space</kbd> <kbd>space</kbd> or <kbd>AltGr</kbd>+<kbd>space</kbd>|
+| Windows    | <kbd>Alt</kbd>+<kbd>0</kbd>+<kbd>1</kbd>+<kbd>6</kbd>+<kbd>0</kbd> ([using the number pad](https://www.freecodecamp.org/news/alt-codes-special-characters-keyboard-symbols-windows-list/))|
+
+Some text editors use <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>space</kbd>.
+Some will prevent you from typing non-breaking spaces at all (so you might have to copy/paste the character from somewhere else).
+
+### My markdown still doesn't display properly!
+
+When I get stuck 😤, here's how I debug markdown in GIFT with Moodle:
+
+- Try writing a question with markdown format, then import it as GIFT. I use a question category called "GIFT-debugging" for this purpose. 
+- If it doesn't preview in Moodle properly, I change it inside of Moodle's editor (making sure that the format is `markdown` in the web editor) until it previews properly. Remember to check the Moodle markdown documentation cited above.
+- Export the question to GIFT again (and see what you've learned).
 
 ## Conclusion
 
-GIFT can get pretty ugly when you're embedding markdown in it. But I still think it's worth using, especially with the VSCode extension.
-If you know of any other gotchas or work-arounds using markdown in GIFT, please leave a comment!
+GIFT can get pretty ugly when you're embedding markdown in it. But I still think it's worth using, especially with the [VSCode extension from Ethan Ou 🎉](https://marketplace.visualstudio.com/items?itemName=ethan-ou.vscode-gift-pack).
+
+If you know of any other gotchas or work-arounds using markdown <i class="fab fa-markdown"></i> in Moodle's GIFT format, please leave a comment!
