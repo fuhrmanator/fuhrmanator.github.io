@@ -7,7 +7,7 @@ background: '/img/bg-about.jpg'
 
 ![ETS Logo](/img/logo_ets_red_centered.svg)
 
-[English directions](#English-directions)
+[English directions](#english-directions)
 
 ## Directions en français
 
