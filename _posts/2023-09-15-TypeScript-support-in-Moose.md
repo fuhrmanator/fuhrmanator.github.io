@@ -21,8 +21,8 @@ Our project provides this metamodel at <https://github.com/fuhrmanator/FamixType
 
 The following instructions are for people familiar with Moose and Pharo. If you need help with Pharo images, check out the [Pharo Mooc](https://mooc.pharo.org/). 
 
-1. Create and run a **Moose 10 (stable)** image.
-2. Open a Playground and run this script to load the FamixTypeScript metamodel:
+- Create and run a **Moose 10 (stable)** image.
+- Open a Playground and run this script to load the FamixTypeScript metamodel:
     ```smalltalk
     Metacello new 
         githubUser: 'fuhrmanator' project: 'FamixTypeScript' commitish: 'master' path: 'src';
@@ -32,9 +32,9 @@ The following instructions are for people familiar with Moose and Pharo. If you 
 
 ## Create the Moose (Famix) model of a TypeScript project
 
-1. Let's clone the project <https://github.com/Chuzzy/Emojiopoly>.
-2. Next, we'll install `ts2famix` (it's an npm command, so you need to have npm running on your machine): `npm i -g ts2famix`. 
-3. Let's move to the Emojiopoly clone's location, and create a Famix model of the Emojiopoly project:
+- Let's clone the project <https://github.com/Chuzzy/Emojiopoly>.
+- Next, we'll install `ts2famix` (it's an npm command, so you need to have npm running on your machine): `npm i -g ts2famix`. 
+- Let's move to the Emojiopoly clone's location, and create a Famix model of the Emojiopoly project:
    ```bash
    cd path/to/Emojiopoly
    ts2famix -i tsconfig.json -o emojiopoly-model.json
@@ -43,8 +43,10 @@ The following instructions are for people familiar with Moose and Pharo. If you 
 
 ## Import the model into Moose
 
-1. If you're in Windows, you can drag the `emojiopoly-model.json` file to the running window of Moose. You'll see a dialog allowing you to confirm the import.
-
+- If you're running Windows (or a window manager in Linux?), you can drag the `emojiopoly-model.json` file and drop it on the running window of Moose. You'll see a dialog allowing you to confirm the import.
+- If you're not able to drag the file, you have to load it with a script like this in a Playground:
+  ```smalltalk
+  ```
 
 ## Do analyses on the model.
 
