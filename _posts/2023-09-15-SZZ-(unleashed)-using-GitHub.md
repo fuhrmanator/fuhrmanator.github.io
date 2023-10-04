@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-published: false
+published: true
 title: SZZ (unleashed) using GitHub
 header-img: img/posts/ETS-CYTech-SZZ-mashup.png
 background: '/img/posts/ETS-CYTech-SZZ-mashup.png'
