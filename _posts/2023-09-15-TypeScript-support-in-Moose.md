@@ -141,7 +141,7 @@ This visualization represents classes as rectangles. Each rectangle has three di
 
 > Tip: The visualization obtains data from each Moose element through properties, for example, `#numberOfAttributes`, `#numberOfMethods`, and `#numberOfLinesOfCode`. These are methods (accessors) of Famix elements, such as FamixTypeScriptClass, which provide the values. You can find other properties in the Moose Properties tab of these elements.
 
-![Roassal visualization of Emojiopoly](/img/posts/VisualisationMooseRoassal.png)
+![Roassal visualization of Emojiopoly](/img/posts/VisualisationMooseRoassal.gif)
 
 With the **emojiopoly** project, you can see that the MonopolyGame class has many methods (its height) and also a significant amount of code (its red color).
 
@@ -153,9 +153,9 @@ The layout (`RSTreeLayout`) also helps visualize the class hierarchy in terms of
 ### Check out Moose 10's new visualization tools
 
 The latest version of Moose has some built-in features that make it fun to explore projects.
-Check out [Gabriel Ullmann's excellent video](https://www.youtube.com/watch?v=2ILbR5ZrSm8) on using Moose 10.
+Check out [Gabriel Ullmann's excellent video](https://www.youtube.com/watch?v=2ILbR5ZrSm8&t=689) on using Moose 10.
 Please note that his demo is done with a Java project (model), but Moose analyses work almost the same way with a TypeScript project (once you've loaded and imported a model of a TypeScript project).
-<iframe width="420" height="315" src="http://www.youtube.com/embed/dQw4w9WgXcQ?t=689" frameborder="0" allowfullscreen></iframe>
+<iframe width="420" height="315" src="https://www.youtube.com/embed/2ILbR5ZrSm8?t=689" frameborder="0" allowfullscreen></iframe>
 
 ## What's next?
 
