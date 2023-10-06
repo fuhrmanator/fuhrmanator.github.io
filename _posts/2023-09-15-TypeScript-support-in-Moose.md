@@ -155,7 +155,7 @@ The layout (`RSTreeLayout`) also helps visualize the class hierarchy in terms of
 The latest version of Moose has some built-in features that make it fun to explore projects.
 Check out [Gabriel Ullmann's excellent video](https://www.youtube.com/watch?v=2ILbR5ZrSm8&t=689) on using Moose 10.
 Please note that his demo is done with a Java project (model), but Moose analyses work almost the same way with a TypeScript project (once you've loaded and imported a model of a TypeScript project).
-<iframe width="420" height="315" src="https://www.youtube.com/embed/2ILbR5ZrSm8?t=689" frameborder="0" allowfullscreen></iframe>
+<iframe style="aspect-ratio: 16 / 9; width: 100%;}"  src="https://www.youtube.com/embed/2ILbR5ZrSm8?start=689" frameborder="0" allowfullscreen></iframe>
 
 ## What's next?
 
