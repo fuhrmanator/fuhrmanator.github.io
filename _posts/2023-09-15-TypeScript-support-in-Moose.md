@@ -10,16 +10,21 @@ background: '/img/posts/moose-typescript.png'
 It's now possible to model and analyze TypeScript projects in [Moose](https://github.com/moosetechnology).
 
 Thanks to excellent collaboration with summer 2023 interns [Eya Bdah](https://www.linkedin.com/in/bdah-eya-684b341a2/) (ISSAT of Sousse University) and [Maël Paul](https://www.linkedin.com/in/maelpaul/) (ENSEIRB-MATMECA Bordeaux), several former students of MGL843 who contributed to the open-source elements of this project, and last but not least, Inria's [EVREF (formerly RMoD)](https://www.inria.fr/fr/evref) group, there is a stable Famix [metamodel](https://github.com/fuhrmanator/FamixTypeScript) and [importer (aka parser)](https://github.com/fuhrmanator/FamixTypeScriptImporter) for TypeScript.
-The importer is also an npmjs package, which means you can easily install and run it if you use npm.
+The importer [`ts2famix`](https://www.npmjs.com/package/ts2famix) is also an npmjs package, which means you can easily install and run it if you use npm.
 
-In this post, I'll show you how to use these tools to analyze a TypeScript project using Moose.
+## Assumptions
 
-## Teach Moose about TypeScript
+In this post, I'll show you how to use these tools to analyze a TypeScript project using Moose 10.
+We assume the reader is familiar with cloning GitHub projects and running npm commands (since we're analyzing TypeScript), as well as using the git `bash` command-line tool.
+We tested this on Windows 10 (again using git `bash`), but it should work on Linux and Mac, too.
+
+## Moose needs to grok TypeScript
 
 The Moose software needs a metamodel to understand TypeScript programs.
-Our project provides this metamodel at <https://github.com/fuhrmanator/FamixTypeScript>. 
+Our project provides this metamodel at <https://github.com/fuhrmanator/FamixTypeScript>.
 
-The following instructions are for people familiar with Moose and Pharo. If you need help with Pharo images, check out the [Pharo Mooc](https://mooc.pharo.org/). 
+The following instructions are for people familiar with Moose and Pharo.
+If you need help with Pharo images, check out the [Pharo Mooc](https://mooc.pharo.org/). 
 
 - Create and run a **Moose 10 (stable)** image.
 - Open a Playground and run this script to load the FamixTypeScript metamodel:
@@ -28,7 +33,7 @@ The following instructions are for people familiar with Moose and Pharo. If you 
         githubUser: 'fuhrmanator' project: 'FamixTypeScript' commitish: 'master' path: 'src';
         baseline: 'FamixTypeScript';
         load
-    ``` 
+    ```
 
 ## Create the Moose (Famix) model of a TypeScript project
 
@@ -72,7 +77,7 @@ You can do any analysis you want on the model, but here is how to get started:
 
     ![Inspecting a FamixTypeScriptClass](/img/posts/AnimationMooseInspectModel.gif){:class="img-responsive"}
 
-### Simple Query
+### Simple Queries
 
 In a Playground window, execute the following code:
 
@@ -102,9 +107,20 @@ longMethods := tsModel allMethods
 
 To find out the class to which each method belongs, check the `parentType` property in the navigation.
 
-### Visualizations with Roassal
+### TypeScript-specific Queries
 
-You can draw inspiration from a [Roassal visualization](https://github.com/bergel/AgileVisualizationAPressCode/blob/main/01-04-AgileVisualization.txt) (a visualization library in Pharo) to visually represent classes in a Moose model:
+What if you want to find all `Decorators` (a TypeScript-specific element) in a project?
+Sadly, there is not (yet) a `tsModel allDecorators` method for TypeScript models.
+The solution is to use the `tsModel allMatching: FamixTypeScriptDecorator`.
+Indeed, the `allMatching:` method allows you to find all elements of a specific Entity.
+You can see the TypeScript metamodel element names in the [SVG visualization from the metamodel repository](https://raw.githubusercontent.com/fuhrmanator/FamixTypeScript/v1/doc/FamixTypeScript.svg).
+The elements are shown as UML classes in light blue, e.g., `Module`, `Decorator`, etc.
+Note that you need to add the prefix `FamixTypeScript` to the name of the element, e.g., `FamixTypeScriptModule`, `FamixTypeScriptDecorator`, etc.
+
+### Visualizations with Roassal 3
+
+Roassal 3 a powerful (and complex) visualization library in Pharo.
+We can draw inspiration from an [example of a Roassal 3 visualization on GitHub](https://github.com/bergel/AgileVisualizationAPressCode/blob/main/01-04-AgileVisualization.txt) to represent classes visually in a Moose model:
 
 ```smalltalk
 "The variable classes contains the classes we would like to visualize"
@@ -133,31 +149,35 @@ c nodes @ RSDraggable @ RSPopup.
 c @ RSCanvasController.
 ```
 
-This visualization represents classes as rectangles. Each rectangle has three dimensions:
+This visualization represents classes as rectangles.
+Each rectangle has three dimensions:
 
 - The color of each rectangle represents the number of lines of code. Gray signifies a relatively low number of lines of code, while red indicates a relatively high number of lines of code. The color variation is handled by the `RSNormalizer` class.
 - The height of each rectangle represents the number of methods.
 - The width of each rectangle represents the number of attributes.
 
-> Tip: The visualization obtains data from each Moose element through properties, for example, `#numberOfAttributes`, `#numberOfMethods`, and `#numberOfLinesOfCode`. These are methods (accessors) of Famix elements, such as FamixTypeScriptClass, which provide the values. You can find other properties in the Moose Properties tab of these elements.
+> Tip: The visualization obtains data from each Moose element through properties, for example, `#numberOfAttributes`, `#numberOfMethods`, and `#numberOfLinesOfCode`. These are methods (accessors) of Famix elements, such as `FamixTypeScriptClass`, which provide the values. You can find other properties in the Moose Properties tab of these elements.
 
 ![Roassal visualization of Emojiopoly](/img/posts/VisualisationMooseRoassal.gif){:class="img-responsive"}
 
-With the **emojiopoly** project, you can see that the MonopolyGame class has many methods (its height) and also a significant amount of code (its red color).
+With the **Emojiopoly** project, you can see that the `MonopolyGame` class has many methods (its height) and also a significant amount of code (its red color).
 
-> Tip: The syntax with the hashtag used on line 9, `normalize: #numberOfAttributes`, is a shorthand syntax for a longer block expression: `normalize: [:element | element numberOfAttributes ]`. Sometimes, you may want to perform a calculation on the value used in the visualization, for example, combining it with another attribute like the number of `receivingInvocations`. In that case, you would do `normalize: [:element | element numberOfAttributes + element receivingInvocations size ]`.
-:::
+> Pharo Tip: The Pharo syntax with the hashtag used on line 9, `normalize: #numberOfAttributes`, is a shorthand syntax for a longer block expression: `normalize: [ :element | element numberOfAttributes ]`. Sometimes, you may want to perform a calculation on the value used in the visualization, for example, combining it with another attribute like the number of `receivingInvocations`. In that case, you would do `normalize: [ :element | element numberOfAttributes + element receivingInvocations size ]`.
 
-The layout (`RSTreeLayout`) also helps visualize the class hierarchy in terms of inheritance. However, the **emojiopoly** project does not use inheritance in TypeScript, so no hierarchy is visible in the visualization.
+The layout (`RSTreeLayout`) also helps visualize the class hierarchy in terms of inheritance. 
+However, the **Emojiopoly** project, because TypeScript allows type composition, does not use inheritance.
+Therefore, no hierarchy is visible in the visualization.
 
 ### Check out Moose 10's new visualization tools
 
 The latest version of Moose has some built-in features that make it fun to explore projects.
 Check out [Gabriel Ullmann's excellent video](https://www.youtube.com/watch?v=2ILbR5ZrSm8&t=689) on using Moose 10.
 Please note that his demo is done with a Java project (model), but Moose analyses work almost the same way with a TypeScript project (once you've loaded and imported a model of a TypeScript project).
-<iframe style="aspect-ratio: 16 / 9; width: 100%;}"  src="https://www.youtube.com/embed/2ILbR5ZrSm8?start=689" frameborder="0" allowfullscreen></iframe>
+
+<iframe style="aspect-ratio: 16 / 9; width: 100%;"  src="https://www.youtube.com/embed/2ILbR5ZrSm8?start=689" frameborder="0" allowfullscreen></iframe>
 
 ## What's next?
 
--   The FamixTypeScriptImporter (`ts2famix`) is still in development, so don't forget to check for updates. Please report any issues you find.
--   Let us know if you are using FamixTypeScript to analyze your TypeScript projects.
+The FamixTypeScriptImporter (`ts2famix`) as well as the FamixTypeScript metamodel are still in development, so don't forget to check for updates. Please report any issues you find on the respective GitHub repositories.
+
+Let us know if you are using (or want to use) FamixTypeScript to model your TypeScript projects!
