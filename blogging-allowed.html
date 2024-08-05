@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Christopher Fuhrman - Blogging Allowed</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean"
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background: #00000000;
+      }
+</style>
+<style>
+#title-block-header.quarto-title-block.default .quarto-title-meta {
+  color: #000000;
+}
+/*
+.quarto-title-block .quarto-title-banner {
+  height: 0;
+}
+*/
+#title-block-header {
+  position: relative;
+  height: 300px;
+}
+#title-block-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url(./img/bg-index.jpg);
+    background-size: cover;
+    background-position-y: center;
+    opacity: 0.5; /* Adjust as needed */
+}
+#title-block-header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+</style>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Christopher Fuhrman - Blogging Allowed">
+<meta property="og:site_name" content="Christopher Fuhrman">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Christopher Fuhrman - Blogging Allowed">
+<meta name="twitter:creator" content="@thefuhrmanator">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Christopher Fuhrman</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">Christopher Fuhrman</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./blogging-allowed.html" aria-current="page"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fuhrmanator"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/thefuhrmanator"> <i class="bi bi-twitter=x" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/fuhrmanator/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:christopher.fuhrman@etsmtl.ca"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="./index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page-left">
+      <h1 class="title">Blogging Allowed</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page-left">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(12)</span></div><div class="category" data-category="DSM">DSM <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Empirical analyses">Empirical analyses <span class="quarto-category-count">(1)</span></div><div class="category" data-category="GIFT">GIFT <span class="quarto-category-count">(2)</span></div><div class="category" data-category="GitHub">GitHub <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Java">Java <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Moodle">Moodle <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Moose">Moose <span class="quarto-category-count">(4)</span></div><div class="category" data-category="OER">OER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Open Source">Open Source <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Pharo">Pharo <span class="quarto-category-count">(3)</span></div><div class="category" data-category="PlantUML">PlantUML <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Quarto">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SZZ">SZZ <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TypeScript">TypeScript <span class="quarto-category-count">(1)</span></div><div class="category" data-category="WSL">WSL <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Windows">Windows <span class="quarto-category-count">(1)</span></div><div class="category" data-category="markdown">markdown <span class="quarto-category-count">(1)</span></div></div></div>
+<!-- main -->
+<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+
+
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="Empirical analyses,GitHub,SZZ" data-listing-date-sort="1694750400000" data-listing-file-modified-sort="1722886820234" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="101">
+<div class="thumbnail">
+<p><a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external"></a></p><a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external">
+<p><img src="./posts/szz-unleashed-github-bugs/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external">SZZ (unleashed) using GitHub</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Empirical analyses'); return false;">
+Empirical analyses
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('GitHub'); return false;">
+GitHub
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('SZZ'); return false;">
+SZZ
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external">Now it’s possible to use SZZ Unleashed with bug databases that are in GitHub (rather than Jira).</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external">
+<div class="listing-date">
+Sep 15, 2023
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="Moose,TypeScript" data-listing-date-sort="1694750400000" data-listing-file-modified-sort="1722886820255" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1500">
+<div class="thumbnail">
+<p><a href="./posts/typescript-in-moose/index.html" class="no-external"></a></p><a href="./posts/typescript-in-moose/index.html" class="no-external">
+<p><img src="./posts/typescript-in-moose/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/typescript-in-moose/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/typescript-in-moose/index.html" class="no-external">TypeScript support for Moose (Pharo)</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/typescript-in-moose/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Moose'); return false;">
+Moose
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('TypeScript'); return false;">
+TypeScript
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/typescript-in-moose/index.html" class="no-external">It’s now possible to model and analyze TypeScript projects in Moose.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/typescript-in-moose/index.html" class="no-external">
+<div class="listing-date">
+Sep 15, 2023
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="OER,Open Source,Quarto" data-listing-date-sort="1684728000000" data-listing-file-modified-sort="1722886820225" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="132">
+<div class="thumbnail">
+<p><a href="./posts/oer-in-french/index.html" class="no-external"></a></p><a href="./posts/oer-in-french/index.html" class="no-external">
+<p><img src="./posts/oer-in-french/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/oer-in-french/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/oer-in-french/index.html" class="no-external">Open Educational Resource (OER) in French</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/oer-in-french/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('OER'); return false;">
+OER
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Open Source'); return false;">
+Open Source
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Quarto'); return false;">
+Quarto
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/oer-in-french/index.html" class="no-external">For the “Journée d’Innovation Pédagogique” of the ÉTS, I presented the work I did on creating an Open Education Resource (OER) for a course I teach.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/oer-in-french/index.html" class="no-external">
+<div class="listing-date">
+May 22, 2023
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="Moodle,GIFT,markdown" data-listing-date-sort="1639544400000" data-listing-file-modified-sort="1722886820221" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1448">
+<div class="thumbnail">
+<p><a href="./posts/markdown-in-gift/index.html" class="no-external"></a></p><a href="./posts/markdown-in-gift/index.html" class="no-external">
+<p><img src="./posts/markdown-in-gift/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/markdown-in-gift/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/markdown-in-gift/index.html" class="no-external">Getting the most from markdown in GIFT</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/markdown-in-gift/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Moodle'); return false;">
+Moodle
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('GIFT'); return false;">
+GIFT
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('markdown'); return false;">
+markdown
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/markdown-in-gift/index.html" class="no-external">Markdown <i class="fab fa-markdown"></i> is a format supported within GIFT (see: Creating questions quickly in Moodle with GIFT), which can be used for simple formatting text in a question, in answers and…</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/markdown-in-gift/index.html" class="no-external">
+<div class="listing-date">
+Dec 15, 2021
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="Moodle,GIFT" data-listing-date-sort="1608267600000" data-listing-file-modified-sort="1722886820183" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1420">
+<div class="thumbnail">
+<p><a href="./posts/creating-questions-quickly-gift/index.html" class="no-external"></a></p><a href="./posts/creating-questions-quickly-gift/index.html" class="no-external">
+<p><img src="./posts/creating-questions-quickly-gift/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/creating-questions-quickly-gift/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/creating-questions-quickly-gift/index.html" class="no-external">Creating questions quickly in Moodle with GIFT</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/creating-questions-quickly-gift/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Moodle'); return false;">
+Moodle
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('GIFT'); return false;">
+GIFT
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/creating-questions-quickly-gift/index.html" class="no-external">I’ve been using Moodle for several years in my courses, and it remains one of the best tools for online learning thanks to its flexible and powerful testing (quiz)…</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/creating-questions-quickly-gift/index.html" class="no-external">
+<div class="listing-date">
+Dec 18, 2020
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="PlantUML" data-listing-date-sort="1574571600000" data-listing-file-modified-sort="1722886820227" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="82">
+<div class="thumbnail">
+<p><a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external"></a></p><a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external">
+<p><img src="./posts/plantuml-gizmo-docs-slides/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external">PlantUML Gizmo bundled for Google Docs and Slides</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external">You can now do PlantUML in Google Slides and Docs.</a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('PlantUML'); return false;">
+PlantUML
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external">I recently updated the PlantUML Gizmo add-on as a bundle for Google Docs and Google Slides.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external">
+<div class="listing-date">
+Nov 24, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="Moose,Java,DSM" data-listing-date-sort="1565150400000" data-listing-file-modified-sort="1722886820153" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="640">
+<div class="thumbnail">
+<p><a href="./posts/cochange-dsm-moose/index.html" class="no-external"></a></p><a href="./posts/cochange-dsm-moose/index.html" class="no-external">
+<p><img src="./posts/cochange-dsm-moose/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/cochange-dsm-moose/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/cochange-dsm-moose/index.html" class="no-external">Using a DSM to visualize co-change of Java classes</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/cochange-dsm-moose/index.html" class="no-external">I will show a DSM-based visualization for co-change with a Java project using Moose and Pharo.</a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Moose'); return false;">
+Moose
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Java'); return false;">
+Java
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('DSM'); return false;">
+DSM
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/cochange-dsm-moose/index.html" class="no-external">In a previous post, I explained how to do a <code>DSM from a Java project in Moose</code>. In this post, I will extend the idea to a DSM-based visualization for co-change, again with a…</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/cochange-dsm-moose/index.html" class="no-external">
+<div class="listing-date">
+Aug 7, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="Moose,Java,DSM" data-listing-date-sort="1565064000000" data-listing-file-modified-sort="1722886820197" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="218">
+<div class="thumbnail">
+<p><a href="./posts/dsm-moose-java/index.html" class="no-external"></a></p><a href="./posts/dsm-moose-java/index.html" class="no-external">
+<p><img src="./posts/dsm-moose-java/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/dsm-moose-java/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/dsm-moose-java/index.html" class="no-external">Dependency Structure Matrix for a Java project using Moose</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/dsm-moose-java/index.html" class="no-external">I will show how one can create a Design Structure Matrix (DSM) in Moose, in particular from a model of a Java project.</a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Moose'); return false;">
+Moose
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Java'); return false;">
+Java
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('DSM'); return false;">
+DSM
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/dsm-moose-java/index.html" class="no-external">As an extension to <code>Analyzing Java With Moose</code>, in this post I will show how one can create a Design Structure Matrix (DSM) in Moose, in particular from a model of a Java…</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/dsm-moose-java/index.html" class="no-external">
+<div class="listing-date">
+Aug 6, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-categories="Moose,Pharo,Java,PlantUML" data-listing-date-sort="1564372800000" data-listing-file-modified-sort="1722886820131" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1910">
+<div class="thumbnail">
+<p><a href="./posts/analyzing-java-with-moose/index.html" class="no-external"></a></p><a href="./posts/analyzing-java-with-moose/index.html" class="no-external">
+<p><img src="./posts/analyzing-java-with-moose/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/analyzing-java-with-moose/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/analyzing-java-with-moose/index.html" class="no-external">Analyzing Java with Moose 8</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/analyzing-java-with-moose/index.html" class="no-external">Moose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining.</a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Moose'); return false;">
+Moose
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Pharo'); return false;">
+Pharo
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Java'); return false;">
+Java
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('PlantUML'); return false;">
+PlantUML
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/analyzing-java-with-moose/index.html" class="no-external">Updated 2021-03-15</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/analyzing-java-with-moose/index.html" class="no-external">
+<div class="listing-date">
+Jul 29, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-listing-date-sort="1553227200000" data-listing-file-modified-sort="1722886820413" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="772">
+<div class="thumbnail">
+<p><a href="./posts/github-api-in-pharo/index.html" class="no-external"></a></p><a href="./posts/github-api-in-pharo/index.html" class="no-external">
+<p><img src="./posts/github-api-in-pharo/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/github-api-in-pharo/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/github-api-in-pharo/index.html" class="no-external">Using the GitHub API in Pharo 7</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/github-api-in-pharo/index.html" class="no-external">In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine.</a>
+</div>
+<div class="listing-description">
+<a href="./posts/github-api-in-pharo/index.html" class="no-external">In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine according to their popularity (e.g., forks and stars).</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/github-api-in-pharo/index.html" class="no-external">
+<div class="listing-date">
+Mar 22, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="10" data-categories="Pharo" data-listing-date-sort="1552708800000" data-listing-file-modified-sort="1722886820203" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1139">
+<div class="thumbnail">
+<p><a href="./posts/libc-pharo-experiments/index.html" class="no-external"></a></p><a href="./posts/libc-pharo-experiments/index.html" class="no-external">
+<p><img src="./posts/libc-pharo-experiments/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/libc-pharo-experiments/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/libc-pharo-experiments/index.html" class="no-external">LibC experiments in Pharo 7</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/libc-pharo-experiments/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Pharo'); return false;">
+Pharo
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/libc-pharo-experiments/index.html" class="no-external">I’ve done some work in Pharo that required interfacing with external tools (Java, R, etc.) on multiple platforms. I investigated using OSProcess and OSSubProcess, but there…<code></code></a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/libc-pharo-experiments/index.html" class="no-external">
+<div class="listing-date">
+Mar 16, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="11" data-categories="Pharo,WSL,Windows" data-listing-date-sort="1551243600000" data-listing-file-modified-sort="1722886820233" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="639">
+<div class="thumbnail">
+<p><a href="./posts/running-pharo-in-WSL/index.html" class="no-external"></a></p><a href="./posts/running-pharo-in-WSL/index.html" class="no-external">
+<p><img src="./posts/running-pharo-in-WSL/image.jpg" class="thumbnail-image"></p>
+</a><p><a href="./posts/running-pharo-in-WSL/index.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/running-pharo-in-WSL/index.html" class="no-external">Running Pharo in Windows Subsystem for Linux (WSL)</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/running-pharo-in-WSL/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Pharo'); return false;">
+Pharo
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('WSL'); return false;">
+WSL
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Windows'); return false;">
+Windows
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/running-pharo-in-WSL/index.html" class="no-external">Pharo 7 runs well in Windows 10 (I have a Surface Pro 4), but I wanted to do some testing of a project also under Linux. Initially I had run Ubuntu in a VM VirtualBox, but…</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/running-pharo-in-WSL/index.html" class="no-external">
+<div class="listing-date">
+Feb 27, 2019
+</div>
+<div class="listing-author">
+Christopher Fuhrman
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fuhrmanator\.github\.io\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

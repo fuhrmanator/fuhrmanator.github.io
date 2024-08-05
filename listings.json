@@ -1,0 +1,19 @@
+[
+  {
+    "listing": "/blogging-allowed.html",
+    "items": [
+      "/posts/szz-unleashed-github-bugs/index.html",
+      "/posts/typescript-in-moose/index.html",
+      "/posts/oer-in-french/index.html",
+      "/posts/markdown-in-gift/index.html",
+      "/posts/creating-questions-quickly-gift/index.html",
+      "/posts/plantuml-gizmo-docs-slides/index.html",
+      "/posts/cochange-dsm-moose/index.html",
+      "/posts/dsm-moose-java/index.html",
+      "/posts/analyzing-java-with-moose/index.html",
+      "/posts/github-api-in-pharo/index.html",
+      "/posts/libc-pharo-experiments/index.html",
+      "/posts/running-pharo-in-WSL/index.html"
+    ]
+  }
+]

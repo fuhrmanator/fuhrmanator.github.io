@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.553">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Christopher Fuhrman">
+<meta name="dcterms.date" content="2019-07-29">
+
+<title>Christopher Fuhrman - Analyzing Java with Moose 8</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean"
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: rgba(255, 255, 255, 0.9);
+background: #00000000;
+      }
+</style>
+<style>
+#title-block-header.quarto-title-block.default .quarto-title-meta {
+  color: rgba(255, 255, 255, 0.9);
+}
+.quarto-title-block .quarto-title-banner {
+  height: 0; /* hide */
+}
+#title-block-header {
+  background: 
+    /* top, transparent black, faked with gradient */
+    linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    /* bottom, image */ 
+    url(./image.jpg);
+  background-size: cover;
+  background-position-y: center;
+  height: 450px;
+  opacity: 0.7; /* image opacity, lower means lighter */
+  z-index: -1;
+}
+</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Christopher Fuhrman - Analyzing Java with Moose 8">
+<meta property="og:description" content="Moose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining.">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/analyzing-java-with-moose/image.jpg">
+<meta property="og:site_name" content="Christopher Fuhrman">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Christopher Fuhrman - Analyzing Java with Moose 8">
+<meta name="twitter:description" content="Moose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining.">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/analyzing-java-with-moose/image.jpg">
+<meta name="twitter:creator" content="@thefuhrmanator">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Christopher Fuhrman</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Christopher Fuhrman</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blogging-allowed.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fuhrmanator"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/thefuhrmanator"> <i class="bi bi-twitter=x" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/fuhrmanator/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:christopher.fuhrman@etsmtl.ca"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Analyzing Java with Moose 8</h1>
+            <p class="subtitle lead">Moose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining.</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Moose</div>
+                <div class="quarto-category">Pharo</div>
+                <div class="quarto-category">Java</div>
+                <div class="quarto-category">PlantUML</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Christopher Fuhrman </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 29, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<blockquote class="blockquote">
+<p>Updated 2021-03-15</p>
+</blockquote>
+<p>Moose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining. In this blog post, I will show you a few features of Moose to analyze a Java project.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Although Pharo is supported and is stable in Windows 10, there can be some problems, especially with long directory paths and spaces in file names, that can occur in this tutorial. It’s possible to use <a href="../../posts/running-pharo-in-WSL/index.html">Pharo in WSL</a> and avoid these pitfalls. If you’re going to do a lot of work with Pharo in Windows, I highly recommend checking out WSL!</p>
+</div>
+</div>
+<section id="analysis-overview" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-overview">Analysis overview</h2>
+<p>Here’s an overview of this post:</p>
+<p><img src="https://www.plantuml.com/plantuml/svg/JO_13e9034Jl_OeUyHVmeZ6QI20XCH8l71eekhfioUv2ebzlGGxUEfatayukHF9nx2t0SW6a1okECQE9SF3ov2Pk8LraaD4tZ8sqN4DQaWyh5mLxUZ6UziNvXhtw5fEA_SJ6SRRHV74vOcVidCk5sfMH3l-APqn4EulPhA4J_uAqCc4aQpxyoq1IMdBnMkHQEnD8Tp9Ets6liaToPD_110KVv4KfTkrIfGjbW9rAtVi5.png" class="img-fluid"></p>
+<p>Moose operates on <em>models</em> of software, namely FAMIX models. To analyze a Java project, you must first create a model of it using a Java-to-Famix parser. In this example, I will use <a href="https://github.com/moosetechnology/VerveineJ">VerveineJ</a>, but it’s also possible to use <a href="https://github.com/feenkcom/jdt2famix">JDT2Famix</a>.</p>
+<p>PlantUML is used to create class diagrams of the software in Moose (this is optional). For this post, I installed a local version of the <a href="https://github.com/plantuml/plantuml-server">PlantUML server</a>, which also requires an installation of GraphViz.</p>
+</section>
+<section id="install-moose" class="level2">
+<h2 class="anchored" data-anchor-id="install-moose">Install Moose</h2>
+<p>To make this post, I used Moose 8 in Pharo 8, both of which were in development stage at the time of writing this. Here’s a simple way to get it running:</p>
+<ul>
+<li><a href="http://pharo.org/download">Install the Pharo Launcher</a> and start it.</li>
+<li><strong>Important for Windows 10:</strong> click on the <strong>VMs</strong> button in Pharo Launcher and click the <strong>Update</strong> button to make sure you have the latest (most stable) Pharo virtual machines.</li>
+<li>Create a copy of the image of Moose-8 from the Inria CI: <strong>New Image Templates &gt; Official distributions &gt; Moose Suite 8.0 (development version) &gt; Create image</strong><br>
+&gt; <strong>Warning:</strong> Windows 10 users will want to remove the spaces from the name of the image, or else they may cause problems in the scripts in this tutorial. You can name the image <strong>Moose8JavaTutorial</strong>, for example.</li>
+<li>Launch the image once it has downloaded.</li>
+</ul>
+</section>
+<section id="clone-the-java-project-you-want-to-analyze" class="level2">
+<h2 class="anchored" data-anchor-id="clone-the-java-project-you-want-to-analyze">Clone the Java project you want to analyze</h2>
+<p><img src="https://www.plantuml.com/plantuml/svg/JT31QiCm30RWkvz2i4ExLqWlBME3bGOAOsMN7JH7ITt8Kf2TGlVqizCUTlojJpz6svJHyXpPfJ78X8OHVj2FW-aidLTMWsmegOn8ibkuU-8mdFDWHDAyi0h17gy8a-c5VDwuPeb9P_C4NZlwTglcY9OUC2j470dUTktx5yG26DOdiYi5eVtpfkZsunNwmClcGR5xAEtXN_S2LKjjMwV5zcfZUJo5D2E7NxglkTNwo2ZviptKyee01mnIlqLMSWGKv5iAgTepcbP8qjqBKzR9RKiib_e3.png" class="img-fluid"></p>
+<p>In this step, let’s assume there is a GitHub repository of a Java project that we want to analyze, e.g., <a href="https://github.com/bethrobson/Head-First-Design-Patterns">the source code from Head First Design Patterns</a>. In this step we will get a local copy of the source code using <strong>git clone</strong>, so <code>git</code> needs to be installed on your machine and visible from the execution path. The <code>MooseEasyUtility</code> class will clone it in a temporary folder of the Pharo image directory.</p>
+<p>Open a Moose Playground (<kbd>CTRL</kbd>+<kbd>O</kbd>+<kbd>W</kbd>) in Pharo, and execute the following:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>javaProjectFileRef := <span class="kw">MooseEasyUtility</span> cloneGitHubRepo:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://github.com/bethrobson/Head-First-Design-Patterns'</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create a clone of the Java repo from GitHub in your Pharo working directory, with a relative path of <code>tmp/MooseEasyRepos/bethrobson__Head-First-Design-Patterns</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We are <em>not</em> using <code>Iceberg</code> to make this clone, but a <code>git clone</code> command run in a Bourne shell via <a href="../../posts/libc-pharo-experiments/index.html"><code>LibC</code> in Pharo</a>. We chose not to use Iceberg because the command runs faster, and there is no memory allocated in the Pharo image for the repository.</p>
+<p>If you want to analyze Java source code, you can use <em>any</em> directory – it doesn’t have to be a git repository and you don’t have to create it using the above command.</p>
+<p>In Pharo under Windows, you will briefly see a <code>cmd.exe</code> window appear during the execution of the command. This is a “gotcha” also discussed in the <code>LibC</code> post.</p>
+</div>
+</div>
+</section>
+<section id="parse-java-to-make-famix-model" class="level2">
+<h2 class="anchored" data-anchor-id="parse-java-to-make-famix-model">Parse Java to make FAMIX model</h2>
+<p><img src="https://www.plantuml.com/plantuml/svg/VP31JiCm38RlUGfB73fUeRiC8P2O5gaIOkB2mRHkbpMnAoUT14-FMthWnF7F_-cpdKCkg6LE4HhKJ7346q8HI3WIF3_ubtT8qb5qUGmyeMA2Jsp7GMNchfKe2aMHirN4nLMhpbNrOnJUR9FAbTgoT_KQiypQ4hHc_N1tCGoNCYWHr_yl0BipwOq2q_7ULFxr2VeGJL7L9y5kWwI7FqFsLdeHi_gbDRON7Utn7FACCNpJTborQo9oUVCdSwyGu8213Mr8BIT0nlYLGrxO2wei877tAyn59dUmQ1_v0m00.png" title="Parse Java to make FAMIX model" class="img-fluid"></p>
+<p>Once we have a local copy (clone) of the source code, we can make the FAMIX model of it using a parser such as <a href="https://github.com/moosetechnology/VerveineJ">VerveineJ</a>, which is supported by Moose-Easy. To install VerveineJ for our purposes, it’s simple:</p>
+<ul>
+<li>Make sure a Java Runtime Environment (<code>java</code> command) is in the execution path of your system. To verify, execute the following in a Moose Playground:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode st code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">LibC</span> runCommand: <span class="st">'java --version'</span>) = 0 </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ifTrue: <span class="st">'java command found.'</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ifFalse: <span class="st">'java command NOT FOUND.'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Download and unzip VerveineJ 1.0 with the following commands in a Moose Playground:<br>
+</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UIManager</span> default</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    informUserDuring: [ :bar | </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        bar label: <span class="st">'Downloading VerveineJ 1.0.1...'</span>.</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        [ | client |</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        client := <span class="kw">ZnClient</span> <span class="fu">new</span>.</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        client</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            signalProgress: <span class="kw">true</span>;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            url: <span class="st">'https://github.com/moosetechnology/VerveineJ/archive/v1.0.1.zip'</span>;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            downloadTo: <span class="kw">FileLocator</span> imageDirectory.</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        client isSuccess</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>            ifTrue: [ <span class="kw">ZipArchive</span> <span class="fu">new</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                    readFrom: <span class="st">'v1.0.1.zip'</span>;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                    extractAllTo: <span class="kw">FileLocator</span> imageDirectory.</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                <span class="co">"Permissions may not be set with ZipArchive#extractAllTo:"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                <span class="co">"Note: This fails (silently) in a Windows VM"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">LibC</span> runCommand: <span class="st">'chmod u+x VerveineJ-1.0.1/verveinej.sh'</span> ]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            ifFalse: [ <span class="kw">self</span> inform: <span class="st">'Download failed.'</span> ] ]</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            on: <span class="kw">HTTPProgress</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>            do: [ :progress | </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                bar label: progress printString.</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                progress isEmpty</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                    ifFalse: [ bar current: progress percentage ].</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                progress resume ] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If the download works, the VerveineJ importer will be in your Pharo working directory, with a relative path of <code>VerveineJ-1.0.1</code>.</p>
+<p>Once you have VerveineJ, there are two ways to create the FAMIX model from the Java source code:</p>
+<ol type="1">
+<li><p>Start the <code>FamixMaker</code> tool in the menu <strong>Moose &gt; Moose Tools &gt; Famix Maker</strong> (or you can execute <code>MooseEasyFamixMakerPresenter open</code> in a Moose Playground). You supply the paths to the source code, the VerveineJ parser script <code>verveinej.sh</code> and the destination MSE (FAMIX) file. With the relative paths of the examples above, the Java source to parse is at <code>tmp/MooseEasyRepos/bethrobson__Head-First-Design-Patterns</code>, the VerveineJ parser is at <code>VerveineJ-1.0.1/verveinej.sh</code> and we choose the name <code>HFDP.mse</code> to be the MSE file to be stored in <code>tmp</code>:<br>
+<img src="FamixMakerDialog.png" class="img-fluid"><br>
+Click <strong>Generate MSE File</strong> when all the fields are correct. As before, in Windows you will see the <code>cmd.exe</code> window and even the execution of a shell script.</p></li>
+<li><p>Alternatively, use a programmatic interface. In the same Moose Playground where we cloned the source and VerveineJ parser above, invoke it like this:<br>
+</p></li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wizard := <span class="kw">MooseEasyFamixMaker</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        generateMSETo: <span class="st">'tmp/HFDP.mse'</span> asFileReference</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        parsing: <span class="st">'tmp/MooseEasyRepos/bethrobson__Head-First-Design-Patterns'</span> asFileReference</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        with: <span class="st">'VerveineJ-1.0.1/verveinej.sh'</span> asFileReference.</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>wizard generateMSE.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Either way, at the end of this step there should be a file <code>tmp/HFDP.mse</code> that is the FAMIX model of the Java source code.</p>
+</section>
+<section id="load-model-of-java-source-into-moose" class="level2">
+<h2 class="anchored" data-anchor-id="load-model-of-java-source-into-moose">Load model of Java source (into Moose)</h2>
+<p><img src="https://www.plantuml.com/plantuml/svg/TP31JiD034Jl-nMMEAJyGdefGY1HDL8bHCM5WzauwP9TE_9kAi7NusrwuCBHzioRaNUve9ObHJW8zf2afmWom1ul25aMzUJo57X6nGIVwATHPU7UInI5eiZPJiJ5DLUIQzh7A4mhO5Rv8b-sjlq316yf7xOxekQRiWWad0YU7xgNzrkDpOdqGe5fVxzrRVVw14E8PhoBOJoNKOcu_RTrTOWOlgj7Inj49yiyXRnW33-qkbopEKRayjOTBEGg0XmnSAr7QdC2P8pVEUIgFQDA5HBtAp0NcTtEHllXBm00.png" title="Load model of Java source" class="img-fluid"></p>
+<p>If you use the GUI, the following code is generated in the text box at the bottom of the dialog. Otherwise, you can copy it from here, changing the paths for the Java source and MSE files:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Load the moose Model with some error checking"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>| mseFileRef mseStream mooseModel |</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mseFileRef := <span class="st">'tmp/HFDP.mse'</span> asFileReference. <span class="co">"Generated by FamixMaker"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>mseStream := mseFileRef readStream.</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>mseStream</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    ifNotNil: [ </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        mooseModel := <span class="kw">MooseModel</span> importFromMSEStream: mseStream. </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        mooseModel rootFolder:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">'tmp/MooseEasyRepos/bethrobson__Head-First-Design-Patterns'</span>.</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        mooseModel install. <span class="co">"So it appears in the Panel"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        mseStream close. ]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ifNil: [ <span class="kw">self</span> error: </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Could not load MSE file into Moose: '</span> , mseFileRef asString ].</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="visualize-a-java-package-in-plantuml" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-a-java-package-in-plantuml">Visualize a Java package in PlantUML</h2>
+<p><img src="https://www.plantuml.com/plantuml/svg/NP31JiCm38RlUGfB73PUeRiC8P2O5gaIOkAoWqdTBZInAoUT14-FMtP077_xysVP-r9HwvmJd6APCSLlWYmT9LV6o1CgPlZ0C0ugCtT1aYXKHIxM8gvkiywxJVEOX0aEU4MOL3ufr9rLrrnara0GJ7ksMejQRcGLo3WIF3_ub_VVlR0zaLufCXtk5uD_VO8-fdNoADZTAEdXZtld6YzYLhyqpwuN7TrTYiEb3ah4pV_Zjcr2hc_-Q3iM6730oAvfIIrcGCRqLM8ny88gHX5tgxLKcTpUalti1m00.png" title="Visualize model" class="img-fluid"></p>
+<p>The <a href="https://github.com/fuhrmanator/PlantUMLPharoGizmo">PlantUML Pharo Gizmo</a> project has a GUI to visualize Moose models. You start the GUI with the following:</p>
+<ul>
+<li><p>Click <strong>Moose &gt; Moose Projects &gt; Load PlantUML Gizmo</strong> to load the project.</p></li>
+<li><p>Invoke the GUI with the following command in a Moose Playground:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">PUGizmoForMoose</span> open.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+<p>The following browser should appear:</p>
+<p><img src="PlantUMLMooseOpen.png" class="img-fluid"></p>
+<p>Click on the <code>HFDP</code> Moose model on the left to browse to the list of classes and interfaces from the source code.</p>
+<p><img src="PlantUMLMooseClasses.png" class="img-fluid"></p>
+<p>In this example, we will focus on a particular package: <code>headfirst::designpatterns::combining::decorator</code>. We can filter the list by adding the following code in the editor at the bottom:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>each mooseName beginsWith: <span class="st">'headfirst::designpatterns::combining::decorator'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Press <kbd>Enter</kbd> to accept the filter, and you should see a new list:</p>
+<p><img src="PlantUMLMooseClassesFiltered.png" class="img-fluid"></p>
+<p>Select all the elements in the list by clicking in the list and typing <kbd>CTRL</kbd>+<kbd>A</kbd>. Then, right-click in the selected list and choose <strong>Select</strong>:</p>
+<p><img src="PlantUMLMooseClassesFiltered.gif" class="img-fluid"></p>
+<p>Click <strong>Get the diagram</strong> to see the UML class diagram:</p>
+<p><img src="PlantUMLMooseClassesFilteredGetIt.png" class="img-fluid"></p>
+<p>You can change the details of the diagram, to show <strong>Inheritance</strong> and <strong>Aggregation</strong> by clicking the respective check boxes.</p>
+<p><img src="PlantUMLMooseClassesFilteredDiagramInherAggreScaled.png" class="img-fluid"></p>
+<p>You can get a copy of the .png (or .svg) of the diagram by clicking the <strong>Copy Current UML Code</strong> button, and pasting the code in an editor such as <a href="https://planttext.com/?text=nLKzRmCX3Dtv5LRsHEgACgHgf4uTclm27_ZkKFauOJD4weylbqYLRZq69a3WvsVp7bnOC4i9NZ49H0p42ngwqu8P9MNGMitE4b1Ov061ma2P5Hlq16_AqoWW2RARPW7hCXbnAIfbF3B3OIQqeyiiMbjYDyK5HIX7rjgaCBZeuhHkcVJCflMrJX_NOduE-o5gz0TwtuPmTw7uTRaVvZCbfiRmTujBFRKVvQjs0hDjQ-btmThJLEAJYbk7iQfaBn8Elg4lDx9hJ5j5jp9K8RymMgg0y-_frARpBkd_FT8Z-rRPFHXiND63mDPHFHXiRDI5G9C5Nuyh78-fhm3t4TXU_uMYNR_WFm00">PlantText.com</a>. The following is an SVG version of the diagram generated by PlantUML Gizmo for Moose:</p>
+<p><img src="https://www.plantuml.com/plantuml/svg/nLKzRmCX3Dtv5LRsHEgACgHgf4uTclm27_ZkKFauOJD4weylbqYLRZq69a3WvsVp7bnOC4i9NZ49H0p42ngwqu8P9MNGMitE4b1Ov061ma2P5Hlq16_AqoWW2RARPW7hCXbnAIfbF3B3OIQqeyiiMbjYDyK5HIX7rjgaCBZeuhHkcVJCflMrJX_NOduE-o5gz0TwtuPmTw7uTRaVvZCbfiRmTujBFRKVvQjs0hDjQ-btmThJLEAJYbk7iQfaBn8Elg4lDx9hJ5j5jp9K8RymMgg0y-_frARpBkd_FT8Z-rRPFHXiND63mDPHFHXiRDI5G9C5Nuyh78-fhm3t4TXU_uMYNR_WFm00.png" class="img-fluid"></p>
+</section>
+<section id="perform-a-moose-analysis-using-pharo" class="level2">
+<h2 class="anchored" data-anchor-id="perform-a-moose-analysis-using-pharo">Perform a Moose analysis using Pharo</h2>
+<p><img src="https://www.plantuml.com/plantuml/svg/PP1DQiD038NtSmf15t6lu6mIIWiD6J2KX6woK6tPcNf6Cffne3rzPJUBGfTwFn_exN91BNEAq93seWcGCNxba5qU0q-ecE03st5GcRbh9Of2KUHi5d5ncnNWDlLJ52Ouu0rXKlcajcnDNUyiixO4hNHqCQr1pVTa4KWu4hpi_Uix90j4gCwaDmfCXyU5uD-UeGznRHu5ktjAUlZ3thhQYnZLB-R5sIUZgyyXpnZ3D_rsNDL4v7BoHmCl2S010xk768Ph6PI8wtyhLCqLLQn0tAtKN6HoExjij1y0.png" title="Perform analysis" class="img-fluid"></p>
+<p>Moose combined with Pharo is very powerful mechanism to do analyses on software. In this example, let’s assume we want to <em>find all the Java classes in the Head First Design Patterns project that implement more than one interface</em>. It helps to understand that in Moose, a Java interface and a Java class are the same FAMIX element. That said, a class element’s hierarchy can be obtained in several ways in Moose. For now, we will consider the message <code>directSuperclasses</code>, which in Moose returns the direct superclass (or superinterfaces) of a Java class (or interface). As such, we can assume a class implements more than two interfaces if <code>directSuperclasses</code> returns more than two elements. That is, the one (1) superclass of the Java class, and at least two (2) superinterfaces it also implements.</p>
+<p>In a Moose Playground, type the following Pharo statements:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the HFDP model (first in Moose panel)"</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>javaModel := <span class="kw">MooseModel</span> root first.</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Query all classes that have more than two direct FAMIX superclasses"</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>classesImplementingMoreThanOneInterface := javaModel allModelClasses </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    select: [ :each | </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        each directSuperclasses size &gt; 2 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Click <strong>Do it all and go</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) to see the list of classes that implement more than one interface.</p>
+<p>Clicking on one of the results in the list, e.g., <code>BeatModel</code> (the first one), we can verify the results of the analysis, i.e., that the class implements at least two interfaces, by clicking the <strong>Raw</strong> tab in the window on the right and typing <code>self directSuperclasses</code> in the text box at the bottom. Typing <kbd>Ctrl</kbd>+<kbd>G</kbd> (Do it and go) will show the list of elements for this message, which indeed includes two interfaces:</p>
+<pre><code>MetaEventListener in javax::sound::midi (Class)
+BeatModelInterface in headfirst::designpatterns::combined::djview (Class)
+Object in java::lang (Class)</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The use of <code>Class</code> in this output is from the Moose’s meaning, not Java’s meaning.</p>
+</div>
+</div>
+<p><img src="MooseQueryMultipleInterfaceClasses.gif" class="img-fluid"></p>
+<p>For more analyses, see <a href="http://themoosebook.org">The Moose Book</a>.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Thanks to the <code>Moose-Easy</code> and <code>PlantUMLPharoGizmo</code> tools shown in this post, we have shown a relatively easy way to analyze Java projects with Moose.</p>
+</section>
+<section id="acknowledgements" class="level2">
+<h2 class="anchored" data-anchor-id="acknowledgements">Acknowledgements</h2>
+<p>I am grateful to Professor Stéphane Ducasse and the entire RMoD team for their generosity during my 2018-2019 sabbatical at INRIA Nord Europe Lille, where I learned so much about Pharo, Moose and a productive team culture in open source software engineering.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<div class="comments">
+
+	<div id="disqus_thread"></div>
+
+	<script type="text/javascript">
+
+
+
+	    var disqus_shortname = 'cfuhrman';
+
+
+
+	    (function() {
+
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+	    })();
+
+
+
+	</script>
+
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</div>
+
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/fuhrmanator\.github\.io\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
