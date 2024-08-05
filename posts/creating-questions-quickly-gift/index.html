@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.5.56">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Christopher Fuhrman">
 <meta name="dcterms.date" content="2020-12-18">
 
-<title>Christopher Fuhrman - Creating questions quickly in Moodle with GIFT</title>
+<title>Creating questions quickly in Moodle with GIFT – Christopher Fuhrman</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -157,12 +157,12 @@ background: #00000000;
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Christopher Fuhrman - Creating questions quickly in Moodle with GIFT">
+<meta property="og:title" content="Creating questions quickly in Moodle with GIFT – Christopher Fuhrman">
 <meta property="og:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
 <meta property="og:image" content="https://fuhrmanator.github.io/posts/creating-questions-quickly-gift/image.jpg">
 <meta property="og:site_name" content="Christopher Fuhrman">
 <meta property="og:locale" content="en_US">
-<meta name="twitter:title" content="Christopher Fuhrman - Creating questions quickly in Moodle with GIFT">
+<meta name="twitter:title" content="Creating questions quickly in Moodle with GIFT – Christopher Fuhrman">
 <meta name="twitter:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
 <meta name="twitter:image" content="https://fuhrmanator.github.io/posts/creating-questions-quickly-gift/image.jpg">
 <meta name="twitter:creator" content="@thefuhrmanator">
@@ -181,7 +181,7 @@ background: #00000000;
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -225,7 +225,7 @@ background: #00000000;
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -277,7 +277,23 @@ background: #00000000;
 <p>I’ve been using Moodle for several years in my courses, and it remains one of the best tools for online learning thanks to its flexible and powerful testing (quiz) capabilities. However, creating a quiz or question in Moodle requires so many clicks!</p>
 <p>I want to share here some solutions that don’t require creating questions in the GUI of Moodle, thanks to GIFT (General Input Format Template). GIFT is a text-based format for questions, kind of like a markdown for quizzes. Formally, one might call it a <em>domain specific language</em> (DSL). You can read <a href="https://docs.moodle.org/en/GIFT_format">more about the Moodle GIFT</a>.</p>
 <!-- ![](https://www.plantuml.com/plantuml/svg/ZP5RQy9048NVyoiMN_gK2m6XY1NJc9RYhQZGbq1PDsDSifUmEz9QyRztJQWLMsZtOH_ETsRc33EqI0tkf21JaE1PHWMGA8WzMt5LKqCbkQUiAetUgIBLGXloQ03K1RUuTpKM3MUdHXTa11kw4xY2Tqm4BvK4XOIv3ynFruDMEACII68u5TxDjs6c4VxemGIrbXmyujvrNZHKMMTpDItNfW3pEpk5QCdBbYCqsiPfosR7jHR5MRBy0qWSHOs0BXwzZdVqsbYTFfTbRujOzyAG2UxceI_usb2p3vYM8PUq1FjQXHL0xRiJI9yP_QRyYtZ--hpMFsr-t0rgLHwQczv5GVSuoDKuovvpbIQJQQxwfnLwjz4WcOsSDdbAnsIIBPTaDV-2iQFf8ajM6PdE5rc7K4iIRmYgS9V-1000 "Meme") -->
-<img src="index_files\mediabag\8a1d53fe67b1fa66ff8c3eef4899960f44cbc621.svg" class="img-fluid">
+<pre class="plantuml"><code>@startuml
+scale 0.2
+skinparam BackgroundColor Green
+skinparam style strictuml
+skinparam DefaultTextAlignment center
+skinparam DefaultFontName Arial
+'skinparam NoteTextAlignment center
+skinparam class {
+    BackgroundColor transparent
+    BorderColor transparent
+    FontColor White
+    fontStyle bold
+    fontsize 200
+    textalignment center
+}
+class "&lt;img:pngkey.com-white-crown-png-859112.png{scale=0.7}&gt;\nKEEP\nCALM\n&lt;size:80&gt;AND\nCLICK LESS TO\n&lt;size:280&gt;CREATE MORE" as A
+@enduml</code></pre>
 <section id="why-i-like-gift" class="level2">
 <h2 class="anchored" data-anchor-id="why-i-like-gift">Why I like GIFT</h2>
 <p>GIFT has the advantage of allowing me to create questions quickly. It also has the advantage that it is text; if I want to maintain or share a set of questions (like a question bank), I can put it in a (private) git repository. Beware that because it is text, if you want to include images in your questions, you need to take some care. HTML and Markdown formats are supported, so it’s possible to store images in questions that way. Another way to store images is with inline <code>data:</code> URI. There are online tools that will convert images into <code>data:</code> URI format (beware they can be many lines of text!).</p>
@@ -327,27 +343,27 @@ c) mint (correct)</p>
 </blockquote>
 <p>Moodle allows multiple-choice questions with more than one correct answer; the answers are presented as checkboxes. The way I would score this (if it were a test on paper) is that it’s a 4-part answer. Checking (or not) an answer is 1/4 of the value. In fact, this way to grade is considered a <a href="http://hotpot.uvic.ca/howto/msquestion.htm"><em>best practice</em> in HotPotatoes</a>.</p>
 <p>Sadly, Moodle – and GIFT – don’t make this kind of grading <em>easy</em>. If you just indicate which answers are correct in Moodle/GIFT, students can check <em>all</em> the boxes and get 100% (it’s a pretty well-known hack). You could argue this is a bug in Moodle, and <a href="https://moodle.org/mod/forum/discuss.php?d=39785">many people have since 2006</a>! Here’s what this would look like in GIFT:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Which of the following are perennial herbs? {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    ~basil</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    ~dill</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    =fennel</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    =mint</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>So, a way to solve the problem is to give the wrong answers negative weights:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>Which of the following are perennial herbs? {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%-25%basil</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%-25%dill</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%50%fennel</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%50%mint</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ~basil</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ~dill</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    =fennel</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    =mint</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>So, a way to solve the problem is to give the wrong answers negative weights:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Which of the following are perennial herbs? {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%-25%basil</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%-25%dill</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%50%fennel</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    ~<span class="co">%50%mint</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This technically works, but what should the values be when you have 3 answers? 5 answers? 6? The design makes it hard to maintain these questions (you have to change all the negative values as you add/remove answers).</p>
 <p>The <em>maintainable</em> solution I found is to use a <em>matching question</em> with two choices (correct or incorrect). In this example, I used <em>perennial</em> and <em>not perennial</em> (but it could be <em>perennial</em> and <em>annual</em>):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Classify the following herbs as perennial or not {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    =basil -&gt; not perennial</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    =dill -&gt; not perennial</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    =fennel -&gt; perennial</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    =mint -&gt; perennial</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>Classify the following herbs as perennial or not {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    =basil -&gt; not perennial</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    =dill -&gt; not perennial</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    =fennel -&gt; perennial</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    =mint -&gt; perennial</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Using a matching question like this, the scoring is done correctly regardless of the number of answers. A drawback to this style is that students have to click in a drop-down menu with two choices (not as easy to use as a checkbox).</p>
 </section>
 </section>
@@ -384,35 +400,20 @@ c) mint (correct)</p>
 
 </main> <!-- /main -->
 <div class="comments">
-
 	<div id="disqus_thread"></div>
-
 	<script type="text/javascript">
-
-
 
 	    var disqus_shortname = 'cfuhrman';
 
-
-
 	    (function() {
-
 	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-
 	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-
 	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-
 	    })();
 
-
-
 	</script>
-
 	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 </div>
-
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -448,18 +449,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -491,7 +481,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/fuhrmanator\.github\.io\/");
@@ -499,7 +511,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
