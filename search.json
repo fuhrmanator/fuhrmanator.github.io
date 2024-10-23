@@ -165,7 +165,7 @@
     "href": "posts/typescript-famix-generics/index.html#unified-approach-in-the-metamodel-and-ts2famix",
     "title": "Improved modeling of TypeScript generics and their concretizations",
     "section": "Unified Approach in the Metamodel and ts2famix",
-    "text": "Unified Approach in the Metamodel and ts2famix\nBoth our metamodel and the ts2famix npm package share a consistent approach to representing generics and concretization relationships. In our metamodel, parametric elements and their concretizations are modeled clearly to reflect the relationships between abstract types and their concrete instances. These representations are aligned with how ts2famix handles generics in TypeScript projects, ensuring that improvements in the recognition of parametric elements are mirrored in both the model and the code analysis process."
+    "text": "Unified Approach in the Metamodel and ts2famix\nBoth our metamodel and the ts2famix npm package share a consistent approach to representing generics and concretization relationships. In our metamodel, parametric elements and their concretizations are modeled clearly to reflect the relationships between abstract types and their concrete instances. These representations are aligned with how ts2famix handles generics in TypeScript projects, ensuring that improvements in the recognition of parametric elements are mirrored in both the model and the code analysis process.\n\n\n\nTypeScript Metamodel"
   },
   {
     "objectID": "posts/typescript-famix-generics/index.html#conclusion",
