@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Christopher Fuhrman">
-<meta name="dcterms.date" content="2023-09-15">
+<meta name="author" content="Nour Ayechi">
+<meta name="dcterms.date" content="2024-10-22">
 
-<title>TypeScript support for Moose (Pharo) – Christopher Fuhrman</title>
+<title>Improved modeling of TypeScript generics and their concretizations – Christopher Fuhrman</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -157,14 +157,14 @@ background: #00000000;
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="TypeScript support for Moose (Pharo) – Christopher Fuhrman">
+<meta property="og:title" content="Improved modeling of TypeScript generics and their concretizations – Christopher Fuhrman">
 <meta property="og:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
-<meta property="og:image" content="https://fuhrmanator.github.io/posts/typescript-in-moose/image.jpg">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/typescript-famix-generics/image.jpg">
 <meta property="og:site_name" content="Christopher Fuhrman">
 <meta property="og:locale" content="en_US">
-<meta name="twitter:title" content="TypeScript support for Moose (Pharo) – Christopher Fuhrman">
+<meta name="twitter:title" content="Improved modeling of TypeScript generics and their concretizations – Christopher Fuhrman">
 <meta name="twitter:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
-<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/typescript-in-moose/image.jpg">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/typescript-famix-generics/image.jpg">
 <meta name="twitter:creator" content="@thefuhrmanator">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -234,7 +234,7 @@ background: #00000000;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">TypeScript support for Moose (Pharo)</h1>
+      <h1 class="title">Improved modeling of TypeScript generics and their concretizations</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">Moose</div>
                 <div class="quarto-category">TypeScript</div>
@@ -248,14 +248,14 @@ background: #00000000;
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Christopher Fuhrman </p>
+               <p>Nour Ayechi </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">September 15, 2023</p>
+        <p class="date">October 22, 2024</p>
       </div>
     </div>
     
@@ -274,171 +274,96 @@ background: #00000000;
 
 
 
-<p>It’s now possible to model and analyze TypeScript projects in <a href="https://github.com/moosetechnology">Moose</a>.</p>
-<p>Thanks to excellent collaboration with summer 2023 interns <a href="https://www.linkedin.com/in/bdah-eya-684b341a2/">Eya Bdah</a> (ISSAT of Sousse University) and <a href="https://www.linkedin.com/in/maelpaul/">Maël Paul</a> (ENSEIRB-MATMECA Bordeaux), several former students of MGL843 who contributed to the open-source elements of this project, and last but not least, Inria’s <a href="https://www.inria.fr/fr/evref">EVREF (formerly RMoD)</a> group, there is a stable Famix <a href="https://github.com/fuhrmanator/FamixTypeScript">metamodel</a> and <a href="https://github.com/fuhrmanator/FamixTypeScriptImporter">importer (aka parser)</a> for TypeScript. The importer <a href="https://www.npmjs.com/package/ts2famix"><code>ts2famix</code></a> is also an npmjs package, which means you can easily install and run it if you use npm.</p>
+<p>The <a href="../typescript-in-moose/"><code>ts2famix</code> npm package</a> provides the ability to analyze TypeScript projects by breaking down their components and generating a model with detailed information. However, both ts2famix and its corresponding metamodel initially had limitations in accurately recognizing parametric elements and concretization relationships. During my Summer 2024 internship, I focused on improving the recognition of these elements and their representation, enhancing their accuracy in both the ts2famix-generated JSON file and our metamodel.</p>
 <section id="assumptions" class="level2">
 <h2 class="anchored" data-anchor-id="assumptions">Assumptions</h2>
-<p>In this post, I’ll show you how to use these tools to analyze a TypeScript project using Moose 10. We assume the reader is familiar with cloning GitHub projects and running npm commands (since we’re analyzing TypeScript), as well as using the git <code>bash</code> command-line tool. We tested this on Windows 10 (again using git <code>bash</code>), but it should work on Linux and Mac, too.</p>
+<p>In this post, we assume familiarity with TypeScript’s generic types and their usage. We’ll explore how generics and concretization relationships are represented in both our metamodel and ts2famix.</p>
 </section>
-<section id="moose-needs-to-grok-typescript" class="level2">
-<h2 class="anchored" data-anchor-id="moose-needs-to-grok-typescript">Moose needs to grok TypeScript</h2>
-<p>The Moose software needs a metamodel to understand TypeScript programs. Our project provides this metamodel at <a href="https://github.com/fuhrmanator/FamixTypeScript" class="uri">https://github.com/fuhrmanator/FamixTypeScript</a>.</p>
-<p>The following instructions are for people familiar with Moose and Pharo. If you need help with Pharo images, check out the <a href="https://mooc.pharo.org/">Pharo Mooc</a>.</p>
-<ul>
-<li><p>Create and run a <strong>Moose 10 (stable)</strong> image.</p></li>
-<li><p>Open a Playground and run this script to load the FamixTypeScript metamodel:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Metacello</span> <span class="fu">new</span> </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    githubUser: <span class="st">'fuhrmanator'</span> project: <span class="st">'FamixTypeScript'</span> commitish: <span class="st">'master'</span> path: <span class="st">'src'</span>;</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    baseline: <span class="st">'FamixTypeScript'</span>;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    load</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-</ul>
-</section>
-<section id="create-the-moose-famix-model-of-a-typescript-project" class="level2">
-<h2 class="anchored" data-anchor-id="create-the-moose-famix-model-of-a-typescript-project">Create the Moose (Famix) model of a TypeScript project</h2>
-<ul>
-<li><p>Let’s clone the project <a href="https://github.com/Chuzzy/Emojiopoly" class="uri">https://github.com/Chuzzy/Emojiopoly</a>.</p></li>
-<li><p>Next, we’ll install <code>ts2famix</code> (it’s an npm command, so you need to have npm running on your machine):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> i <span class="at">-g</span> ts2famix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Let’s move into the Emojiopoly clone’s location, and create a Famix model of the project:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> path/to/Emojiopoly</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ts2famix</span> <span class="at">-i</span> tsconfig.json <span class="at">-o</span> emojiopoly-model.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will create the model <code>emojiopoly-model.json</code> in the same directory as the Emojiopoly clone.</p></li>
-</ul>
-</section>
-<section id="import-the-model-into-moose" class="level2">
-<h2 class="anchored" data-anchor-id="import-the-model-into-moose">Import the model into Moose</h2>
-<ul>
-<li><p>If you’re running Windows (maybe this works on a Mac, too?), you can drag the <code>emojiopoly-model.json</code> file and drop it on the running window of Moose. You’ll see a dialog allowing you to confirm the import. <img src="drag-drop-model-to-moose.gif" class="img-fluid" alt="Drag and drop the model file"></p></li>
-<li><p>If you’re not able to drag the file, move the <code>emojiopoly-model.json</code> file generated by <code>ts2famix</code> to the same folder as the Moose image. The folder has a path like <code>Documents/Pharo/images/[Moose image name]</code>. Tip: you can find the folder of the image by right-clicking on the image in Pharo Launcher and selecting <strong>Show in folder</strong>.</p></li>
-<li><p>In the Moose image, open a Playground (<kbd>CTRL</kbd>-<kbd>O</kbd> <kbd>CTRL</kbd>-<kbd>W</kbd>) and run the following script:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="st">'emojiopoly-model.json'</span> asFileReference readStreamDo:</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    [ :stream | model := <span class="kw">FamixTypeScriptModel</span> <span class="fu">new</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      importFromJSONStream: stream. model install ].</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will load the model into Moose.</p></li>
-<li><p>Open the menu <strong>Moose &gt; Models browser</strong> to verify that the model of Emojiopoly has been loaded into Moose. You should see <strong>emojiopoly-model</strong> (or whatever the name you used for the .json file) in the list of <strong>Models</strong>.</p></li>
-</ul>
-</section>
-<section id="do-some-analyses-on-the-model" class="level2">
-<h2 class="anchored" data-anchor-id="do-some-analyses-on-the-model">Do some analyses on the model</h2>
-<p>You can do any analysis you want on the model, but here is how to get started:</p>
-<ul>
-<li><p>From the <strong>Models browser</strong> window, select <strong>emojiopoly-model</strong> from the list.</p></li>
-<li><p>Click on the <strong>Inspect</strong> button (icon with glasses).</p></li>
-<li><p>A new <strong>Moose Inspector</strong> window will appear.</p></li>
-<li><p>Click on <strong>Card</strong> in the left-hand list.</p></li>
-<li><p>You will see a sub-window <strong>a FamixTypeScriptClass (Card)</strong> on the left.</p></li>
-<li><p>Click on the <strong>SourceText</strong> tab at the top of this sub-window to view the source code of the class.</p></li>
-<li><p>Click on the <strong>Moose Properties</strong> tab to view the Moose properties of this class.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="AnimationMooseInspectModel.gif" class="img-fluid figure-img"></p>
-<figcaption>Inspecting a FamixTypeScriptClass</figcaption>
-</figure>
-</div></li>
-</ul>
-<section id="simple-queries" class="level3">
-<h3 class="anchored" data-anchor-id="simple-queries">Simple Queries</h3>
-<p>In a Playground window, execute the following code:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the emojiopoly model (first in Moose panel)"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tsModel := <span class="kw">MooseModel</span> root first.</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Find all classes that have 100 or more lines of code"</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>bigClasses := tsModel allModelClasses </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    select: [ :each | </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        each numberOfLinesOfCode &gt;= 100 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The result should generally include only one class, `MonopolyGame``. You can select it and view its source code to verify it has more than 100 lines.</p>
-<p>In the Navigation tab, you can also see its methods, attributes, and more.</p>
-<p>To get a list of long methods (containing 20 lines or more) in the project, execute this script:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the emojiopoly model (first in Moose panel)"</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tsModel := <span class="kw">MooseModel</span> root first.</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Find all methods that have 20 or more lines of code"</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>longMethods := tsModel allMethods </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    select: [ :each | </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        each numberOfLinesOfCode &gt;= 20 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To find out the class to which each method belongs, check the <code>parentType</code> property in the navigation.</p>
-</section>
-<section id="typescript-specific-queries" class="level3">
-<h3 class="anchored" data-anchor-id="typescript-specific-queries">TypeScript-specific Queries</h3>
-<p>What if you want to find all <code>Decorators</code> (a TypeScript-specific element) in a project? Sadly, there is not (yet) a <code>tsModel allDecorators</code> method for TypeScript models. The solution is to use the <code>tsModel allMatching: FamixTypeScriptDecorator</code>. Indeed, the <code>allMatching:</code> method allows you to find all elements of a specific Entity. You can see the TypeScript metamodel element names in the <a href="https://raw.githubusercontent.com/fuhrmanator/FamixTypeScript/v1/doc/FamixTypeScript.svg">SVG visualization from the metamodel repository</a>. The elements are shown as UML classes in light blue, e.g., <code>Module</code>, <code>Decorator</code>, etc. Note that you need to add the prefix <code>FamixTypeScript</code> to the name of the element, e.g., <code>FamixTypeScriptModule</code>, <code>FamixTypeScriptDecorator</code>, etc.</p>
-</section>
-<section id="visualizations-with-roassal-3" class="level3">
-<h3 class="anchored" data-anchor-id="visualizations-with-roassal-3">Visualizations with Roassal 3</h3>
-<p>Roassal 3 a powerful (and complex) visualization library in Pharo. We can draw inspiration from an <a href="https://github.com/bergel/AgileVisualizationAPressCode/blob/main/01-04-AgileVisualization.txt">example of a Roassal 3 visualization on GitHub</a> to represent classes visually in a Moose model:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">"The variable classes contains the classes we would like to visualize"</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>classes := <span class="kw">MooseModel</span> root first allModelClasses.</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">"A canvas is a container of graphical shapes"</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>c := <span class="kw">RSCanvas</span> <span class="fu">new</span>.</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">"Each class is represented as a box"</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>classes do: [ :aClass | c add: (<span class="kw">RSBox</span> <span class="fu">new</span> model: aClass) ].</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">"The width of each class indicates the number of variables defined in the class"</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">RSNormalizer</span> width shapes: c shapes; from: 6; to: 20;</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    normalize: <span class="st">#numberOfAttributes</span>.</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">"Height of each class represents the number of methods"</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="kw">RSNormalizer</span> height shapes: c shapes; normalize: <span class="st">#numberOfMethods</span>.</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">"A class color goes from gray to red, indicating the number of lines of code"</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="kw">RSNormalizer</span> color shapes: c shapes;</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    from: <span class="kw">Color</span> gray; to: <span class="kw">Color</span> red; normalize: <span class="st">#numberOfLinesOfCode</span>.</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">"Vertical lines indicate the inheritance relationship"</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="kw">RSLineBuilder</span> orthoVertical</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    canvas: c; withVerticalAttachPoint; color: <span class="kw">Color</span> lightGray;</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    connectFrom: <span class="st">#superclass</span>.</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">"Use a tree layout to adequately locate the classes"</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="kw">RSTreeLayout</span> on: c nodes.</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">"We make all the classes draggable and with a contextual popup window"</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>c nodes <span class="fu">@</span> <span class="kw">RSDraggable</span> <span class="fu">@</span> <span class="kw">RSPopup</span>.</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">"The whole visualization is zoomable, draggable, and shapes may be searched in it"</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>c <span class="fu">@</span> <span class="kw">RSCanvasController</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This visualization represents classes as rectangles. Each rectangle has three dimensions:</p>
-<ul>
-<li>The color of each rectangle represents the number of lines of code. Gray signifies a relatively low number of lines of code, while red indicates a relatively high number of lines of code. The color variation is handled by the <code>RSNormalizer</code> class.</li>
-<li>The height of each rectangle represents the number of methods.</li>
-<li>The width of each rectangle represents the number of attributes.</li>
-</ul>
-<div class="callout callout-style-default callout-tip callout-titled">
+<section id="understanding-genericity-and-concretization" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-genericity-and-concretization">Understanding Genericity and Concretization</h2>
+<p>Genericity refers to the ability to define classes, methods, or types that can operate on different data types. In TypeScript, generics allow developers to write reusable code that can handle various data types while maintaining type safety.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Parametric Class</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClassA<span class="op">&lt;</span> T <span class="op">&gt;</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">constructor</span>(value<span class="op">:</span> T) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">this</span><span class="op">.</span><span class="at">value</span> <span class="op">=</span> value<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For example, a generic class like <code>ClassA</code> can be defined with a type parameter <code>T</code>, making it flexible to work with different types, but it cannot be used without specifying the type for <code>T</code>.</p>
+<p>Concretization occurs when these generic types are assigned specific values or types, turning abstract type parameters into concrete instances.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClassB <span class="kw">extends</span> ClassA<span class="op">&lt;</span> string <span class="op">&gt;</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// In Famix, ClassA is modeled as a ParametricClass with type string</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ClassB and string are modeled as Class and PrimitiveType, respectively</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the case of <code>ClassA</code>, concretization would involve setting <code>T</code> to a specific type like <code>string</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ClassA<span class="op">&lt;</span> T <span class="op">&gt;</span> { <span class="co">/* ... */</span> }</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ClassB <span class="kw">extends</span> ClassA<span class="op">&lt;</span> string <span class="op">&gt;</span> { <span class="co">/* ... */</span> }</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Modeling the relations in Famix:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ClassA&lt; T &gt;  ==Concretization==&gt;  ClassA&lt; string &gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">// T  ==ParameterConcretization==&gt;  string</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this example, we have two classes: <code>ClassA&lt; T &gt;</code>, a generic class with the parameter <code>T</code>, and <code>ClassA&lt; string &gt;</code>, a concrete class where <code>T</code> is specified as <code>string</code>. This illustrates a concretization relationship between <code>ClassA&lt; T &gt;</code> and <code>ClassA&lt; string &gt;</code>, as well as a parameter concretization relationship between the generic parameter <code>T</code> and the concrete parameter <code>string</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The visualization obtains data from each Moose element through properties, for example, <code>#numberOfAttributes</code>, <code>#numberOfMethods</code>, and <code>#numberOfLinesOfCode</code>. These are methods (accessors) of Famix elements, such as <code>FamixTypeScriptClass</code>, which provide the values. You can find other properties in the Moose Properties tab of these elements.</p>
+<p>This example is explained in detail (with an example in Java) throughout <a href="https://modularmoose.org/posts/2023-07-13-parametric">this blog post</a>.</p>
 </div>
 </div>
+</section>
+<section id="implementation-in-the-famixtypescript-metamodel" class="level2">
+<h2 class="anchored" data-anchor-id="implementation-in-the-famixtypescript-metamodel">Implementation in the FamixTypeScript Metamodel</h2>
+<p>Now that we’ve established a theoretical understanding of generics and concretization, we can see how these concepts were implemented in our metamodel.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="VisualisationMooseRoassal.gif" class="img-fluid figure-img"></p>
-<figcaption>Roassal visualization of Emojiopoly</figcaption>
+<p><img src="model.png" class="img-fluid figure-img"></p>
+<figcaption>TypeScript Metamodel (Famix) with generics and concretizations.</figcaption>
 </figure>
 </div>
-<p>With the <strong>Emojiopoly</strong> project, you can see that the <code>MonopolyGame</code> class has many methods (its height) and also a significant amount of code (its red color).</p>
-<div class="callout callout-style-default callout-tip callout-titled">
+<p>Our metamodel includes 8 new classes:</p>
+<ul>
+<li>Five representing the core generic structures: <code>ParametricClass</code>, <code>ParametricInterface</code>, <code>ParametricFunction</code>, <code>ParametricMethod</code>, and <code>ParametricArrowFunction</code>.</li>
+<li>A <code>ParameterType</code>, which refers to the parameters of a parametric element.</li>
+<li>Two classes, <code>Concretisation</code> and <code>ParameterConcretisation</code>, defining relationships between parametric elements and between parameter types, respectively.</li>
+</ul>
+<p>The use of traits has been key in organizing parametric elements and concretizations, allowing us to handle them in a structured, modular way.</p>
+<p>We have 5 new traits in our meta-model:</p>
+<ul>
+<li><code>TParametricEntity</code> is a general type used by all parametric entities, including <code>ParametricClass</code>, <code>ParametricInterface</code>, <code>ParametricFunction</code>, <code>ParametricMethod</code>, and <code>ParametricArrowFunction</code>.</li>
+<li><code>TConcreteParameterType</code> represents concrete parameters.</li>
+<li><code>TGenericParameterType</code> represents generic parameters.<br>
+</li>
+<li><code>TConcretisation</code> establishes a link between two <code>TParametricEntity</code> instances. A <code>TParametricEntity</code> can have one or more concretizations with other <code>TParametricEntity</code> objects. Each <code>TParametricEntity</code> that is a concretization of another holds a reference to its generic entity.</li>
+<li><code>TParameterConcretisation</code> works similarly to <code>TConcretisation</code>, but instead of linking two <code>TParametricEntity</code> instances, it connects a <code>TConcreteParameterType</code> with a <code>TGenericParameterType</code>. A <code>TGenericParameterType</code> can have multiple concretizations, and a <code>TConcreteParameterType</code> contains references to its generics.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tip
+Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The Pharo syntax with the hashtag used on line 9, <code>normalize: #numberOfAttributes</code>, is a shorthand syntax for a longer block expression: <code>normalize: [ :element | element numberOfAttributes ]</code>. Sometimes, you may want to perform a calculation on the value used in the visualization, for example, combining it with another attribute like the number of <code>receivingInvocations</code>. In that case, you would do <code>normalize: [ :element | element numberOfAttributes + element receivingInvocations size ]</code>.</p>
+<p>These relations are explained in detail throughout <a href="https://modularmoose.org/moose-wiki/Developers/predefinedEntities#genericity">this blog post</a>.</p>
 </div>
 </div>
-<p>The layout (<code>RSTreeLayout</code>) also helps visualize the class hierarchy in terms of inheritance. However, the <strong>Emojiopoly</strong> project, because TypeScript allows type composition, does not use inheritance. Therefore, no hierarchy is visible in the visualization.</p>
 </section>
-<section id="check-out-moose-10s-new-visualization-tools" class="level3">
-<h3 class="anchored" data-anchor-id="check-out-moose-10s-new-visualization-tools">Check out Moose 10’s new visualization tools</h3>
-<p>The latest version of Moose has some built-in features that make it fun to explore projects. Check out <a href="https://www.youtube.com/watch?v=2ILbR5ZrSm8&amp;t=689">Gabriel Ullmann’s excellent video</a> on using Moose 10. Please note that his demo is done with a Java project (model), but Moose analyses work almost the same way with a TypeScript project (once you’ve loaded and imported a model of a TypeScript project).</p>
-<iframe style="aspect-ratio: 16 / 9; width: 100%;" src="https://www.youtube.com/embed/2ILbR5ZrSm8?start=689" frameborder="0" allowfullscreen="">
-</iframe>
+<section id="unified-approach-in-the-metamodel-and-ts2famix" class="level2">
+<h2 class="anchored" data-anchor-id="unified-approach-in-the-metamodel-and-ts2famix">Unified Approach in the Metamodel and ts2famix</h2>
+<p>Both our metamodel and the <code>ts2famix</code> npm package share a consistent approach to representing generics and concretization relationships. In our metamodel, parametric elements and their concretizations are modeled clearly to reflect the relationships between abstract types and their concrete instances. These representations are aligned with how <code>ts2famix</code> handles generics in TypeScript projects, ensuring that improvements in the recognition of parametric elements are mirrored in both the model and the code analysis process.</p>
 </section>
-</section>
-<section id="whats-next" class="level2">
-<h2 class="anchored" data-anchor-id="whats-next">What’s next?</h2>
-<p>The FamixTypeScriptImporter (<code>ts2famix</code>) as well as the FamixTypeScript metamodel are still in development, so don’t forget to check for updates. Please report any issues you find on the respective GitHub repositories.</p>
-<p>Let us know if you are using (or want to use) FamixTypeScript to model your TypeScript projects!</p>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this post, we’ve explored how generics and concretization relationships are modeled both in our metamodel and the <code>ts2famix</code> npm package. By ensuring a consistent approach across both systems, we’ve enhanced the accuracy and usability of these parametric elements in TypeScript project analysis.</p>
 
 
 </section>
