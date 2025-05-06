@@ -1,75 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fuhrmanator.github.io/contact.html</loc>
-    <lastmod>2025-01-20T17:59:26.169Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/dsm-moose-java/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.220Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/github-api-in-pharo/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.220Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/libc-pharo-experiments/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.221Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/running-pharo-in-WSL/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.236Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/szz-unleashed-github-bugs/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.237Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/typescript-famix-generics/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.238Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/plantuml-gizmo-docs-slides/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.233Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/about.html</loc>
-    <lastmod>2025-01-20T17:59:26.169Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/blogging-allowed.html</loc>
-    <lastmod>2025-01-20T17:59:26.169Z</lastmod>
+    <loc>https://fuhrmanator.github.io/monets.html</loc>
+    <lastmod>2025-05-06T15:18:54.670Z</lastmod>
   </url>
   <url>
     <loc>https://fuhrmanator.github.io/directions.html</loc>
-    <lastmod>2025-01-20T17:59:26.169Z</lastmod>
+    <lastmod>2025-05-06T15:18:54.661Z</lastmod>
   </url>
   <url>
-    <loc>https://fuhrmanator.github.io/posts/typescript-in-moose/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.249Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/creating-questions-quickly-gift/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.214Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/markdown-in-gift/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.231Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fuhrmanator.github.io/posts/oer-in-french/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.232Z</lastmod>
+    <loc>https://fuhrmanator.github.io/posts/szz-unleashed-github-bugs/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.727Z</lastmod>
   </url>
   <url>
     <loc>https://fuhrmanator.github.io/posts/cochange-dsm-moose/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.199Z</lastmod>
+    <lastmod>2025-05-06T15:18:54.690Z</lastmod>
   </url>
   <url>
     <loc>https://fuhrmanator.github.io/posts/analyzing-java-with-moose/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.188Z</lastmod>
+    <lastmod>2025-05-06T15:18:54.679Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/github-api-in-pharo/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.711Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/libc-pharo-experiments/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.712Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/plantuml-gizmo-docs-slides/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.724Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/dsm-moose-java/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.711Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/contact.html</loc>
+    <lastmod>2025-05-06T15:18:54.661Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/blogging-allowed.html</loc>
+    <lastmod>2025-05-06T15:18:54.661Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/typescript-in-moose/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.739Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/oer-in-french/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.723Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/typescript-famix-generics/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.728Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/creating-questions-quickly-gift/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.705Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/markdown-in-gift/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.722Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/posts/running-pharo-in-WSL/index.html</loc>
+    <lastmod>2025-05-06T15:18:54.727Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fuhrmanator.github.io/about.html</loc>
+    <lastmod>2025-05-06T15:18:54.661Z</lastmod>
   </url>
   <url>
     <loc>https://fuhrmanator.github.io/index.html</loc>
-    <lastmod>2025-01-20T17:59:26.179Z</lastmod>
+    <lastmod>2025-05-06T15:18:54.670Z</lastmod>
   </url>
 </urlset>
