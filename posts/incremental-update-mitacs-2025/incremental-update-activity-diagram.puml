@@ -1,0 +1,31 @@
+@startuml
+title Incremental Update Process
+
+start
+
+:Detect changed files;
+repeat
+  :Categorize change type of file
+  (Creation | Modification | Deletion);
+
+  :Update ts-morph project representation;
+
+  :Locate Famix elements referencing file (sourcedAnchor);
+
+  :Follow ImportClause chain to dependent elements;
+
+  :Identify related stub entities;
+
+  :Delete identified elements from model;
+
+  if (Change type == Deletion?) then (yes)
+  else (no)
+    :Recreate Famix elements for modified file;
+  endif
+
+repeat while (More modified files?)
+
+:Generate updated JSON;
+
+stop
+@enduml
