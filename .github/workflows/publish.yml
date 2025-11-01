@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
   push:
-    branches: master
+    branches: [master]
 
 name: Quarto Publish
   
@@ -14,19 +14,18 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Run shared Markdown link check
+        uses: ./.github/actions/link-check
+        with:
+          file-extension: '.qmd'
+          config-file: 'markdown-link-check-config.json'
+
       - name: Download Latest PlantUML and make a plantuml command
         run: |
           curl -L -o /usr/local/bin/plantuml.jar https://downloads.sourceforge.net/project/plantuml/plantuml.jar
           echo '#!/bin/bash' > /usr/local/bin/plantuml
           echo 'java -jar /usr/local/bin/plantuml.jar "$@"' >> /usr/local/bin/plantuml
           chmod +x /usr/local/bin/plantuml
-
-      - name: Quarto Markdown link check
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
-        with:
-          file-extension: '.qmd'
-          use-quiet-mode: "yes"
-          config-file: "markdown-link-check-config.json"
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
