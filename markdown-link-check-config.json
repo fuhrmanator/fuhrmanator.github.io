@@ -26,6 +26,14 @@
         {
             "pattern": "^https?://(x.com|twitter.com)/.*$",
             "comment": "Ignore Elon Musk's politics on accessing Twitter"
+        },
+        {
+            "pattern": "https://safirh.etsmtl.ca/.*",
+            "comment": "Ignore SAFIRH links (require authentication)"
+        },
+        {
+            "pattern": "https://outlook.etsmtl.ca/",
+            "comment": "Ignore Outlook link (server error)"
         }
     ],
     "aliveStatusCodes": [200, 206, 403, 429, 999]
