@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,14 +35,15 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -166,7 +167,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -184,11 +185,11 @@ window.Quarto = {
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Blogging Allowed – Christopher Fuhrman">
-<meta property="og:image" content="https://fuhrmanator.github.io/posts/typescript-famix-generics/image.jpg">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/incremental-update-mitacs-2025/image.jpg">
 <meta property="og:site_name" content="Christopher Fuhrman">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:title" content="Blogging Allowed – Christopher Fuhrman">
-<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/typescript-famix-generics/image.jpg">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/incremental-update-mitacs-2025/image.jpg">
 <meta name="twitter:creator" content="@thefuhrmanator">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -200,6 +201,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -280,7 +283,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(13)</span></div><div class="category" data-category="RFNN">DSM <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RW1waXJpY2FsJTIwYW5hbHlzZXM=">Empirical analyses <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0lGVA==">GIFT <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R2l0SHVi">GitHub <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SmF2YQ==">Java <span class="quarto-category-count">(3)</span></div><div class="category" data-category="bWFya2Rvd24=">markdown <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9vZGxl">Moodle <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TW9vc2U=">Moose <span class="quarto-category-count">(5)</span></div><div class="category" data-category="T0VS">OER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3BlbiUyMFNvdXJjZQ==">Open Source <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGhhcm8=">Pharo <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UGxhbnRVTUw=">PlantUML <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1pa">SZZ <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHlwZVNjcmlwdA==">TypeScript <span class="quarto-category-count">(2)</span></div><div class="category" data-category="V2luZG93cw==">Windows <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V1NM">WSL <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(14)</span></div><div class="category" data-category="RFNN">DSM <span class="quarto-category-count">(2)</span></div><div class="category" data-category="RW1waXJpY2FsJTIwYW5hbHlzZXM=">Empirical analyses <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R0lGVA==">GIFT <span class="quarto-category-count">(2)</span></div><div class="category" data-category="R2l0SHVi">GitHub <span class="quarto-category-count">(1)</span></div><div class="category" data-category="SmF2YQ==">Java <span class="quarto-category-count">(3)</span></div><div class="category" data-category="bWFya2Rvd24=">markdown <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TW9vZGxl">Moodle <span class="quarto-category-count">(2)</span></div><div class="category" data-category="TW9vc2U=">Moose <span class="quarto-category-count">(6)</span></div><div class="category" data-category="T0VS">OER <span class="quarto-category-count">(1)</span></div><div class="category" data-category="T3BlbiUyMFNvdXJjZQ==">Open Source <span class="quarto-category-count">(1)</span></div><div class="category" data-category="UGhhcm8=">Pharo <span class="quarto-category-count">(3)</span></div><div class="category" data-category="UGxhbnRVTUw=">PlantUML <span class="quarto-category-count">(2)</span></div><div class="category" data-category="UXVhcnRv">Quarto <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U1pa">SZZ <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VHlwZVNjcmlwdA==">TypeScript <span class="quarto-category-count">(3)</span></div><div class="category" data-category="V2luZG93cw==">Windows <span class="quarto-category-count">(1)</span></div><div class="category" data-category="V1NM">WSL <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -294,7 +297,42 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TW9vc2UlMkNUeXBlU2NyaXB0" data-listing-date-sort="1729555200000" data-listing-file-modified-sort="1746544734728" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="717">
+<div class="quarto-post image-right" data-index="0" data-categories="TW9vc2UlMkNUeXBlU2NyaXB0" data-listing-date-sort="1758326400000" data-listing-file-modified-sort="1762010938484" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2193">
+<div class="thumbnail"><a href="./posts/incremental-update-mitacs-2025/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/incremental-update-mitacs-2025/image.jpg" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/incremental-update-mitacs-2025/index.html" class="no-external">Incremental Update of TypeScript Famix Models</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/incremental-update-mitacs-2025/index.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('TW9vc2U='); return false;">Moose</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VHlwZVNjcmlwdA=='); return false;">TypeScript</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/incremental-update-mitacs-2025/index.html" class="no-external">
+Automation is key in modern development, as easier access to tools can significantly boost productivity. One practical example is VSCode extensions. During my summer…<code></code>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/incremental-update-mitacs-2025/index.html" class="no-external">
+<div class="listing-date">
+Sep 20, 2025
+</div>
+<div class="listing-author">
+Lidiia Makarchuk
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="TW9vc2UlMkNUeXBlU2NyaXB0" data-listing-date-sort="1729555200000" data-listing-file-modified-sort="1762010938503" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="717">
 <div class="thumbnail"><a href="./posts/typescript-famix-generics/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/typescript-famix-generics/image.jpg" class="thumbnail-image">
@@ -329,7 +367,7 @@ Nour Ayechi
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="TW9vc2UlMkNUeXBlU2NyaXB0" data-listing-date-sort="1694736000000" data-listing-file-modified-sort="1746544734739" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1500">
+<div class="quarto-post image-right" data-index="2" data-categories="TW9vc2UlMkNUeXBlU2NyaXB0" data-listing-date-sort="1694736000000" data-listing-file-modified-sort="1762010938514" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1500">
 <div class="thumbnail"><a href="./posts/typescript-in-moose/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/typescript-in-moose/image.jpg" class="thumbnail-image">
@@ -364,7 +402,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="RW1waXJpY2FsJTIwYW5hbHlzZXMlMkNHaXRIdWIlMkNTWlo=" data-listing-date-sort="1694736000000" data-listing-file-modified-sort="1746544734727" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="101">
+<div class="quarto-post image-right" data-index="3" data-categories="RW1waXJpY2FsJTIwYW5hbHlzZXMlMkNHaXRIdWIlMkNTWlo=" data-listing-date-sort="1694736000000" data-listing-file-modified-sort="1762010938502" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="101">
 <div class="thumbnail"><a href="./posts/szz-unleashed-github-bugs/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/szz-unleashed-github-bugs/image.jpg" class="thumbnail-image">
@@ -401,7 +439,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="T0VSJTJDT3BlbiUyMFNvdXJjZSUyQ1F1YXJ0bw==" data-listing-date-sort="1684713600000" data-listing-file-modified-sort="1746544734723" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="132">
+<div class="quarto-post image-right" data-index="4" data-categories="T0VSJTJDT3BlbiUyMFNvdXJjZSUyQ1F1YXJ0bw==" data-listing-date-sort="1684713600000" data-listing-file-modified-sort="1762010938498" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="132">
 <div class="thumbnail"><a href="./posts/oer-in-french/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/oer-in-french/image.jpg" class="thumbnail-image">
@@ -438,7 +476,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="4" data-categories="TW9vZGxlJTJDR0lGVCUyQ21hcmtkb3du" data-listing-date-sort="1639526400000" data-listing-file-modified-sort="1746544734722" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1448">
+<div class="quarto-post image-right" data-index="5" data-categories="TW9vZGxlJTJDR0lGVCUyQ21hcmtkb3du" data-listing-date-sort="1639526400000" data-listing-file-modified-sort="1762010938497" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1448">
 <div class="thumbnail"><a href="./posts/markdown-in-gift/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/markdown-in-gift/image.jpg" class="thumbnail-image">
@@ -475,7 +513,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="5" data-categories="TW9vZGxlJTJDR0lGVA==" data-listing-date-sort="1608249600000" data-listing-file-modified-sort="1746544734705" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1420">
+<div class="quarto-post image-right" data-index="6" data-categories="TW9vZGxlJTJDR0lGVA==" data-listing-date-sort="1608249600000" data-listing-file-modified-sort="1762010938461" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1420">
 <div class="thumbnail"><a href="./posts/creating-questions-quickly-gift/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/creating-questions-quickly-gift/image.jpg" class="thumbnail-image">
@@ -510,7 +548,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="6" data-categories="UGxhbnRVTUw=" data-listing-date-sort="1574553600000" data-listing-file-modified-sort="1746544734724" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="82">
+<div class="quarto-post image-right" data-index="7" data-categories="UGxhbnRVTUw=" data-listing-date-sort="1574553600000" data-listing-file-modified-sort="1762010938499" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="82">
 <div class="thumbnail"><a href="./posts/plantuml-gizmo-docs-slides/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/plantuml-gizmo-docs-slides/image.jpg" class="thumbnail-image">
@@ -543,7 +581,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="7" data-categories="TW9vc2UlMkNKYXZhJTJDRFNN" data-listing-date-sort="1565136000000" data-listing-file-modified-sort="1746544734690" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="640">
+<div class="quarto-post image-right" data-index="8" data-categories="TW9vc2UlMkNKYXZhJTJDRFNN" data-listing-date-sort="1565136000000" data-listing-file-modified-sort="1762010938445" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="640">
 <div class="thumbnail"><a href="./posts/cochange-dsm-moose/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/cochange-dsm-moose/image.jpg" class="thumbnail-image">
@@ -580,7 +618,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="8" data-categories="TW9vc2UlMkNKYXZhJTJDRFNN" data-listing-date-sort="1565049600000" data-listing-file-modified-sort="1746544734711" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="218">
+<div class="quarto-post image-right" data-index="9" data-categories="TW9vc2UlMkNKYXZhJTJDRFNN" data-listing-date-sort="1565049600000" data-listing-file-modified-sort="1762010938467" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="218">
 <div class="thumbnail"><a href="./posts/dsm-moose-java/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/dsm-moose-java/image.jpg" class="thumbnail-image">
@@ -617,7 +655,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="9" data-categories="TW9vc2UlMkNQaGFybyUyQ0phdmElMkNQbGFudFVNTA==" data-listing-date-sort="1564358400000" data-listing-file-modified-sort="1746544734679" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1911">
+<div class="quarto-post image-right" data-index="10" data-categories="TW9vc2UlMkNQaGFybyUyQ0phdmElMkNQbGFudFVNTA==" data-listing-date-sort="1564358400000" data-listing-file-modified-sort="1762010938434" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1911">
 <div class="thumbnail"><a href="./posts/analyzing-java-with-moose/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/analyzing-java-with-moose/image.jpg" class="thumbnail-image">
@@ -656,7 +694,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="10" data-listing-date-sort="1553212800000" data-listing-file-modified-sort="1746544734711" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="772">
+<div class="quarto-post image-right" data-index="11" data-listing-date-sort="1553212800000" data-listing-file-modified-sort="1762010938468" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="772">
 <div class="thumbnail"><a href="./posts/github-api-in-pharo/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/github-api-in-pharo/image.jpg" class="thumbnail-image">
@@ -684,7 +722,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="11" data-categories="UGhhcm8=" data-listing-date-sort="1552694400000" data-listing-file-modified-sort="1746544734712" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1139">
+<div class="quarto-post image-right" data-index="12" data-categories="UGhhcm8=" data-listing-date-sort="1552694400000" data-listing-file-modified-sort="1762010938487" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1139">
 <div class="thumbnail"><a href="./posts/libc-pharo-experiments/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/libc-pharo-experiments/image.jpg" class="thumbnail-image">
@@ -717,7 +755,7 @@ Christopher Fuhrman
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="12" data-categories="UGhhcm8lMkNXU0wlMkNXaW5kb3dz" data-listing-date-sort="1551225600000" data-listing-file-modified-sort="1746544734727" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="639">
+<div class="quarto-post image-right" data-index="13" data-categories="UGhhcm8lMkNXU0wlMkNXaW5kb3dz" data-listing-date-sort="1551225600000" data-listing-file-modified-sort="1762010938502" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="639">
 <div class="thumbnail"><a href="./posts/running-pharo-in-WSL/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/running-pharo-in-WSL/image.jpg" class="thumbnail-image">
@@ -808,13 +846,14 @@ Christopher Fuhrman
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

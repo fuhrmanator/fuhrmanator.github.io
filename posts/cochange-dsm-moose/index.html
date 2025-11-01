@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,14 +90,15 @@ div.csl-indent {
 <link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -198,6 +199,8 @@ background: #00000000;
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -333,7 +336,7 @@ background: #00000000;
 <p>My design here is surely not optimal; there is likely a better way to make this work, but I was interested in getting results for my research. Constructive comments are welcome at the bottom of this post.</p>
 </blockquote>
 <p>For the following code to work, you first have to load the <a href="https://github.com/fuhrmanator/GitMiner">GitMiner project in Pharo 7</a>, following the instructions on the repo’s page. Once it’s loaded, you can open a Moose Playground and paste the following code that uses the sample co-change data and FAMIX model for the FactoryVariants project in Java:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>| mooseModel mseFileRef commitTransactions transactionsFileRef </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>| mooseModel mseFileRef commitTransactions transactionsFileRef </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  classes changeHistoryMatrix cochangeMatrix dsm |</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mseFileRef := <span class="kw">GMUtility</span> resourcesFileReference</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    / <span class="st">'FactoryVariants_HEAD.mse'</span>.</span>
@@ -360,7 +363,7 @@ background: #00000000;
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>dsm labelShapeY label text: <span class="st">#mooseName</span>.</span>
 <span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>dsm cochangeMatrix: cochangeMatrix.</span>
 <span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>dsm rotation: 270.</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>^dsm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>^dsm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Here’s the visualization in action, when you <em>Do it all and go</em>:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -374,11 +377,11 @@ background: #00000000;
 <li>The sum of the diagonal is the total number of changes.</li>
 </ul>
 <p>In Pharo, you can send the message <code>GMCochangeMatrix&gt;&gt;#cochangeMatrix</code> to obtain a <code>PMMatrix</code> (part of <a href="https://github.com/PolyMathOrg/PolyMath">PolyMath</a>) and then get its <code>principalDiagonal</code>. Converting the diagonal to an Array allows you to get its sum. To demonstrate the above properties, insert the following before the <code>^dsm</code> line in the example above:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Transcript</span> show: <span class="st">'Diagonal: '</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Transcript</span> show: <span class="st">'Diagonal: '</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  , cochangeMatrix cochangeMatrix principalDiagonal asString; cr.</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">Transcript</span> show: <span class="st">'Total changes: '</span>, </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  (cochangeMatrix cochangeMatrix principalDiagonal asArray sum)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      asString.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      asString.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>On the Pharo transcript, you should see:</p>
 <pre><code>Diagonal: a PMVector(2 0 1 1 3 0 0 0 1 0 0 1 0 0 0 0)
 Total changes: 9</code></pre>
@@ -458,13 +461,14 @@ Geipel, Markus Michael, and Frank Schweitzer. 2012. <span>“The Link Between De
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

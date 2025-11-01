@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -178,6 +179,8 @@ background: #00000000;
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -290,31 +293,31 @@ background: #00000000;
 <section id="what-can-you-do-with-libc" class="level3">
 <h3 class="anchored" data-anchor-id="what-can-you-do-with-libc">What can you do with LibC?</h3>
 <p>Using the <code>resultOfCommand:</code> method, you can call other programs on your system through a unix-like shell and get the output (stdout) in return.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">LibC</span> resultOfCommand: <span class="st">'echo $0'</span>.  <span class="co">"&gt;&gt;&gt; 'sh'"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">LibC</span> resultOfCommand: <span class="st">'echo $0'</span>.  <span class="co">"&gt;&gt;&gt; 'sh'"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>From the above, you can see that commands are executed in a <a href="http://www.informit.com/articles/article.aspx?p=350778&amp;seqNum=4">Bourne shell (sh)</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">LibC</span> resultOfCommand: <span class="st">'date'</span>.  </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; 'Fri Mar 15 23:47:47 STD 2019'"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">LibC</span> resultOfCommand: <span class="st">'date'</span>.  </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; 'Fri Mar 15 23:47:47 STD 2019'"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>resultOfCommand:</code> shows you standard output (only). If you want to check for success or failure of a command, use <code>runCommand:</code>. The method returns <code>0</code> if the call is successful.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: <span class="st">'date'</span>.  <span class="co">"&gt;&gt;&gt; 0"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: <span class="st">'date'</span>.  <span class="co">"&gt;&gt;&gt; 0"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you want to check the result <em>and</em> get the output (stdout), you can redirect the output to a file on the disk and then load it:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: <span class="st">'date &gt; dateOutput'</span>. <span class="co">"&gt;&gt;&gt; 0"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: <span class="st">'date &gt; dateOutput'</span>. <span class="co">"&gt;&gt;&gt; 0"</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">'dateOutput'</span> asFileReference contents lines. </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('Fri Mar 15 23:48:24 STD 2019')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('Fri Mar 15 23:48:24 STD 2019')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If you want to capture the errors (stderr), you can redirect them to a different file and load it:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: <span class="st">'bogusCommand 2&gt; errors'</span>. </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: <span class="st">'bogusCommand 2&gt; errors'</span>. </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; 32512"</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">'errors'</span> asFileReference contents lines. </span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('sh: 1: bogusCommand: not found')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('sh: 1: bogusCommand: not found')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can check the result, capturing <em>both</em> output and errors by combining the two redirections as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'ls BogusFile pharo.version &gt;output 2&gt; errors'</span>. </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; 512"</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="st">'output'</span> asFileReference contents lines. </span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('pharo.version')"</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">'errors'</span> asFileReference contents lines. </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('ls: cannot access ''BogusFile'': No such file or directory')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('ls: cannot access ''BogusFile'': No such file or directory')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A more programmatic way would be to use variables:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>command := <span class="st">'ls BogusFile pharo.version'</span>.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>command := <span class="st">'ls BogusFile pharo.version'</span>.</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>outputFileName := <span class="st">'output'</span>.</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>errorFileName := <span class="st">'errors'</span>.</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: command , </span>
@@ -323,13 +326,13 @@ background: #00000000;
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>outputFileName asFileReference contents lines. </span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('pharo.version')"</span></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>errorFileName asFileReference contents lines. </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('ls: cannot access ''BogusFile'': No such file or directory')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">"&gt;&gt;&gt; #('ls: cannot access ''BogusFile'': No such file or directory')"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="environment-variables-in-a-libc-command" class="level3">
 <h3 class="anchored" data-anchor-id="environment-variables-in-a-libc-command">Environment variables in a LibC command</h3>
 <p>Let’s use an example with an environment variable we set using <code>OSEnvironment</code> (also compatible with Windows, MacOS and Unix). We can use <a href="https://stackoverflow.com/a/46942812/1168342">a <code>git</code> command to extract a revision of a git repo into a temporary directory</a>, called the <code>GIT_WORK_TREE</code>. When you pass environment variables, they need to be defined using the local file system’s path syntax. If you use <code>Path</code> in Pharo, you can achieve a multi-platform solution.</p>
 <p>First I check out the revision to a work-tree as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">"I cloned earlier my repo into a directory </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">"I cloned earlier my repo into a directory </span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"> tmp/tempClonesPharo relative to my Pharo image"</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>repoPath := <span class="kw">Path</span> * <span class="st">'tmp'</span> / <span class="st">'tempClonesPharo'</span> / repoName.</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">"some path to the checkout destination, </span></span>
@@ -348,16 +351,16 @@ background: #00000000;
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: command.</span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>result = 0</span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    ifFalse: [ <span class="co">"maybe display the gitErrors file to the user </span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">                or try to process it somehow "</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co">                or try to process it somehow "</span> ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>It’s interesting to note that when this code runs on Windows 10, <code>GIT_WORK_TREE</code> will have a value using Windows paths, e.g.&nbsp;<code>C:\Users\...</code> whereas running on Linux (or MacOS), it will have a unix-like form, e.g., <code>/home/users/...</code>.</p>
 <p>So, when specifying paths inside a <code>LibC</code> command (e.g., to redirect output to files, to change directories with <code>cd</code>, etc.), you can use unix-like syntax regardless of the platform. However, when using environment variables that have paths used by commands like <code>git</code>, which is a platform-specific implementation, the paths must take the platform-specific form. If you use <code>Path</code> and <code>fullname</code> as above, you can achieve this.</p>
 </section>
 <section id="changing-the-working-directory-for-libc-commands" class="level3">
 <h3 class="anchored" data-anchor-id="changing-the-working-directory-for-libc-commands">Changing the working directory for LibC commands</h3>
 <p>I am not aware of a way to specify the working directory for a <code>runCommand:</code> before it is run. Therefore, you must combine commands. First make a change of directory using <code>cd</code> and combine it with the following command using the <code>&amp;&amp;</code> (and if) Bourne shell keyword, which says if the previous command succeeded, then execute the following command. You can see how that works from the git example above:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>command := <span class="st">'cd "'</span> , repoPath fullName , </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>command := <span class="st">'cd "'</span> , repoPath fullName , </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'" &amp;&amp; git checkout '</span> , oid , </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">' -- . 2&gt;"'</span> , gitErrors fullName , <span class="st">'"'</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">' -- . 2&gt;"'</span> , gitErrors fullName , <span class="st">'"'</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="quoting-path-names-that-have-spaces" class="level3">
 <h3 class="anchored" data-anchor-id="quoting-path-names-that-have-spaces">Quoting path names that have spaces</h3>
@@ -372,7 +375,7 @@ background: #00000000;
 <p>On Windows, <code>LibC runCommand:</code> opens up a <code>CMD.exe</code> window that will acquire the focus and as of the time of this blog’s writing, can’t be programmatically placed in the background. This can be either good (e.g., it’s useful for the user to see that a long command is executing) or bad (it’s annoying when a bunch of short <code>perl</code> commands pop up in succession).</p>
 <p>It can be problematic to run a <code>LibC runCommand:</code> that expects something on <code>stdin</code>. I didn’t experiment much with this, but I think your Pharo image will block until some input is generated.</p>
 <p><a href="https://unix.stackexchange.com/a/296147/248429">Escaping special characters in the Bourne shell</a> (combined with using <a href="https://www.rexegg.com/regex-perl-one-liners.html">perl regex one-liners</a>) can be very complex. Passing information to commands via environment variables as explained above helps a lot. For example, since regular expressions can contain special characters that need to be escaped (if defined as strings in perl, or passed as one-line arguments), the following snippet shows how to pass them (it’s a regex to validate imperfectly a URL):</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">OSEnvironment</span> current setEnv: <span class="st">'myregex'</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">OSEnvironment</span> current setEnv: <span class="st">'myregex'</span> </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  value: <span class="st">'^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$'</span>.</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">"save the text to search to a file to be used in perl"</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">'/tmp/textToSearch'</span> asFileReference</span>
@@ -384,7 +387,7 @@ background: #00000000;
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">'/tmp/textToSearch &gt; /tmp/regexmatches'</span>.</span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>result := <span class="kw">LibC</span> runCommand: command.</span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>matches := <span class="st">'/tmp/regexmatches'</span> asFileReference </span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  contents lines.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  contents lines.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
@@ -457,13 +460,14 @@ background: #00000000;
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

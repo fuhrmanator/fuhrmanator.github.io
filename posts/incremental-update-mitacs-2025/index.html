@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lidiia Makarchuk">
+<meta name="dcterms.date" content="2025-09-20">
+
+<title>Incremental Update of TypeScript Famix Models – Christopher Fuhrman</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean"
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: rgba(255, 255, 255, 0.9);
+background: #00000000;
+      }
+</style>
+<style>
+#title-block-header.quarto-title-block.default .quarto-title-meta {
+  color: rgba(255, 255, 255, 0.9);
+}
+.quarto-title-block .quarto-title-banner {
+  height: 0; /* hide */
+}
+#title-block-header {
+  background: 
+    /* top, transparent black, faked with gradient */
+    linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    /* bottom, image */ 
+    url(./image.jpg);
+  background-size: cover;
+  background-position-y: center;
+  height: 450px;
+  opacity: 0.7; /* image opacity, lower means lighter */
+  z-index: -1;
+}
+</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Incremental Update of TypeScript Famix Models – Christopher Fuhrman">
+<meta property="og:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/incremental-update-mitacs-2025/image.jpg">
+<meta property="og:site_name" content="Christopher Fuhrman">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Incremental Update of TypeScript Famix Models – Christopher Fuhrman">
+<meta name="twitter:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/incremental-update-mitacs-2025/image.jpg">
+<meta name="twitter:creator" content="@thefuhrmanator">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Christopher Fuhrman</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Christopher Fuhrman</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blogging-allowed.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fuhrmanator"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/fuhrmanator/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/thefuhrmanator"> <i class="bi bi-twitter-x" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:christopher.fuhrman@etsmtl.ca"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../monets.html"> 
+<span class="menu-text">⚰</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Incremental Update of TypeScript Famix Models</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Moose</div>
+                <div class="quarto-category">TypeScript</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Lidiia Makarchuk </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 20, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Automation is key in modern development, as easier access to tools can significantly boost productivity. One practical example is VSCode extensions. During my summer internship in 2025, I developed a VSCode extension to simplify the use of <a href="../typescript-in-moose/"><code>ts2famix</code></a>. The extension enables developers to generate Famix models for the Typescript projects directly in VSCode and keeps these models automatically updated as the code evolves.</p>
+<section id="assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions">Assumptions</h2>
+<p>This post assumes you already have familiarity with ts2famix and a basic understanding of VSCode extensions. We will focus on explaining the key aspects of the extension and provide a detailed exploration of the incremental update feature. We’ll also discuss potential enhancements and improvements for future implementation.</p>
+<p>This extension aims to:</p>
+<ul>
+<li>Simplify creating the model from scratch</li>
+<li>Update the model incrementally each time a file is saved, thereby saving time and automating the workflow</li>
+</ul>
+</section>
+<section id="project-overview" class="level2">
+<h2 class="anchored" data-anchor-id="project-overview">Project Overview</h2>
+<p>The project follows the standard client-server architecture outlined in the <a href="https://code.visualstudio.com/api/language-extensions/language-server-extension-guide">Language Server Extension Guide</a> and consists of two main components:</p>
+<ul>
+<li><strong>Server:</strong> Uses the <code>ts2famix</code> library to generate or update the famix model.</li>
+<li><strong>Client:</strong> Monitors changes in the TypeScript project and triggers incremental updates. It also provides commands to regenerate the model from scratch and lets the user configure where the JSON file is saved.</li>
+</ul>
+<p>Communication between the client and server is handled via the <a href="https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/">Language Server Protocol (LSP)</a>.</p>
+</section>
+<section id="incremental-update-feature" class="level2">
+<h2 class="anchored" data-anchor-id="incremental-update-feature">Incremental Update Feature</h2>
+<section id="incremental-update-workflow" class="level3">
+<h3 class="anchored" data-anchor-id="incremental-update-workflow">Incremental Update Workflow</h3>
+<p>The incremental update process follows this workflow:</p>
+<ol type="1">
+<li><strong>Change Detection</strong>: For each modified file, categorize the change type (creation, modification, or deletion)</li>
+<li><strong>Project Synchronization</strong>: Update the ts-morph project representation with the current file content</li>
+<li><strong>Famix Element Processing</strong>:
+<ul>
+<li><strong>Identification</strong>: Locate all Famix elements that reference the modified file through their <code>sourcedAnchor</code> field</li>
+<li><strong>Dependency Tracing</strong>: Follow the <code>ImportClause</code> chain to find all dependent elements</li>
+<li><strong>Stub Management</strong>: Identify any related stub entities that may be affected</li>
+<li><strong>Element Removal</strong>: Delete all identified elements from the model</li>
+</ul></li>
+<li><strong>Targeted Regeneration</strong>: For non-deletion changes, recreate the necessary Famix elements for the modified file</li>
+<li><strong>Model Serialization</strong>: Generate an updated JSON representation and persist it to the configured storage location</li>
+</ol>
+<p>This workflow is also demonstrated on the next diagram: <a href="incremental-update-activity-diagram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Incremental Update Diagram"><img src="incremental-update-activity-diagram.png" class="img-fluid" alt="Incremental Update Diagram"></a></p>
+<p>Now let’s examine the design decisions behind this workflow in more detail, starting with how we determined the appropriate level of change processing.</p>
+</section>
+<section id="operating-granularity-choosing-the-right-level-of-change-processing" class="level3">
+<h3 class="anchored" data-anchor-id="operating-granularity-choosing-the-right-level-of-change-processing">Operating Granularity: Choosing the Right Level of Change Processing</h3>
+<p>One of the first development decisions was determining at what level we should process changes in the TypeScript code.</p>
+<p>We considered three options:</p>
+<ol type="1">
+<li><strong>Node level</strong>: Operating on individual AST nodes</li>
+<li><strong>File level</strong>: Processing entire files</li>
+<li><strong>Full regeneration</strong>: Rebuilding the entire Famix model from scratch</li>
+</ol>
+<p>We decided against the node level approach because it would require significantly more complex logic.</p>
+<p>The full regeneration option already exists as a command that users can invoke when they need to rebuild the entire model, such as when something goes wrong or when they want a fresh start.</p>
+<p>We ultimately chose the file level approach for several reasons:</p>
+<ul>
+<li><strong>Simpler implementation</strong>: We can reuse the same code that generates the Famix model from scratch</li>
+<li><strong>Practical necessity</strong>: File-level operations are unavoidable for actions like file creation or deletion, where we need to add or remove all elements for a specific file</li>
+</ul>
+<p>This approach does have limitations. We must carefully prevent element duplication by ensuring all stored state stays synchronized during incremental updates. This represents a trade-off between state management and logic complexity - we minimize intermediate state storage to avoid duplication issues, though this makes it more challenging to create logic that works for both initial model creation and incremental updates.</p>
+</section>
+<section id="removing-and-recreating-elements" class="level3">
+<h3 class="anchored" data-anchor-id="removing-and-recreating-elements">Removing and Recreating Elements</h3>
+<p>Our approach is to remove the outdated Famix elements and recreate them when files change. While conceptually simple, this raises an important question: how do we identify which elements need to be updated in such a way?</p>
+<p>Since we operate at the file level, we need to find all elements created from a specific file. This requires tracking which elements correspond to which files.</p>
+</section>
+<section id="approaches-considered-for-element-tracking" class="level3">
+<h3 class="anchored" data-anchor-id="approaches-considered-for-element-tracking">Approaches Considered for Element Tracking</h3>
+<section id="initial-approach-file-based-mapping" class="level4">
+<h4 class="anchored" data-anchor-id="initial-approach-file-based-mapping">Initial Approach: File-Based Mapping</h4>
+<p>We first considered creating a mapping between each file name and its generated elements. The process would work like this:</p>
+<ol type="1">
+<li>Start processing a file</li>
+<li>Set the current file name as context</li>
+<li>Add each new element to a list associated with this file name</li>
+<li>Process the next file once completed</li>
+</ol>
+<p>However, this approach had two significant problems:</p>
+<ul>
+<li>It requires maintaining additional state that must be kept synchronized</li>
+<li>More importantly, it breaks when processing elements from different files simultaneously</li>
+</ul>
+<p>Consider this inheritance example with two files:</p>
+<p><code>a.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { B } <span class="im">from</span> <span class="st">'./b'</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> A <span class="kw">extends</span> B { }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>b.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> B { }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>If we process <code>a.ts</code> first and haven’t yet created the Famix element for class B, we’d check for B’s existence, create it on-demand, and incorrectly associate it with <code>a.ts</code> rather than <code>b.ts</code>.</p>
+</section>
+<section id="the-current-approach-using-source-anchors" class="level4">
+<h4 class="anchored" data-anchor-id="the-current-approach-using-source-anchors">The Current Approach: Using Source Anchors</h4>
+<p>Ts-morph elements aren’t necessarily processed in sequential file order. Elements from different files might be processed concurrently, rather than completing all elements from one file before starting the next.</p>
+<p>Given this behavior, we need to determine the source file for each element individually. Fortunately, we already have a mechanism for this through the <code>IndexedFileAnchor</code>, which exists as a <code>sourcedAnchor</code> field in most Famix elements. We can leverage this existing data structure to track which elements belong to which files.</p>
+<p>This approach does have a minor downside: it somewhat violates the <a href="https://en.wikipedia.org/wiki/Single-responsibility_principle">Single Responsibility Principle</a>, as we’re using the anchor for both source location and element tracking. However, we assessed this as a low risk since the structure of ts2famix elements and their <code>sourcedAnchor</code> field is unlikely to change significantly.</p>
+</section>
+<section id="the-challenge-with-elements-lacking-source-anchors" class="level4">
+<h4 class="anchored" data-anchor-id="the-challenge-with-elements-lacking-source-anchors">The Challenge with Elements Lacking Source Anchors</h4>
+<p>A common limitation across all approaches is that some Famix elements don’t have a <code>sourceAnchor</code>. The <code>PrimitiveType</code> is a prime example. As an optimization, we create primitive types (void, boolean, number, string, etc.) only once and reuse them across multiple files. Consequently, these elements don’t have a <code>sourcedAnchor</code> pointing to any specific file.</p>
+<p>This creates an edge case: if we remove the only file containing a particular primitive type, that type will remain in the repository even though it no longer exists in the TypeScript code. Over time, this could lead to orphaned primitive types in the model.</p>
+<p>For the current implementation, we’ve prioritized other aspects of the incremental update. In future iterations, we might implement a tracking mechanism, such as a map where each primitive type is associated with a list of files that use it, or develop an alternative approach to address this issue.</p>
+</section>
+</section>
+<section id="managing-related-elements" class="level3">
+<h3 class="anchored" data-anchor-id="managing-related-elements">Managing Related Elements</h3>
+<p>Identifying elements associated with a specific file is only part of the solution. We must also ensure that all references to these elements remain consistent after incremental update. This requires finding and updating any element that had a reference to the removed elements.</p>
+<p>The update process involves finding these dependent elements, removing them, and then recreating them by reprocessing their source files. But which elements can reference others? This is where associations come into play. Associations are created specifically to represent relationships between elements. Additionally, the referenced elements themselves may contain fields that store these associations (for example, the Interface element has a <code>_subclasses</code> field containing all Inheritance elements where the Interface is used).</p>
+<p>To illustrate how we identify related elements, let’s examine an inheritance relationship:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> Inheritance <span class="kw">extends</span> EntityWithSourceAnchor <span class="kw">implements</span> FullyQualifiedNameEntity {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> _superclass<span class="op">!:</span> Class <span class="op">|</span> Interface<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> _subclass<span class="op">!:</span> Class <span class="op">|</span> Interface<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">get</span> <span class="fu">fullyQualifiedName</span>()<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="vs">`</span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">subclass</span><span class="op">.</span><span class="at">fullyQualifiedName</span><span class="sc">}</span><span class="vs"> extends </span><span class="sc">${</span><span class="kw">this</span><span class="op">.</span><span class="at">superclass</span><span class="op">.</span><span class="at">fullyQualifiedName</span><span class="sc">}</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>When handling changes, we need to consider two distinct scenarios:</p>
+<ul>
+<li><strong>Changes to the dependent entity (subclass)</strong>: When a subclass changes</li>
+<li><strong>Changes to the independent entity (superclass)</strong>: When a superclass changes</li>
+</ul>
+<section id="when-a-dependent-entity-changes" class="level4">
+<h4 class="anchored" data-anchor-id="when-a-dependent-entity-changes">When a Dependent Entity Changes</h4>
+<p>When the file containing a dependent entity (like a subclass) changes, our task is straightforward. Since we create associations (such as Inheritance) with the <code>sourcedAnchor</code> pointing to the dependent entity’s file, we’ll automatically identify both the dependent entity and its association as elements of the changed file.</p>
+</section>
+<section id="when-an-independent-entity-changes" class="level4">
+<h4 class="anchored" data-anchor-id="when-an-independent-entity-changes">When an Independent Entity Changes</h4>
+<p>This scenario is more complex. We need to:</p>
+<ol type="1">
+<li>Find all associations that reference the independent entity</li>
+<li>Delete these associations</li>
+<li>Recreate them by reprocessing the files containing the dependent entities from the found associations</li>
+</ol>
+</section>
+<section id="handling-changes-in-files-with-reexports" class="level4">
+<h4 class="anchored" data-anchor-id="handling-changes-in-files-with-reexports">Handling Changes in Files with Reexports</h4>
+<section id="named-imports" class="level5">
+<h5 class="anchored" data-anchor-id="named-imports">Named Imports</h5>
+<p>The complexity increases significantly when dealing with reexport chains between independent and dependent entities. To understand this challenge, let’s first examine the structure of the <code>ImportClause</code> association:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> ImportClause <span class="kw">extends</span> EntityWithSourceAnchor <span class="kw">implements</span> FullyQualifiedNameEntity {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> _importingEntity<span class="op">!:</span> Module<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> _importedEntity<span class="op">!:</span> NamedEntity<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">private</span> _moduleSpecifier<span class="op">!:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Consider the following reexport chain example:</p>
+<p><code>export.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> B { }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>reexport1.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> { B } <span class="im">from</span> <span class="st">'./export.ts'</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>reexport2.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> { B } <span class="im">from</span> <span class="st">'./reexport1.ts'</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>reexport3.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> { B } <span class="im">from</span> <span class="st">'./reexport2.ts'</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>import.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { B } <span class="im">from</span> <span class="st">'./reexport3.ts'</span><span class="op">;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> A <span class="kw">extends</span> B { }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>When creating an <code>ImportClause</code> for the <code>import.ts</code> module:</p>
+<ul>
+<li>The <code>importedEntity</code> field points to the Famix element representing class B, which originates in <code>export.ts</code> (as indicated by B’s source anchor)</li>
+<li>The <code>importingEntity</code> field references the Famix element for the <code>import.ts</code> module itself</li>
+<li>The <code>moduleSpecifier</code> field stores the direct import path as written in the code (in this case <code>reexport3.ts</code>) rather than the original source file</li>
+</ul>
+<p>Now, imagine we modify <code>reexport3.ts</code> to be an empty file:</p>
+<p><code>reexport3.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>With this change, we should now use a stub entity as the <code>importedEntity</code>. However, using our standard file-based approach, we would only identify <code>reexport3.ts</code> as changed, missing the need to update the <code>ImportClause</code> in <code>import.ts</code>.</p>
+<p>To solve this, we extend our update logic to use the <code>moduleSpecifier</code> field: when a file changes, we check if any <code>ImportClause</code> has a <code>sourcedAnchor</code> path matching that file. If found, we recreate the <code>ImportClause</code> by locating the file for the <code>importingEntity</code> and regenerating its associations.</p>
+<p>But what about changes to intermediate reexport files? If instead we modify <code>reexport2.ts</code> to be empty:</p>
+<p><code>reexport2.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The file name <code>reexport2.ts</code> isn’t directly referenced in the <code>ImportClause</code> for <code>import.ts</code>, making it impossible to trace the dependency through direct references. Our solution is to create <code>ImportClause</code> instances not only for imports but also for each reexport in the chain:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="reexport-chain.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Import Clauses for the Reexport Chain"><img src="reexport-chain.png" class="img-fluid figure-img" alt="Import Clauses for the Reexport Chain"></a></p>
+<figcaption>Import Clauses for the Reexport Chain</figcaption>
+</figure>
+</div>
+<p>This approach ensures the entire chain of reexports in TypeScript is represented in the Famix model. When any file in the chain changes, we can identify all affected files by traversing the chain of <code>ImportClause</code> relationships.</p>
+</section>
+<section id="namespace-imports" class="level5">
+<h5 class="anchored" data-anchor-id="namespace-imports">Namespace Imports</h5>
+<p>TypeScript also supports namespace imports and reexports. Consider this example:</p>
+<p><code>export.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> A { }</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> B { }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>reexport.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="op">*</span> <span class="im">from</span> <span class="st">'./export'</span><span class="op">;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> C { }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>import.ts</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> x <span class="im">from</span> <span class="st">'./reexport'</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>import.ts</code> file imports everything from <code>reexport.ts</code> as a namespace. Our current implementation creates one <code>ImportClause</code> for each exported entity in the exporting file, following the chain recursively for any namespace reexports. The resulting import clauses are illustrated in this diagram:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ts2famix-namespace-reexport.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Import Clauses for the Namespace Reexport Chain"><img src="ts2famix-namespace-reexport.png" class="img-fluid figure-img" alt="Import Clauses for the Namespace Reexport Chain"></a></p>
+<figcaption>Import Clauses for the Namespace Reexport Chain</figcaption>
+</figure>
+</div>
+</section>
+<section id="default-imports-and-require-style-imports" class="level5">
+<h5 class="anchored" data-anchor-id="default-imports-and-require-style-imports">Default Imports and Require-Style Imports</h5>
+<p>Other import types still need implementation. For default imports, we can apply logic similar to named imports with some adjustments. For CommonJS-style imports using the <code>require</code> keyword, we can either implement them similarly to namespace imports or use stub entities for the <code>importedEntity</code> if the implementation becomes too complex.</p>
+</section>
+<section id="potential-optimizations" class="level5">
+<h5 class="anchored" data-anchor-id="potential-optimizations">Potential Optimizations</h5>
+<p>Our main concern with the current implementation is the namespace import handling, which can generate many <code>ImportClause</code> instances, potentially impacting memory usage and processing speed. While this approach provides a comprehensive view of entity export/import relationships, we could optimize it by using stub entities for <code>importedEntity</code> in namespace imports. This would simplify the model to show only module-to-module relationships rather than entity-to-module relationships:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ts2famix-namespace-reexport-optimized.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Optimized Import Clauses for the Namespace Reexport Chain"><img src="ts2famix-namespace-reexport-optimized.png" class="img-fluid figure-img" alt="Optimized Import Clauses for the Namespace Reexport Chain"></a></p>
+<figcaption>Optimized Import Clauses for the Namespace Reexport Chain</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="further-development-and-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="further-development-and-optimization">Further Development and Optimization</h2>
+<p>The next stages of development will focus on extending incremental update support to other element types.</p>
+<p>There are also several aspects of performance and speed that can be improved.</p>
+<p>Currently, the main bottleneck of the extension is that it recreates the model from scratch every time the VSCode extension starts. This creates two significant problems:</p>
+<ol type="1">
+<li><strong>Slow Startup</strong>: The extension takes considerable time to recreate the model before it can perform incremental updates.</li>
+<li><strong>Memory Usage</strong>: We need to keep the entire Famix model in memory to run incremental updates. For large projects, this is inefficient in terms of memory consumption.</li>
+</ol>
+<p>To address these issues, we’re considering the following approaches:</p>
+<section id="loading-the-model-on-startup" class="level3">
+<h3 class="anchored" data-anchor-id="loading-the-model-on-startup">Loading the Model on Startup</h3>
+<p>Instead of recreating the model from scratch when opening the extension, we could serialize it, store it, and then retrieve it later. This approach requires addressing several considerations:</p>
+<ul>
+<li>How to handle cases where the project has changed since the last serialized model was saved (e.g., through external tools)</li>
+<li>Which events should trigger model serialization and storage</li>
+<li>Where to store the model</li>
+</ul>
+<p>It’s important to note that while we can currently generate JSON files with the model for analysis purposes, these files aren’t suitable for model persistence because they don’t preserve all element fields. When exploring storage options, the <a href="https://code.visualstudio.com/api/extension-capabilities/common-capabilities#data-storage">workspace storage API</a> offers a promising solution.</p>
+</section>
+<section id="reducing-memory-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="reducing-memory-requirements">Reducing Memory Requirements</h3>
+<p>The more challenging problem is finding ways to avoid holding the entire model in memory. This area requires further research to identify the best approach.</p>
+<p>These two challenges are interconnected, and it’s important to develop a solution that addresses both effectively.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>In this post, we’ve discussed the design and challenges of implementing the incremental update feature for the Famix model. While the current solution isn’t finished, it establishes a foundation for future enhancements and optimizations.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'cfuhrman';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/fuhrmanator\.github\.io\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -178,6 +179,8 @@ background: #00000000;
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -282,9 +285,9 @@ background: #00000000;
 
 
 <p>Markdown <i class="fab fa-markdown"></i> is a format supported within GIFT (see: <a href="../../posts/creating-questions-quickly-gift/index.html">Creating questions quickly in Moodle with GIFT</a>), which can be used for simple formatting text in a question, in answers and feedback:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>::Simple markdown::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>::Simple markdown::</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>[markdown]If you're standing somewhere on the equator, the **sun** </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>rises in the<span class="fu">\:</span> {=*east*#**Super!** ~*west* ~*north* ~*south*}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>rises in the<span class="fu">\:</span> {=*east*#**Super!** ~*west* ~*north* ~*south*}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>But, formatting code blocks or nested lists in Moodle requires some deeper understanding, because of the meanings of characters in the two formats. The solutions require escaping certain characters, which complicates the GIFT files. The good news is that using a smart editor, such as the <a href="https://marketplace.visualstudio.com/items?itemName=ethan-ou.vscode-gift-pack">GIFT Format Pack extension in VSCode</a>, can make it less painful.</p>
 <section id="moodle-markdown-is-not-github-markdown" class="level3">
 <h3 class="anchored" data-anchor-id="moodle-markdown-is-not-github-markdown">Moodle markdown is not GitHub markdown</h3>
@@ -310,8 +313,8 @@ Tip
 <section id="reminder-gifts-control-characters" class="level3">
 <h3 class="anchored" data-anchor-id="reminder-gifts-control-characters">Reminder: GIFT’s control characters</h3>
 <p>It’s necessary to escape any GIFT control characters in the text, regardless of markdown. For example:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>::Escaped control character::</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>[markdown]Two plus two<span class="fu">\:</span> {=four =4}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>::Escaped control character::</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>[markdown]Two plus two<span class="fu">\:</span> {=four =4}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Notice the <code>\:</code> inside the question stem. This is necessary because <code>:</code> is one of <a href="https://docs.moodle.org/311/en/GIFT_format#Special_Characters_.7E_.3D_.23_.7B_.7D">GIFT’s special characters <code>~ = # { } :</code></a>, which generally must be escaped. Again, using a tool that understands GIFT will help with this.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -330,8 +333,8 @@ Tip
 <section id="line-breaks" class="level3">
 <h3 class="anchored" data-anchor-id="line-breaks">Line breaks</h3>
 <p>In GIFT, line breaks are considered white space and don’t mean anything, unless there are two in succession - a blank line - to separate questions. Since markdown <em>does</em> use line breaks as part of its formatting, there must be a way to escape them so they don’t get processed as GIFT. The Moodle GIFT parser will convert the text <code>\n</code> (two characters) of a markdown text into a line break. Here’s an example:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>::Multi-line question stem::</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>[markdown]How much is<span class="fu">\n\n</span>2 + 2?{=four =4}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>::Multi-line question stem::</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>[markdown]How much is<span class="fu">\n\n</span>2 + 2?{=four =4}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This produces a question with the line breaks as follows:</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;How much is</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2 + 2</p>
@@ -339,24 +342,24 @@ Tip
 <section id="indentation" class="level3">
 <h3 class="anchored" data-anchor-id="indentation">Indentation</h3>
 <p>Markdown is sensitive to white space in some cases, e.g.&nbsp;indentation. Nested lists, for instance, must be indented:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Item A</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Item A</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Item A.1</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Item A.2</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Item B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Item B</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In the example above, we need to specify line breaks <em>and</em> indentation. It’s also an example of a gotcha in markdown formatting, because <a href="https://docs.moodle.org/311/en/Markdown#Bullet_point_lists">Moodle’s documentation on markdown</a> states it uses <code>*</code> (rather than <code>-</code>) as the character for bulleted lists.</p>
 <p>Here’s an example of a nested, bulleted list in markdown that displays properly inside of Moodle (v.311):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>::Nested bulleted list::</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>[markdown]This is a nested list<span class="fu">\:\n\n*</span> Item A<span class="fu">\n</span>  * Item A.1<span class="fu">\n</span>  * Item A.2<span class="fu">\n*</span> Item B{TRUE}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>::Nested bulleted list::</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>[markdown]This is a nested list<span class="fu">\:\n\n*</span> Item A<span class="fu">\n</span>  * Item A.1<span class="fu">\n</span>  * Item A.2<span class="fu">\n*</span> Item B{TRUE}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The <code>:</code> is escaped, there are several <code>\n</code> to indicate line breaks, and the number of spaces after the <code>\n</code> specifies how much indentation occurs.</p>
 <p>I purposefully didn’t use real line breaks in the GIFT (within the nested list in markdown), because it interfered with the formatting when I imported it. That makes it less readable to have it one one line, but I know it works like this.</p>
 </section>
 <section id="inline-code" class="level3">
 <h3 class="anchored" data-anchor-id="inline-code">Inline code</h3>
 <p>Formatting inline code is very straightforward. Here’s an example:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>::Inline code question::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>::Inline code question::</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>[markdown]What's the result of the following expression in JavaScript<span class="fu">\:</span> </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>`3 <span class="co">% 2`?</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>{=`1` ~`5` ~`NaN`}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>{=`1` ~`5` ~`NaN`}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This makes a question that looks something like:</p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;What’s the result of the following expression in JavaScript: <code>3 % 2</code>?<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔘 <code>1</code><br>
@@ -369,7 +372,7 @@ Tip
 <p>I teach courses in software engineering, so many of my quizzes have multi-line examples of code in the stems and the choices (for multiple-choice questions). It’s possible to use markdown for these, but it is extra tricky because of the GIFT control characters that appear in code (especially <code>{ } : =</code>), the new lines and indenting.</p>
 <p>However, indenting works differently in code blocks in Moodle! Multiple spaces will be ignored when displaying code, unless a <a href="https://en.wikipedia.org/wiki/Non-breaking_space">non-breaking space</a> “&nbsp;” is the first character of the line. Furthermore, the non-breaking space has to be a character, <strong>not</strong> some HTML <code>&amp;nbsp;</code> or unicode <code>U+00A0</code> specification that can be entered easily by keyboard.</p>
 <p>Let’s see a complicated 😱 example.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>::Code blocks in stem and answers::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>::Code blocks in stem and answers::</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>[markdown]</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>// Warning: there are some non-breaking spaces (look like normal spaces)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>Complete the following TypeScript class so it has a method named `go` </span>
@@ -378,7 +381,7 @@ Tip
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>{</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    =<span class="fu">\n</span>```<span class="fu">\ngo</span>(a<span class="fu">\:</span> string) <span class="fu">\{\n</span>&nbsp;   return true;<span class="fu">\n\}\n\n</span>```</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    ~<span class="fu">\n</span>```<span class="fu">\ngo</span>(string a) <span class="fu">\{\n</span>&nbsp;   return true;<span class="fu">\n\}\n</span>```</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The above GIFT with markdown produces a multiple-choice question that displays like this in my Moodle:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -400,7 +403,7 @@ Tip
 <section id="but-i-dont-like-tools" class="level3">
 <h3 class="anchored" data-anchor-id="but-i-dont-like-tools">But I don’t like tools…</h3>
 <p>Here’s the solution without using the VSCode extension (it’s part of a Stack Overflow <a href="https://stackoverflow.com/a/70383459/1168342">answer</a>). Note that I’ve replaced the non-breaking spaces as <code>.</code> at the start of lines that require indenting:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>::Code blocks in stem and answers ::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode latex code-with-copy"><code class="sourceCode latex"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>::Code blocks in stem and answers ::</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>[markdown]</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Complete the following TypeScript class so it has a method named `go` that</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>accepts a string argument and always returns true.</span>
@@ -422,7 +425,7 @@ Tip
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>.   return true;</span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="fu">\}</span></span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You must escape all control characters and insert the non-breaking space as the first character of each indented line of code blocks. Here’s how to enter a non-breaking space on your keyboard:</p>
 <table class="caption-top table">
 <thead>
@@ -532,13 +535,14 @@ Tip
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

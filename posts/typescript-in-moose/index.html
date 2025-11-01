@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -178,6 +179,8 @@ background: #00000000;
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -293,10 +296,10 @@ background: #00000000;
 <ul>
 <li><p>Create and run a <strong>Moose 10 (stable)</strong> image.</p></li>
 <li><p>Open a Playground and run this script to load the FamixTypeScript metamodel:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Metacello</span> <span class="fu">new</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">Metacello</span> <span class="fu">new</span> </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    githubUser: <span class="st">'fuhrmanator'</span> project: <span class="st">'FamixTypeScript'</span> commitish: <span class="st">'master'</span> path: <span class="st">'src'</span>;</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    baseline: <span class="st">'FamixTypeScript'</span>;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    load</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    load</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ul>
 </section>
 <section id="create-the-moose-famix-model-of-a-typescript-project" class="level2">
@@ -304,10 +307,10 @@ background: #00000000;
 <ul>
 <li><p>Let’s clone the project <a href="https://github.com/Chuzzy/Emojiopoly" class="uri">https://github.com/Chuzzy/Emojiopoly</a>.</p></li>
 <li><p>Next, we’ll install <code>ts2famix</code> (it’s an npm command, so you need to have npm running on your machine):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> i <span class="at">-g</span> ts2famix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> i <span class="at">-g</span> ts2famix</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Let’s move into the Emojiopoly clone’s location, and create a Famix model of the project:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> path/to/Emojiopoly</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ts2famix</span> <span class="at">-i</span> tsconfig.json <span class="at">-o</span> emojiopoly-model.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> path/to/Emojiopoly</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ts2famix</span> <span class="at">-i</span> tsconfig.json <span class="at">-o</span> emojiopoly-model.json</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will create the model <code>emojiopoly-model.json</code> in the same directory as the Emojiopoly clone.</p></li>
 </ul>
 </section>
@@ -317,9 +320,9 @@ background: #00000000;
 <li><p>If you’re running Windows (maybe this works on a Mac, too?), you can drag the <code>emojiopoly-model.json</code> file and drop it on the running window of Moose. You’ll see a dialog allowing you to confirm the import. <img src="drag-drop-model-to-moose.gif" class="img-fluid" alt="Drag and drop the model file"></p></li>
 <li><p>If you’re not able to drag the file, move the <code>emojiopoly-model.json</code> file generated by <code>ts2famix</code> to the same folder as the Moose image. The folder has a path like <code>Documents/Pharo/images/[Moose image name]</code>. Tip: you can find the folder of the image by right-clicking on the image in Pharo Launcher and selecting <strong>Show in folder</strong>.</p></li>
 <li><p>In the Moose image, open a Playground (<kbd>CTRL</kbd>-<kbd>O</kbd> <kbd>CTRL</kbd>-<kbd>W</kbd>) and run the following script:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="st">'emojiopoly-model.json'</span> asFileReference readStreamDo:</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="st">'emojiopoly-model.json'</span> asFileReference readStreamDo:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    [ :stream | model := <span class="kw">FamixTypeScriptModel</span> <span class="fu">new</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      importFromJSONStream: stream. model install ].</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>      importFromJSONStream: stream. model install ].</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will load the model into Moose.</p></li>
 <li><p>Open the menu <strong>Moose &gt; Models browser</strong> to verify that the model of Emojiopoly has been loaded into Moose. You should see <strong>emojiopoly-model</strong> (or whatever the name you used for the .json file) in the list of <strong>Models</strong>.</p></li>
 </ul>
@@ -345,21 +348,21 @@ background: #00000000;
 <section id="simple-queries" class="level3">
 <h3 class="anchored" data-anchor-id="simple-queries">Simple Queries</h3>
 <p>In a Playground window, execute the following code:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the emojiopoly model (first in Moose panel)"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the emojiopoly model (first in Moose panel)"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tsModel := <span class="kw">MooseModel</span> root first.</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Find all classes that have 100 or more lines of code"</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>bigClasses := tsModel allModelClasses </span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    select: [ :each | </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        each numberOfLinesOfCode &gt;= 100 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        each numberOfLinesOfCode &gt;= 100 ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The result should generally include only one class, `MonopolyGame``. You can select it and view its source code to verify it has more than 100 lines.</p>
 <p>In the Navigation tab, you can also see its methods, attributes, and more.</p>
 <p>To get a list of long methods (containing 20 lines or more) in the project, execute this script:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the emojiopoly model (first in Moose panel)"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the emojiopoly model (first in Moose panel)"</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tsModel := <span class="kw">MooseModel</span> root first.</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Find all methods that have 20 or more lines of code"</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>longMethods := tsModel allMethods </span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    select: [ :each | </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        each numberOfLinesOfCode &gt;= 20 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        each numberOfLinesOfCode &gt;= 20 ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>To find out the class to which each method belongs, check the <code>parentType</code> property in the navigation.</p>
 </section>
 <section id="typescript-specific-queries" class="level3">
@@ -369,7 +372,7 @@ background: #00000000;
 <section id="visualizations-with-roassal-3" class="level3">
 <h3 class="anchored" data-anchor-id="visualizations-with-roassal-3">Visualizations with Roassal 3</h3>
 <p>Roassal 3 a powerful (and complex) visualization library in Pharo. We can draw inspiration from an <a href="https://github.com/bergel/AgileVisualizationAPressCode/blob/main/01-04-AgileVisualization.txt">example of a Roassal 3 visualization on GitHub</a> to represent classes visually in a Moose model:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">"The variable classes contains the classes we would like to visualize"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">"The variable classes contains the classes we would like to visualize"</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>classes := <span class="kw">MooseModel</span> root first allModelClasses.</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">"A canvas is a container of graphical shapes"</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>c := <span class="kw">RSCanvas</span> <span class="fu">new</span>.</span>
@@ -392,7 +395,7 @@ background: #00000000;
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co">"We make all the classes draggable and with a contextual popup window"</span></span>
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>c nodes <span class="fu">@</span> <span class="kw">RSDraggable</span> <span class="fu">@</span> <span class="kw">RSPopup</span>.</span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">"The whole visualization is zoomable, draggable, and shapes may be searched in it"</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>c <span class="fu">@</span> <span class="kw">RSCanvasController</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>c <span class="fu">@</span> <span class="kw">RSCanvasController</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This visualization represents classes as rectangles. Each rectangle has three dimensions:</p>
 <ul>
 <li>The color of each rectangle represents the number of lines of code. Gray signifies a relatively low number of lines of code, while red indicates a relatively high number of lines of code. The color variation is handled by the <code>RSNormalizer</code> class.</li>
@@ -516,13 +519,14 @@ Tip
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -178,6 +179,8 @@ background: #00000000;
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -286,10 +289,10 @@ background: #00000000;
 <h2 class="anchored" data-anchor-id="rest-v3-api">REST (v3 API)</h2>
 <p>GitHub’s v3 API for REST is OK for getting info about projects, such as the ones that have lots of stars or forks.</p>
 <p>Here’s a snippet of code to show how to use it in Pharo:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>znClient := <span class="kw">ZnClient</span> <span class="fu">new</span>.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>znClient := <span class="kw">ZnClient</span> <span class="fu">new</span>.</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>jsonString := znClient</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    get:</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">'https://api.github.com/search/repositories?q=language:java+stars:&gt;=500+forks:&gt;100&amp;sort=stars&amp;order=desc&amp;per_page=5'</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">'https://api.github.com/search/repositories?q=language:java+stars:&gt;=500+forks:&gt;100&amp;sort=stars&amp;order=desc&amp;per_page=5'</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -320,7 +323,7 @@ Warning
 <section id="neojson-to-get-to-the-values" class="level3">
 <h3 class="anchored" data-anchor-id="neojson-to-get-to-the-values">NeoJSON to get to the values</h3>
 <p>Assuming you loaded NeoJSON, here’s how you could get to the values from the <code>jsonString</code> response above:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>queryDic := <span class="kw">NeoJSONReader</span> fromString: jsonString.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>queryDic := <span class="kw">NeoJSONReader</span> fromString: jsonString.</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>projectsColl := (queryDic at: <span class="st">'items'</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    collect: [ :item | </span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        {(item at: <span class="st">'full_name'</span>).</span>
@@ -338,7 +341,7 @@ Warning
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">    #(''spring-projects/spring-boot'' ''git://github.com/spring-projects/spring-boot.git''</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">      35550 23522)</span></span>
 <span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">    #(''kdn251/interviews'' ''git://github.com/kdn251/interviews.git''</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">      33272 6610))'"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">      33272 6610))'"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>It’s not bad, but I was hoping to get data about how many issues (total) existed for projects. This proved troublesome with version 3 of the REST API. It’s possible, but requires multiple calls, which amounts to separate requests through each repo’s issues page. Googling this problem, I found the mention of GitHub encouraging people to move to GraphQL.</p>
 </section>
 </section>
@@ -352,7 +355,7 @@ Warning
 <li>I specify the token on subsequent calls as before.</li>
 </ul>
 <p>Here’s a Playground script that could be converted easily to a class with methods:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>| graphQLLoginString graphQLGetIssueCount doGraphQLQuery myAPIToken response queryDic issueCount |</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>| graphQLLoginString graphQLGetIssueCount doGraphQLQuery myAPIToken response queryDic issueCount |</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>graphQLLoginString :=</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'query { viewer { login }}'</span>.</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>graphQLGetIssueCount :=</span>
@@ -384,7 +387,7 @@ Warning
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">"Pull the number out of the JSON"</span></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>queryDic := <span class="kw">NeoJSONReader</span> fromString: response.</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>issueCount := ((((queryDic at: <span class="st">'data'</span>) at: <span class="st">'repository'</span>) at: <span class="st">'issues'</span>)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    at: <span class="st">'totalCount'</span>) asInteger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    at: <span class="st">'totalCount'</span>) asInteger</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><a href="https://pixabay.com/photos/fork-cutlery-metal-metal-fork-2390507/">Photo credit</a></p>
 
 
@@ -457,13 +460,14 @@ Warning
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

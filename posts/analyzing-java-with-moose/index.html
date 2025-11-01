@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.30">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-662ae1889177880cb371f83234c0a158.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-1475427dd2c897999e25a11399bbef4f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-092a35ba01f5cb2430e3fda4981ea437.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -178,6 +179,8 @@ background: #00000000;
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Christopher Fuhrman</span>
     </a>
@@ -323,8 +326,8 @@ Note
 <p><img src="https://www.plantuml.com/plantuml/svg/JT31QiCm30RWkvz2i4ExLqWlBME3bGOAOsMN7JH7ITt8Kf2TGlVqizCUTlojJpz6svJHyXpPfJ78X8OHVj2FW-aidLTMWsmegOn8ibkuU-8mdFDWHDAyi0h17gy8a-c5VDwuPeb9P_C4NZlwTglcY9OUC2j470dUTktx5yG26DOdiYi5eVtpfkZsunNwmClcGR5xAEtXN_S2LKjjMwV5zcfZUJo5D2E7NxglkTNwo2ZviptKyee01mnIlqLMSWGKv5iAgTepcbP8qjqBKzR9RKiib_e3.png" class="img-fluid"></p>
 <p>In this step, let’s assume there is a GitHub repository of a Java project that we want to analyze, e.g., <a href="https://github.com/bethrobson/Head-First-Design-Patterns">the source code from Head First Design Patterns</a>. In this step we will get a local copy of the source code using <strong>git clone</strong>, so <code>git</code> needs to be installed on your machine and visible from the execution path. The <code>MooseEasyUtility</code> class will clone it in a temporary folder of the Pharo image directory.</p>
 <p>Open a Moose Playground (<kbd>CTRL</kbd>+<kbd>O</kbd>+<kbd>W</kbd>) in Pharo, and execute the following:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>javaProjectFileRef := <span class="kw">MooseEasyUtility</span> cloneGitHubRepo:</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://github.com/bethrobson/Head-First-Design-Patterns'</span>.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>javaProjectFileRef := <span class="kw">MooseEasyUtility</span> cloneGitHubRepo:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://github.com/bethrobson/Head-First-Design-Patterns'</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will create a clone of the Java repo from GitHub in your Pharo working directory, with a relative path of <code>tmp/MooseEasyRepos/bethrobson__Head-First-Design-Patterns</code>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -349,14 +352,14 @@ Note
 <ul>
 <li>Make sure a Java Runtime Environment (<code>java</code> command) is in the execution path of your system. To verify, execute the following in a Moose Playground:</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode st code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">LibC</span> runCommand: <span class="st">'java --version'</span>) = 0 </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode st code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">LibC</span> runCommand: <span class="st">'java --version'</span>) = 0 </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    ifTrue: <span class="st">'java command found.'</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ifFalse: <span class="st">'java command NOT FOUND.'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    ifFalse: <span class="st">'java command NOT FOUND.'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>Download and unzip VerveineJ 1.0 with the following commands in a Moose Playground:<br>
 </li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UIManager</span> default</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UIManager</span> default</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    informUserDuring: [ :bar | </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        bar label: <span class="st">'Downloading VerveineJ 1.0.1...'</span>.</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        [ | client |</span>
@@ -379,7 +382,7 @@ Note
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                bar label: progress printString.</span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>                progress isEmpty</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                    ifFalse: [ bar current: progress percentage ].</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                progress resume ] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>                progress resume ] ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If the download works, the VerveineJ importer will be in your Pharo working directory, with a relative path of <code>VerveineJ-1.0.1</code>.</p>
 <p>Once you have VerveineJ, there are two ways to create the FAMIX model from the Java source code:</p>
 <ol type="1">
@@ -389,18 +392,18 @@ Click <strong>Generate MSE File</strong> when all the fields are correct. As bef
 <li><p>Alternatively, use a programmatic interface. In the same Moose Playground where we cloned the source and VerveineJ parser above, invoke it like this:<br>
 </p></li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wizard := <span class="kw">MooseEasyFamixMaker</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wizard := <span class="kw">MooseEasyFamixMaker</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>        generateMSETo: <span class="st">'tmp/HFDP.mse'</span> asFileReference</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        parsing: <span class="st">'tmp/MooseEasyRepos/bethrobson__Head-First-Design-Patterns'</span> asFileReference</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        with: <span class="st">'VerveineJ-1.0.1/verveinej.sh'</span> asFileReference.</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>wizard generateMSE.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>wizard generateMSE.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Either way, at the end of this step there should be a file <code>tmp/HFDP.mse</code> that is the FAMIX model of the Java source code.</p>
 </section>
 <section id="load-model-of-java-source-into-moose" class="level2">
 <h2 class="anchored" data-anchor-id="load-model-of-java-source-into-moose">Load model of Java source (into Moose)</h2>
 <p><img src="https://www.plantuml.com/plantuml/svg/TP31JiD034Jl-nMMEAJyGdefGY1HDL8bHCM5WzauwP9TE_9kAi7NusrwuCBHzioRaNUve9ObHJW8zf2afmWom1ul25aMzUJo57X6nGIVwATHPU7UInI5eiZPJiJ5DLUIQzh7A4mhO5Rv8b-sjlq316yf7xOxekQRiWWad0YU7xgNzrkDpOdqGe5fVxzrRVVw14E8PhoBOJoNKOcu_RTrTOWOlgj7Inj49yiyXRnW33-qkbopEKRayjOTBEGg0XmnSAr7QdC2P8pVEUIgFQDA5HBtAp0NcTtEHllXBm00.png" title="Load model of Java source" class="img-fluid"></p>
 <p>If you use the GUI, the following code is generated in the text box at the bottom of the dialog. Otherwise, you can copy it from here, changing the paths for the Java source and MSE files:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Load the moose Model with some error checking"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Load the moose Model with some error checking"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>| mseFileRef mseStream mooseModel |</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mseFileRef := <span class="st">'tmp/HFDP.mse'</span> asFileReference. <span class="co">"Generated by FamixMaker"</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>mseStream := mseFileRef readStream.</span>
@@ -412,7 +415,7 @@ Click <strong>Generate MSE File</strong> when all the fields are correct. As bef
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        mooseModel install. <span class="co">"So it appears in the Panel"</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        mseStream close. ]</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ifNil: [ <span class="kw">self</span> error: </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Could not load MSE file into Moose: '</span> , mseFileRef asString ].</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Could not load MSE file into Moose: '</span> , mseFileRef asString ].</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="visualize-a-java-package-in-plantuml" class="level2">
 <h2 class="anchored" data-anchor-id="visualize-a-java-package-in-plantuml">Visualize a Java package in PlantUML</h2>
@@ -421,14 +424,14 @@ Click <strong>Generate MSE File</strong> when all the fields are correct. As bef
 <ul>
 <li><p>Click <strong>Moose &gt; Moose Projects &gt; Load PlantUML Gizmo</strong> to load the project.</p></li>
 <li><p>Invoke the GUI with the following command in a Moose Playground:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">PUGizmoForMoose</span> open.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">PUGizmoForMoose</span> open.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ul>
 <p>The following browser should appear:</p>
 <p><img src="PlantUMLMooseOpen.png" class="img-fluid"></p>
 <p>Click on the <code>HFDP</code> Moose model on the left to browse to the list of classes and interfaces from the source code.</p>
 <p><img src="PlantUMLMooseClasses.png" class="img-fluid"></p>
 <p>In this example, we will focus on a particular package: <code>headfirst::designpatterns::combining::decorator</code>. We can filter the list by adding the following code in the editor at the bottom:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>each mooseName beginsWith: <span class="st">'headfirst::designpatterns::combining::decorator'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>each mooseName beginsWith: <span class="st">'headfirst::designpatterns::combining::decorator'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Press <kbd>Enter</kbd> to accept the filter, and you should see a new list:</p>
 <p><img src="PlantUMLMooseClassesFiltered.png" class="img-fluid"></p>
 <p>Select all the elements in the list by clicking in the list and typing <kbd>CTRL</kbd>+<kbd>A</kbd>. Then, right-click in the selected list and choose <strong>Select</strong>:</p>
@@ -445,12 +448,12 @@ Click <strong>Generate MSE File</strong> when all the fields are correct. As bef
 <p><img src="https://www.plantuml.com/plantuml/svg/PP1DQiD038NtSmf15t6lu6mIIWiD6J2KX6woK6tPcNf6Cffne3rzPJUBGfTwFn_exN91BNEAq93seWcGCNxba5qU0q-ecE03st5GcRbh9Of2KUHi5d5ncnNWDlLJ52Ouu0rXKlcajcnDNUyiixO4hNHqCQr1pVTa4KWu4hpi_Uix90j4gCwaDmfCXyU5uD-UeGznRHu5ktjAUlZ3thhQYnZLB-R5sIUZgyyXpnZ3D_rsNDL4v7BoHmCl2S010xk768Ph6PI8wtyhLCqLLQn0tAtKN6HoExjij1y0.png" title="Perform analysis" class="img-fluid"></p>
 <p>Moose combined with Pharo is very powerful mechanism to do analyses on software. In this example, let’s assume we want to <em>find all the Java classes in the Head First Design Patterns project that implement more than one interface</em>. It helps to understand that in Moose, a Java interface and a Java class are the same FAMIX element. That said, a class element’s hierarchy can be obtained in several ways in Moose. For now, we will consider the message <code>directSuperclasses</code>, which in Moose returns the direct superclass (or superinterfaces) of a Java class (or interface). As such, we can assume a class implements more than two interfaces if <code>directSuperclasses</code> returns more than two elements. That is, the one (1) superclass of the Java class, and at least two (2) superinterfaces it also implements.</p>
 <p>In a Moose Playground, type the following Pharo statements:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the HFDP model (first in Moose panel)"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Get the HFDP model (first in Moose panel)"</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>javaModel := <span class="kw">MooseModel</span> root first.</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Query all classes that have more than two direct FAMIX superclasses"</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>classesImplementingMoreThanOneInterface := javaModel allModelClasses </span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    select: [ :each | </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        each directSuperclasses size &gt; 2 ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        each directSuperclasses size &gt; 2 ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Click <strong>Do it all and go</strong> (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>) to see the list of classes that implement more than one interface.</p>
 <p>Clicking on one of the results in the list, e.g., <code>BeatModel</code> (the first one), we can verify the results of the analysis, i.e., that the class implements at least two interfaces, by clicking the <strong>Raw</strong> tab in the window on the right and typing <code>self directSuperclasses</code> in the text box at the bottom. Typing <kbd>Ctrl</kbd>+<kbd>G</kbd> (Do it and go) will show the list of elements for this message, which indeed includes two interfaces:</p>
 <pre><code>MetaEventListener in javax::sound::midi (Class)
@@ -550,13 +553,14 @@ Note
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
