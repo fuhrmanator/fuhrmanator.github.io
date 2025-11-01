@@ -1,0 +1,18 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+name: PR link check
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run shared Markdown link check
+        uses: ./.github/actions/link-check
+        with:
+          file-extension: '.qmd'
+          config-file: 'markdown-link-check-config.json'

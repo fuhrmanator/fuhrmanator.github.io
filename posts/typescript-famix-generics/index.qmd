@@ -52,7 +52,7 @@ ClassB extends ClassA< string > { /* ... */ }
 In this example, we have two classes: `ClassA< T >`, a generic class with the parameter `T`, and `ClassA< string >`, a concrete class where `T` is specified as `string`. This illustrates a concretization relationship between `ClassA< T >` and `ClassA< string >`, as well as a parameter concretization relationship between the generic parameter `T` and the concrete parameter `string`.
 
 ::: {.callout-note}
-This example is explained in detail (with an example in Java) throughout [this blog post](https://modularmoose.org/posts/2023-07-13-parametric).
+This example is explained in detail (with an example in Java) throughout [this blog post](https://modularmoose.org/blog/2023-07-13-parametric).
 :::
 
 ## Implementation in the FamixTypeScript Metamodel
@@ -78,7 +78,7 @@ We have 5 new traits in our meta-model:
  - `TParameterConcretisation` works similarly to `TConcretisation`, but instead of linking two `TParametricEntity` instances, it connects a `TConcreteParameterType` with a `TGenericParameterType`. A `TGenericParameterType` can have multiple concretizations, and a `TConcreteParameterType` contains references to its generics.
 
 ::: {.callout-note}
-These relations are explained in detail throughout [this blog post](https://modularmoose.org/moose-wiki/Developers/predefinedEntities#genericity).
+These relations are explained in detail throughout [this blog post](https://modularmoose.org/developers/predefinedentities/#genericity).
 :::
 
 ## Unified Approach in the Metamodel and ts2famix

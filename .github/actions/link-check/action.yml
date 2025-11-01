@@ -22,5 +22,3 @@ runs:
         file-extension: ${{ inputs.file-extension }}
         use-quiet-mode: ${{ inputs.use-quiet-mode }}
         config-file: ${{ inputs.config-file }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
