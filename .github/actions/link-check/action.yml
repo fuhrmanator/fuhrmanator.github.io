@@ -1,0 +1,26 @@
+description: "Composite action that runs markdown-link-check as a step (assumes caller has checked out the repo)."
+name: "link-check"
+inputs:
+  file-extension:
+    description: "File extension to scan (example: .md, .qmd)"
+    required: false
+    default: ".qmd"
+  config-file:
+    description: "Path to markdown-link-check config file"
+    required: false
+    default: "markdown-link-check-config.json"
+  use-quiet-mode:
+    description: "Pass through use-quiet-mode option"
+    required: false
+    default: "yes"
+runs:
+  using: "composite"
+  steps:
+    - name: Run Markdown link check
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        file-extension: ${{ inputs.file-extension }}
+        use-quiet-mode: ${{ inputs.use-quiet-mode }}
+        config-file: ${{ inputs.config-file }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
