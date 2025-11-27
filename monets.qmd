@@ -31,6 +31,7 @@ description: Il était une fois un portail simple qui était le centre de l'univ
 
 ## Varia
 
+- [Bottin](https://www.etsmtl.ca/nous-joindre/bottin-repertoire)
 - [GUS](https://gus.etsmtl.ca/)
 - [Cellulaire](https://cellulaire.etsmtl.ca/)
 
