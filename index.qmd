@@ -27,4 +27,8 @@ I'm a software engineering professor at [École de technologie supérieure](http
 
 My research interests include software migration, testing, quality, and architecture. 
 
+## Random
+
+[Hilfiker Clock](https://htmlpreview.github.io/?https://gist.githubusercontent.com/fuhrmanator/6758c9146e18bfb3bae66090f9ab80ec/raw/8464fc842f372ee09cac259d6635dd03a222f31e/index.html) (Swiss railway clock) written in JavaScript before Generative AI was a thing.
+
 :::
