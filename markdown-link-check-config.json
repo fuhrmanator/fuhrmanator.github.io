@@ -16,6 +16,10 @@
             "comment": "Ignore local links"
         },
         {
+            "pattern": "^https?://www.linkedin.com/.*$",
+            "comment": "Ignore PlantUML diagrams (gives bogus 404 errors)"
+        },
+        {
             "pattern": "^https?://www.plantuml.com/.*$",
             "comment": "Ignore PlantUML diagrams (timeout can be long)"
         },
