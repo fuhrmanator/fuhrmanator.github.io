@@ -1,0 +1,9 @@
+---
+title: Open source student response system: ÉvalueTonSavoir
+date: 2026-04-27
+categories: [GIFT]
+author: Christopher Fuhrman
+image: 'teacher.svg'
+---
+
+This is a temporary placeholder for a post about ÉvalueTonSavoir ([GitHub](https://github.com/ets-cfuhrman-pfe/EvalueTonSavoir)), an open source student response system. The post will cover the features, benefits, and how to use ÉvalueTonSavoir in educational settings. Stay tuned for more details!
