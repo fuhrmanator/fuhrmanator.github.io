@@ -203,88 +203,11 @@
     "text": "Acknowledgements\nI am grateful to Professor Stéphane Ducasse and the entire RMoD team for their generosity during my 2018-2019 sabbatical at INRIA Nord Europe Lille, where I learned so much about Pharo, Moose and a productive team culture in open source software engineering."
   },
   {
-    "objectID": "posts/github-api-in-pharo/index.html",
-    "href": "posts/github-api-in-pharo/index.html",
-    "title": "Using the GitHub API in Pharo 7",
+    "objectID": "posts/evaluetonsavoir-student-response-system/index.html",
+    "href": "posts/evaluetonsavoir-student-response-system/index.html",
+    "title": "Open source student response system–ÉvalueTonSavoir",
     "section": "",
-    "text": "In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine according to their popularity (e.g., forks and stars)."
-  },
-  {
-    "objectID": "posts/github-api-in-pharo/index.html#which-api-rest-or-graphql",
-    "href": "posts/github-api-in-pharo/index.html#which-api-rest-or-graphql",
-    "title": "Using the GitHub API in Pharo 7",
-    "section": "Which API (REST or GraphQL)?",
-    "text": "Which API (REST or GraphQL)?\nGitHub offers different ways to query its infrastructure. The traditional REST query is the v3 of its API, and a more powerful (which requires an authentication token) GraphQL v4 of its API."
-  },
-  {
-    "objectID": "posts/github-api-in-pharo/index.html#rest-v3-api",
-    "href": "posts/github-api-in-pharo/index.html#rest-v3-api",
-    "title": "Using the GitHub API in Pharo 7",
-    "section": "REST (v3 API)",
-    "text": "REST (v3 API)\nGitHub’s v3 API for REST is OK for getting info about projects, such as the ones that have lots of stars or forks.\nHere’s a snippet of code to show how to use it in Pharo:\nznClient := ZnClient new.\njsonString := znClient\n    get:\n        'https://api.github.com/search/repositories?q=language:java+stars:&gt;=500+forks:&gt;100&sort=stars&order=desc&per_page=5'.\n\n\n\n\n\n\nNote\n\n\n\nNote the specifics in the query, e.g. language:java and sort=stars. You can read more about these options on GitHub’s documentation for API v3.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThis query returns at most 5 results (per_page=5). Without this option, GitHub gives 30 results per query. It’s possible to get up to 100 results per query by setting per_page=100. To get multiple “pages”, you specify the page number (page=2, page=3, etc.) in queries.\n\n\nThe jsonString is a JSON string response, which can be accessed nicely using NeoJSON (which must be loaded in your Pharo image).\n\nNeoJSON to get to the values\nAssuming you loaded NeoJSON, here’s how you could get to the values from the jsonString response above:\nqueryDic := NeoJSONReader fromString: jsonString.\nprojectsColl := (queryDic at: 'items')\n    collect: [ :item | \n        {(item at: 'full_name').\n        (item at: 'git_url').\n        (item at: 'watchers_count').\n        (item at: 'forks_count')} ].\n\nprojectsColl asString\n\"'#(#(''iluwatar/java-design-patterns'' ''git://github.com/iluwatar/java-design-patterns.git''\n      45632 14784)\n    #(''elastic/elasticsearch'' ''git://github.com/elastic/elasticsearch.git''\n      39349 13141)\n    #(''ReactiveX/RxJava'' ''git://github.com/ReactiveX/RxJava.git''\n      38107 6443)\n    #(''spring-projects/spring-boot'' ''git://github.com/spring-projects/spring-boot.git''\n      35550 23522)\n    #(''kdn251/interviews'' ''git://github.com/kdn251/interviews.git''\n      33272 6610))'\"\nIt’s not bad, but I was hoping to get data about how many issues (total) existed for projects. This proved troublesome with version 3 of the REST API. It’s possible, but requires multiple calls, which amounts to separate requests through each repo’s issues page. Googling this problem, I found the mention of GitHub encouraging people to move to GraphQL."
-  },
-  {
-    "objectID": "posts/github-api-in-pharo/index.html#graphql-v4-api",
-    "href": "posts/github-api-in-pharo/index.html#graphql-v4-api",
-    "title": "Using the GitHub API in Pharo 7",
-    "section": "GraphQL (v4 API)",
-    "text": "GraphQL (v4 API)\nGraphQL is more complex, but in theory more powerful. You have to do POST requests, and you need an authorization token (which means GitHub tracks what you are doing). Since the responses are still in JSON, NeoJSON can pick them apart for you as before.\nSo, here’s what I did according to the instructions from GitHub:\n\nI first created a token with scope repo (and all repo sub-scopes). I described it as a GitHub repo mining token. For obvious reasons, I don’t reveal the token here in my examples.\nBefore making the first query call, I make a call to login with the token{:text-decoration=“underline”}.\nI specify the token on subsequent calls as before.\n\nHere’s a Playground script that could be converted easily to a class with methods:\n| graphQLLoginString graphQLGetIssueCount doGraphQLQuery myAPIToken response queryDic issueCount |\ngraphQLLoginString :=\n    'query { viewer { login }}'.\ngraphQLGetIssueCount :=\n    'query { repository(owner:\"isaacs\", name:\"github\") {issues(states:OPEN) {totalCount}}}'.\n\"Get a token for repo scope\n at https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line\"\nmyAPIToken := 'GET_YOUR_TOKEN_FROM_GIT_HUB_AND_PUT_IT_HERE'.\n\"block closure to be called like a method\"\ndoGraphQLQuery := [ :authToken :graphQLquery | \n    | escaper |\n    \"escape any double-quotes in the GraphQL query\"\n    escaper := [ :stringToEscape | \n        stringToEscape copyWithRegex: '\\\"' matchesReplacedWith: '\\\"' ].\n    ZnClient new\n        url: 'https://api.github.com/graphql';\n        headerAt: 'Authorization' put: 'bearer ' , authToken;\n        entity:\n            (ZnEntity\n                with: '{\"query\": \"' , (escaper value: graphQLquery) , '\"}'\n                type: ZnMimeType applicationJson);\n        post ].\n\"Log in first, should check for errors in the response\"\nresponse := doGraphQLQuery\n    value: myAPIToken value: graphQLLoginString.\n\"Do the query to get the number of issues\"\nresponse := doGraphQLQuery\n    value: myAPIToken\n    value: graphQLGetIssueCount.\n\"Pull the number out of the JSON\"\nqueryDic := NeoJSONReader fromString: response.\nissueCount := ((((queryDic at: 'data') at: 'repository') at: 'issues')\n    at: 'totalCount') asInteger\nPhoto credit"
-  },
-  {
-    "objectID": "directions.html",
-    "href": "directions.html",
-    "title": "Directions",
-    "section": "",
-    "text": "English directions"
-  },
-  {
-    "objectID": "directions.html#directions-en-français",
-    "href": "directions.html#directions-en-français",
-    "title": "Directions",
-    "section": "Directions en français",
-    "text": "Directions en français\nSe rendre à l’ÉTS. Une fois à l’ÉTS :\n\nVous rendre au pavillon A: 1100, rue Notre-Dame Ouest\nUtiliser l’entrée principale (coin Peel et Notre-Dame), mais ne pas prendre l’ascenseur près de l’entrée principale.\nAller à la cafétéria, puis à gauche des caisses, vous verrez deux ascenseurs vitrés et un autre en face. Prendre l’un des trois ascenseurs.\nSi vous venez à mon bureau, A-4471:\n\nVous rendre au 4e étage.\nEn sortant des ascenseurs vitrés, aller à droite puis vous verrez l’entrée du Département de génie logiciel et des TI.\nSi vous êtes à l’extérieur des heures d’ouverture du département, utiliser le téléphone à droite de la porte pour me rejoindre au 8638.\nPuis vous rendre à mon bureau au A-4471.\n\n\nMerci à mon collègue Eric Paquette pour avoir écrit ces renseignements pour ses étudiants."
-  },
-  {
-    "objectID": "directions.html#english-directions",
-    "href": "directions.html#english-directions",
-    "title": "Directions",
-    "section": "English directions",
-    "text": "English directions\nGo to ÉTS. Once there,\n\nEnter building A at 1100 Notre-Dame Street West\nUse the main entrance (at the corner of Peel and Notre-Dame), but do not take the elevator next to the main entrance.\nGo to the cafeteria, then to the left of the cashiers you will see two glass-window elevators. Use any of the three elevators found there.\nIf you are going to my office, A-4471:\n\nGo to the 4th floor.\nAfter exiting the glass elevators, turn right and you will see the entrance of the Département de génie logiciel et des TI.\nShould the department be closed, use the phone to the right of the door to contact me at 8638.\nFinally, go to my office at door A-4471.\n\n\nThanks to my colleague Eric Paquette for writing these instructions for his students."
-  },
-  {
-    "objectID": "monets.html",
-    "href": "monets.html",
-    "title": "RIP MonÉTS",
-    "section": "",
-    "text": "SAFIRH Portail Employé\nSAFIRH Portail Gestionnaire\nSAFIRH Portail d’info de gestion\nSAFIRH 1.0\nSAFIRH 2.0"
-  },
-  {
-    "objectID": "monets.html#safirh",
-    "href": "monets.html#safirh",
-    "title": "RIP MonÉTS",
-    "section": "",
-    "text": "SAFIRH Portail Employé\nSAFIRH Portail Gestionnaire\nSAFIRH Portail d’info de gestion\nSAFIRH 1.0\nSAFIRH 2.0"
-  },
-  {
-    "objectID": "monets.html#enseignement",
-    "href": "monets.html#enseignement",
-    "title": "RIP MonÉTS",
-    "section": "Enseignement",
-    "text": "Enseignement\n\nPlanETS\nSIGNETS\nCASA (examens ESH)\nEvalCours\nRéservation de salles (Prelude)\nRéservation de salles (gestion) VPN!\nPAE-BAT (profs réguliers)\nPAE-BAT (profs enseignants)"
-  },
-  {
-    "objectID": "monets.html#corps-professoral",
-    "href": "monets.html#corps-professoral",
-    "title": "RIP MonÉTS",
-    "section": "Corps professoral",
-    "text": "Corps professoral\n\nUniweb\nTéléphonie\nMessagerie (Outlook)\nGIPPE"
-  },
-  {
-    "objectID": "monets.html#varia",
-    "href": "monets.html#varia",
-    "title": "RIP MonÉTS",
-    "section": "Varia",
-    "text": "Varia\n\nBottin\nGUS\nCellulaire"
+    "text": "This is a temporary placeholder for a post about ÉvalueTonSavoir (GitHub), an open source student response system. The post will cover the features, benefits, and how to use ÉvalueTonSavoir in educational settings. Stay tuned for more details!"
   },
   {
     "objectID": "posts/typescript-famix-generics/index.html",
@@ -327,6 +250,90 @@
     "title": "Improved modeling of TypeScript generics and their concretizations",
     "section": "Conclusion",
     "text": "Conclusion\nIn this post, we’ve explored how generics and concretization relationships are modeled both in our metamodel and the ts2famix npm package. By ensuring a consistent approach across both systems, we’ve enhanced the accuracy and usability of these parametric elements in TypeScript project analysis."
+  },
+  {
+    "objectID": "monets.html",
+    "href": "monets.html",
+    "title": "RIP MonÉTS",
+    "section": "",
+    "text": "SAFIRH Portail Employé\nSAFIRH Portail Gestionnaire\nSAFIRH Portail d’info de gestion\nSAFIRH 1.0\nSAFIRH 2.0"
+  },
+  {
+    "objectID": "monets.html#safirh",
+    "href": "monets.html#safirh",
+    "title": "RIP MonÉTS",
+    "section": "",
+    "text": "SAFIRH Portail Employé\nSAFIRH Portail Gestionnaire\nSAFIRH Portail d’info de gestion\nSAFIRH 1.0\nSAFIRH 2.0"
+  },
+  {
+    "objectID": "monets.html#enseignement",
+    "href": "monets.html#enseignement",
+    "title": "RIP MonÉTS",
+    "section": "Enseignement",
+    "text": "Enseignement\n\nPlanETS\nSIGNETS\nCASA (examens ESH)\nEvalCours\nRéservation de salles (Prelude)\nRéservation de salles (gestion) VPN!\nPAE-BAT (profs réguliers)\nPAE-BAT (profs enseignants)"
+  },
+  {
+    "objectID": "monets.html#corps-professoral",
+    "href": "monets.html#corps-professoral",
+    "title": "RIP MonÉTS",
+    "section": "Corps professoral",
+    "text": "Corps professoral\n\nUniweb\nTéléphonie\nMessagerie (Outlook)\nGIPPE"
+  },
+  {
+    "objectID": "monets.html#varia",
+    "href": "monets.html#varia",
+    "title": "RIP MonÉTS",
+    "section": "Varia",
+    "text": "Varia\n\nBottin\nGUS\nCellulaire"
+  },
+  {
+    "objectID": "directions.html",
+    "href": "directions.html",
+    "title": "Directions",
+    "section": "",
+    "text": "English directions"
+  },
+  {
+    "objectID": "directions.html#directions-en-français",
+    "href": "directions.html#directions-en-français",
+    "title": "Directions",
+    "section": "Directions en français",
+    "text": "Directions en français\nSe rendre à l’ÉTS. Une fois à l’ÉTS :\n\nVous rendre au pavillon A: 1100, rue Notre-Dame Ouest\nUtiliser l’entrée principale (coin Peel et Notre-Dame), mais ne pas prendre l’ascenseur près de l’entrée principale.\nAller à la cafétéria, puis à gauche des caisses, vous verrez deux ascenseurs vitrés et un autre en face. Prendre l’un des trois ascenseurs.\nSi vous venez à mon bureau, A-4471:\n\nVous rendre au 4e étage.\nEn sortant des ascenseurs vitrés, aller à droite puis vous verrez l’entrée du Département de génie logiciel et des TI.\nSi vous êtes à l’extérieur des heures d’ouverture du département, utiliser le téléphone à droite de la porte pour me rejoindre au 8638.\nPuis vous rendre à mon bureau au A-4471.\n\n\nMerci à mon collègue Eric Paquette pour avoir écrit ces renseignements pour ses étudiants."
+  },
+  {
+    "objectID": "directions.html#english-directions",
+    "href": "directions.html#english-directions",
+    "title": "Directions",
+    "section": "English directions",
+    "text": "English directions\nGo to ÉTS. Once there,\n\nEnter building A at 1100 Notre-Dame Street West\nUse the main entrance (at the corner of Peel and Notre-Dame), but do not take the elevator next to the main entrance.\nGo to the cafeteria, then to the left of the cashiers you will see two glass-window elevators. Use any of the three elevators found there.\nIf you are going to my office, A-4471:\n\nGo to the 4th floor.\nAfter exiting the glass elevators, turn right and you will see the entrance of the Département de génie logiciel et des TI.\nShould the department be closed, use the phone to the right of the door to contact me at 8638.\nFinally, go to my office at door A-4471.\n\n\nThanks to my colleague Eric Paquette for writing these instructions for his students."
+  },
+  {
+    "objectID": "posts/github-api-in-pharo/index.html",
+    "href": "posts/github-api-in-pharo/index.html",
+    "title": "Using the GitHub API in Pharo 7",
+    "section": "",
+    "text": "In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine according to their popularity (e.g., forks and stars)."
+  },
+  {
+    "objectID": "posts/github-api-in-pharo/index.html#which-api-rest-or-graphql",
+    "href": "posts/github-api-in-pharo/index.html#which-api-rest-or-graphql",
+    "title": "Using the GitHub API in Pharo 7",
+    "section": "Which API (REST or GraphQL)?",
+    "text": "Which API (REST or GraphQL)?\nGitHub offers different ways to query its infrastructure. The traditional REST query is the v3 of its API, and a more powerful (which requires an authentication token) GraphQL v4 of its API."
+  },
+  {
+    "objectID": "posts/github-api-in-pharo/index.html#rest-v3-api",
+    "href": "posts/github-api-in-pharo/index.html#rest-v3-api",
+    "title": "Using the GitHub API in Pharo 7",
+    "section": "REST (v3 API)",
+    "text": "REST (v3 API)\nGitHub’s v3 API for REST is OK for getting info about projects, such as the ones that have lots of stars or forks.\nHere’s a snippet of code to show how to use it in Pharo:\nznClient := ZnClient new.\njsonString := znClient\n    get:\n        'https://api.github.com/search/repositories?q=language:java+stars:&gt;=500+forks:&gt;100&sort=stars&order=desc&per_page=5'.\n\n\n\n\n\n\nNote\n\n\n\nNote the specifics in the query, e.g. language:java and sort=stars. You can read more about these options on GitHub’s documentation for API v3.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThis query returns at most 5 results (per_page=5). Without this option, GitHub gives 30 results per query. It’s possible to get up to 100 results per query by setting per_page=100. To get multiple “pages”, you specify the page number (page=2, page=3, etc.) in queries.\n\n\nThe jsonString is a JSON string response, which can be accessed nicely using NeoJSON (which must be loaded in your Pharo image).\n\nNeoJSON to get to the values\nAssuming you loaded NeoJSON, here’s how you could get to the values from the jsonString response above:\nqueryDic := NeoJSONReader fromString: jsonString.\nprojectsColl := (queryDic at: 'items')\n    collect: [ :item | \n        {(item at: 'full_name').\n        (item at: 'git_url').\n        (item at: 'watchers_count').\n        (item at: 'forks_count')} ].\n\nprojectsColl asString\n\"'#(#(''iluwatar/java-design-patterns'' ''git://github.com/iluwatar/java-design-patterns.git''\n      45632 14784)\n    #(''elastic/elasticsearch'' ''git://github.com/elastic/elasticsearch.git''\n      39349 13141)\n    #(''ReactiveX/RxJava'' ''git://github.com/ReactiveX/RxJava.git''\n      38107 6443)\n    #(''spring-projects/spring-boot'' ''git://github.com/spring-projects/spring-boot.git''\n      35550 23522)\n    #(''kdn251/interviews'' ''git://github.com/kdn251/interviews.git''\n      33272 6610))'\"\nIt’s not bad, but I was hoping to get data about how many issues (total) existed for projects. This proved troublesome with version 3 of the REST API. It’s possible, but requires multiple calls, which amounts to separate requests through each repo’s issues page. Googling this problem, I found the mention of GitHub encouraging people to move to GraphQL."
+  },
+  {
+    "objectID": "posts/github-api-in-pharo/index.html#graphql-v4-api",
+    "href": "posts/github-api-in-pharo/index.html#graphql-v4-api",
+    "title": "Using the GitHub API in Pharo 7",
+    "section": "GraphQL (v4 API)",
+    "text": "GraphQL (v4 API)\nGraphQL is more complex, but in theory more powerful. You have to do POST requests, and you need an authorization token (which means GitHub tracks what you are doing). Since the responses are still in JSON, NeoJSON can pick them apart for you as before.\nSo, here’s what I did according to the instructions from GitHub:\n\nI first created a token with scope repo (and all repo sub-scopes). I described it as a GitHub repo mining token. For obvious reasons, I don’t reveal the token here in my examples.\nBefore making the first query call, I make a call to login with the token{:text-decoration=“underline”}.\nI specify the token on subsequent calls as before.\n\nHere’s a Playground script that could be converted easily to a class with methods:\n| graphQLLoginString graphQLGetIssueCount doGraphQLQuery myAPIToken response queryDic issueCount |\ngraphQLLoginString :=\n    'query { viewer { login }}'.\ngraphQLGetIssueCount :=\n    'query { repository(owner:\"isaacs\", name:\"github\") {issues(states:OPEN) {totalCount}}}'.\n\"Get a token for repo scope\n at https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line\"\nmyAPIToken := 'GET_YOUR_TOKEN_FROM_GIT_HUB_AND_PUT_IT_HERE'.\n\"block closure to be called like a method\"\ndoGraphQLQuery := [ :authToken :graphQLquery | \n    | escaper |\n    \"escape any double-quotes in the GraphQL query\"\n    escaper := [ :stringToEscape | \n        stringToEscape copyWithRegex: '\\\"' matchesReplacedWith: '\\\"' ].\n    ZnClient new\n        url: 'https://api.github.com/graphql';\n        headerAt: 'Authorization' put: 'bearer ' , authToken;\n        entity:\n            (ZnEntity\n                with: '{\"query\": \"' , (escaper value: graphQLquery) , '\"}'\n                type: ZnMimeType applicationJson);\n        post ].\n\"Log in first, should check for errors in the response\"\nresponse := doGraphQLQuery\n    value: myAPIToken value: graphQLLoginString.\n\"Do the query to get the number of issues\"\nresponse := doGraphQLQuery\n    value: myAPIToken\n    value: graphQLGetIssueCount.\n\"Pull the number out of the JSON\"\nqueryDic := NeoJSONReader fromString: response.\nissueCount := ((((queryDic at: 'data') at: 'repository') at: 'issues')\n    at: 'totalCount') asInteger\nPhoto credit"
   },
   {
     "objectID": "posts/plantuml-gizmo-docs-slides/index.html",
@@ -445,7 +452,7 @@
     "href": "blogging-allowed.html",
     "title": "Blogging Allowed",
     "section": "",
-    "text": "Incremental Update of TypeScript Famix Models\n\n\n\n\n\n\nMoose\n\nTypeScript\n\n\n\n\n\n\n\n\n\nSep 20, 2025\n\n\nLidiia Makarchuk\n\n\n\n\n\n\n\n\n\n\n\n\nImproved modeling of TypeScript generics and their concretizations\n\n\n\n\n\n\nMoose\n\nTypeScript\n\n\n\n\n\n\n\n\n\nOct 22, 2024\n\n\nNour Ayechi\n\n\n\n\n\n\n\n\n\n\n\n\nSZZ (unleashed) using GitHub\n\n\n\n\n\n\nEmpirical analyses\n\nGitHub\n\nSZZ\n\n\n\n\n\n\n\n\n\nSep 15, 2023\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nTypeScript support for Moose (Pharo)\n\n\n\n\n\n\nMoose\n\nTypeScript\n\n\n\n\n\n\n\n\n\nSep 15, 2023\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nOpen Educational Resource (OER) in French\n\n\n\n\n\n\nOER\n\nOpen Source\n\nQuarto\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nGetting the most from markdown in GIFT\n\n\n\n\n\n\nMoodle\n\nGIFT\n\nmarkdown\n\n\n\n\n\n\n\n\n\nDec 15, 2021\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nCreating questions quickly in Moodle with GIFT\n\n\n\n\n\n\nMoodle\n\nGIFT\n\n\n\n\n\n\n\n\n\nDec 18, 2020\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nPlantUML Gizmo bundled for Google Docs and Slides\n\n\nYou can now do PlantUML in Google Slides and Docs.\n\n\n\nPlantUML\n\n\n\n\n\n\n\n\n\nNov 24, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nUsing a DSM to visualize co-change of Java classes\n\n\nI will show a DSM-based visualization for co-change with a Java project using Moose and Pharo.\n\n\n\nMoose\n\nJava\n\nDSM\n\n\n\n\n\n\n\n\n\nAug 7, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nDependency Structure Matrix for a Java project using Moose\n\n\nI will show how one can create a Design Structure Matrix (DSM) in Moose, in particular from a model of a Java project.\n\n\n\nMoose\n\nJava\n\nDSM\n\n\n\n\n\n\n\n\n\nAug 6, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nAnalyzing Java with Moose 8\n\n\nMoose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining.\n\n\n\nMoose\n\nPharo\n\nJava\n\nPlantUML\n\n\n\n\n\n\n\n\n\nJul 29, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nUsing the GitHub API in Pharo 7\n\n\nIn my mining activities with Pharo, I found it useful to query GitHub to select projects to mine.\n\n\n\n\n\n\n\n\nMar 22, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nLibC experiments in Pharo 7\n\n\n\n\n\n\nPharo\n\n\n\n\n\n\n\n\n\nMar 16, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nRunning Pharo in Windows Subsystem for Linux (WSL)\n\n\n\n\n\n\nPharo\n\nWSL\n\nWindows\n\n\n\n\n\n\n\n\n\nFeb 27, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\nNo matching items"
+    "text": "Open source student response system–ÉvalueTonSavoir\n\n\n\n\n\n\nGIFT\n\n\n\n\n\n\n\n\n\nApr 27, 2026\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nIncremental Update of TypeScript Famix Models\n\n\n\n\n\n\nMoose\n\nTypeScript\n\n\n\n\n\n\n\n\n\nSep 20, 2025\n\n\nLidiia Makarchuk\n\n\n\n\n\n\n\n\n\n\n\n\nImproved modeling of TypeScript generics and their concretizations\n\n\n\n\n\n\nMoose\n\nTypeScript\n\n\n\n\n\n\n\n\n\nOct 22, 2024\n\n\nNour Ayechi\n\n\n\n\n\n\n\n\n\n\n\n\nSZZ (unleashed) using GitHub\n\n\n\n\n\n\nEmpirical analyses\n\nGitHub\n\nSZZ\n\n\n\n\n\n\n\n\n\nSep 15, 2023\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nTypeScript support for Moose (Pharo)\n\n\n\n\n\n\nMoose\n\nTypeScript\n\n\n\n\n\n\n\n\n\nSep 15, 2023\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nOpen Educational Resource (OER) in French\n\n\n\n\n\n\nOER\n\nOpen Source\n\nQuarto\n\n\n\n\n\n\n\n\n\nMay 22, 2023\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nGetting the most from markdown in GIFT\n\n\n\n\n\n\nMoodle\n\nGIFT\n\nmarkdown\n\n\n\n\n\n\n\n\n\nDec 15, 2021\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nCreating questions quickly in Moodle with GIFT\n\n\n\n\n\n\nMoodle\n\nGIFT\n\n\n\n\n\n\n\n\n\nDec 18, 2020\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nPlantUML Gizmo bundled for Google Docs and Slides\n\n\nYou can now do PlantUML in Google Slides and Docs.\n\n\n\nPlantUML\n\n\n\n\n\n\n\n\n\nNov 24, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nUsing a DSM to visualize co-change of Java classes\n\n\nI will show a DSM-based visualization for co-change with a Java project using Moose and Pharo.\n\n\n\nMoose\n\nJava\n\nDSM\n\n\n\n\n\n\n\n\n\nAug 7, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nDependency Structure Matrix for a Java project using Moose\n\n\nI will show how one can create a Design Structure Matrix (DSM) in Moose, in particular from a model of a Java project.\n\n\n\nMoose\n\nJava\n\nDSM\n\n\n\n\n\n\n\n\n\nAug 6, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nAnalyzing Java with Moose 8\n\n\nMoose is a platform in Pharo that can manipulate models of software, to facilitate analyses including software data mining.\n\n\n\nMoose\n\nPharo\n\nJava\n\nPlantUML\n\n\n\n\n\n\n\n\n\nJul 29, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nUsing the GitHub API in Pharo 7\n\n\nIn my mining activities with Pharo, I found it useful to query GitHub to select projects to mine.\n\n\n\n\n\n\n\n\nMar 22, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nLibC experiments in Pharo 7\n\n\n\n\n\n\nPharo\n\n\n\n\n\n\n\n\n\nMar 16, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\n\n\n\n\n\n\n\nRunning Pharo in Windows Subsystem for Linux (WSL)\n\n\n\n\n\n\nPharo\n\nWSL\n\nWindows\n\n\n\n\n\n\n\n\n\nFeb 27, 2019\n\n\nChristopher Fuhrman\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
