@@ -1,5 +1,5 @@
 ---
-title: Open source student response system: ÉvalueTonSavoir
+title: Open source student response system--ÉvalueTonSavoir
 date: 2026-04-27
 categories: [GIFT]
 author: Christopher Fuhrman
