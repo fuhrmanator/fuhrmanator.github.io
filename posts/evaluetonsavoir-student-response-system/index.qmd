@@ -4,6 +4,7 @@ date: 2026-04-27
 categories: [GIFT, Open Source, Pedagogy]
 author: Christopher Fuhrman
 image: 'survey-image.png'
+title-block-banner: 'survey-image.png'
 ---
 
 This blog entry is in French, and presents a summary report about ÉvalueTonSavoir ([GitHub](#0)), an open source student response system.
