@@ -207,7 +207,42 @@
     "href": "posts/evaluetonsavoir-student-response-system/index.html",
     "title": "Open source student response system–ÉvalueTonSavoir",
     "section": "",
-    "text": "This is a temporary placeholder for a post about ÉvalueTonSavoir (GitHub), an open source student response system. The post will cover the features, benefits, and how to use ÉvalueTonSavoir in educational settings. Stay tuned for more details!"
+    "text": "This blog entry is in French, and presents a summary report about ÉvalueTonSavoir (GitHub), an open source student response system.\nA video (in French) of its features can be found on youtube: https://www.youtube.com/watch?v=hw97fGxOOxY"
+  },
+  {
+    "objectID": "posts/evaluetonsavoir-student-response-system/index.html#profil-des-participants",
+    "href": "posts/evaluetonsavoir-student-response-system/index.html#profil-des-participants",
+    "title": "Open source student response system–ÉvalueTonSavoir",
+    "section": "Profil des participants",
+    "text": "Profil des participants\n\nLa majorité des répondants provient des programmes de Génie mécanique (43,5 %) et de Génie de la construction (34,8 %). Le génie électrique complète le profil des utilisateurs avec 21,7 % des réponses."
+  },
+  {
+    "objectID": "posts/evaluetonsavoir-student-response-system/index.html#appréciation-générale-du-format-quiz",
+    "href": "posts/evaluetonsavoir-student-response-system/index.html#appréciation-générale-du-format-quiz",
+    "title": "Open source student response system–ÉvalueTonSavoir",
+    "section": "Appréciation générale du format « Quiz »",
+    "text": "Appréciation générale du format « Quiz »\n\nLe format d’apprentissage par quiz est très largement plébiscité par les étudiants, avec une note moyenne de 4,22 / 5.\n\nAssimilation : 87 % des étudiants sont d’accord (ou tout à fait d’accord) pour dire que les quiz aident à assimiler la matière.\n\nEngagement : Les quiz jouent un rôle crucial pour maintenir l’intérêt et la concentration en classe.\n\nCollaboration : L’impact sur la connaissance des collègues (format équipe) est jugé plus neutre."
+  },
+  {
+    "objectID": "posts/evaluetonsavoir-student-response-system/index.html#évaluation-de-la-plateforme-evalsa",
+    "href": "posts/evaluetonsavoir-student-response-system/index.html#évaluation-de-la-plateforme-evalsa",
+    "title": "Open source student response system–ÉvalueTonSavoir",
+    "section": "Évaluation de la plateforme Evalsa",
+    "text": "Évaluation de la plateforme Evalsa\n\nL’application affiche un excellent taux de satisfaction global de 7,70 / 10.\n\n\n\n\nCritère\nAppréciation majoritaire\n\n\n\n\nUtilité\nExcellente / Très bonne\n\n\nPertinence\nExcellente / Très bonne\n\n\nRapidité\nTrès satisfaisante\n\n\nEsthétique\nSatisfaisante (point d’amélioration possible)\n\n\n\nPoints forts relevés :\n\nSimplicité : Connexion rapide via code QR et interface intuitive.\n\nRétroaction immédiate : Les étudiants apprécient de comprendre leurs erreurs tout de suite après avoir répondu.\n\nFluidité : Absence de procédures de connexion lourdes."
+  },
+  {
+    "objectID": "posts/evaluetonsavoir-student-response-system/index.html#axes-damélioration-et-problèmes-techniques",
+    "href": "posts/evaluetonsavoir-student-response-system/index.html#axes-damélioration-et-problèmes-techniques",
+    "title": "Open source student response system–ÉvalueTonSavoir",
+    "section": "Axes d’amélioration et problèmes techniques",
+    "text": "Axes d’amélioration et problèmes techniques\nMalgré une réception positive, des problèmes techniques récurrents ont été identifiés :\n\nBug de réinitialisation : Plusieurs étudiants rapportent que leurs réponses s’effacent ou que la page se rafraîchit lorsque l’enseignant change de diapositive.\n\nInterface Mobile : Des ajustements de mise en page sont suggérés (gestion du mode veille sur téléphone).\n\nFonctionnalités souhaitées : Ajout d’un “mode sombre” et d’un tableau récapitulatif des résultats personnels à la fin du test."
+  },
+  {
+    "objectID": "posts/evaluetonsavoir-student-response-system/index.html#conclusion",
+    "href": "posts/evaluetonsavoir-student-response-system/index.html#conclusion",
+    "title": "Open source student response system–ÉvalueTonSavoir",
+    "section": "Conclusion",
+    "text": "Conclusion\nLa plateforme Evalsa remplit ses objectifs pédagogiques en favorisant la concentration et l’apprentissage actif. La résolution du bug de perte de données permettrait d’atteindre un niveau de satisfaction supérieur à 9/10."
   },
   {
     "objectID": "posts/typescript-famix-generics/index.html",
