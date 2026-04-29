@@ -18,24 +18,26 @@ Voici une synthèse des réponse au sondage et des commentaires des personnes é
 
 **Date du rapport :** 29 avril 2026
 
-## **Profil des participants**
+## Profil des participants
 
 ![](img-sondage/programme.png)
 
 La majorité des répondants provient des programmes de **Génie mécanique (43,5 %)** et de **Génie de la construction (34,8 %)**.
 Le génie électrique complète le profil des utilisateurs avec **21,7 %** des réponses.
 
-## **Appréciation générale du format « Quiz »** 
+## Appréciation générale du format « Quiz »
 
 ![](img-sondage/appreciation-quiz.png)
 
 Le format d’apprentissage par quiz est très largement plébiscité par les étudiants, avec une note moyenne de **4,22 / 5**.
 
+![](img-sondage/utilite-quiz.png)
+
 - **Assimilation :** 87 % des étudiants sont d’accord (ou tout à fait d’accord) pour dire que les quiz aident à assimiler la matière.\
 - **Engagement :** Les quiz jouent un rôle crucial pour maintenir l’intérêt et la concentration en classe.\
 - **Collaboration :** L'impact sur la connaissance des collègues (format équipe) est jugé plus neutre.
 
-## **Évaluation de la plateforme Evalsa**
+## Évaluation de la plateforme Evalsa
 
 ![](img-sondage/satisfaction.png)
 
@@ -56,7 +58,7 @@ L'application affiche un excellent taux de satisfaction global de **7,70 / 10**.
 - **Rétroaction immédiate :** Les étudiants apprécient de comprendre leurs erreurs tout de suite après avoir répondu.\
 - **Fluidité :** Absence de procédures de connexion lourdes.
 
-## **Axes d'amélioration et problèmes techniques**
+## Axes d'amélioration et problèmes techniques
 
 Malgré une réception positive, des problèmes techniques récurrents ont été identifiés :
 
@@ -64,7 +66,7 @@ Malgré une réception positive, des problèmes techniques récurrents ont été
 - **Interface Mobile :** Des ajustements de mise en page sont suggérés (gestion du mode veille sur téléphone).\
 - **Fonctionnalités souhaitées :** Ajout d'un "mode sombre" et d'un tableau récapitulatif des résultats personnels à la fin du test.
 
-## **Conclusion**
+## Conclusion
 
 La plateforme **Evalsa** remplit ses objectifs pédagogiques en favorisant la concentration et l'apprentissage actif.
 La résolution du bug de perte de données permettrait d'atteindre un niveau de satisfaction supérieur à 9/10.
