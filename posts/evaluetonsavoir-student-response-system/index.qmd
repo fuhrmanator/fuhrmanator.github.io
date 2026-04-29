@@ -6,9 +6,9 @@ author: Christopher Fuhrman
 image: 'image.jpg'
 ---
 
-This blog entry is in French, and presents a summary report about ÉvalueTonSavoir ([GitHub](#0)), an open source student response system.
+> This blog entry is in French, and presents a summary report about ÉvalueTonSavoir ([GitHub](#0)), an open-source, student response system (SRS) developed primarily by students at the École de technologie supérieure (ÉTS).
 
-A video (in French) of its features can be found on youtube: <https://www.youtube.com/watch?v=hw97fGxOOxY>
+{{< video https://www.youtube.com/watch?v=hw97fGxOOxY >}}
 
 # Résultats du sondage communauté étudiante
 
