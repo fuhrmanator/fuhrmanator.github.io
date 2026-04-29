@@ -84,29 +84,65 @@ ul.task-list li input[type="checkbox"] {
     document.body.classList.add('hypothesis-enabled');
   });
 </script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: rgba(255, 255, 255, 0.9);
+background: #00000000;
+      }
+</style>
+<style>
+#title-block-header.quarto-title-block.default .quarto-title-meta {
+  color: rgba(255, 255, 255, 0.9);
+}
+.quarto-title-block .quarto-title-banner {
+  height: 0; /* hide */
+}
+#title-block-header {
+  background: 
+    /* top, transparent black, faked with gradient */
+    linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    /* bottom, image */ 
+    url(./image.jpg);
+  background-size: cover;
+  background-position-y: center;
+  height: 450px;
+  opacity: 0.7; /* image opacity, lower means lighter */
+  z-index: -1;
+}
+</style>
 
 
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Open source student response system–ÉvalueTonSavoir – Christopher Fuhrman">
 <meta property="og:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
-<meta property="og:image" content="https://fuhrmanator.github.io/posts/evaluetonsavoir-student-response-system/survey-image.png">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/evaluetonsavoir-student-response-system/image.jpg">
 <meta property="og:site_name" content="Christopher Fuhrman">
 <meta property="og:locale" content="en_US">
-<meta property="og:image:height" content="1024">
-<meta property="og:image:width" content="1536">
 <meta name="twitter:title" content="Open source student response system–ÉvalueTonSavoir – Christopher Fuhrman">
 <meta name="twitter:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
-<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/evaluetonsavoir-student-response-system/survey-image.png">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/evaluetonsavoir-student-response-system/image.jpg">
 <meta name="twitter:creator" content="@thefuhrmanator">
-<meta name="twitter:image-height" content="1024">
-<meta name="twitter:image-width" content="1536">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -169,47 +205,48 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Open source student response system–ÉvalueTonSavoir</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">GIFT</div>
+                <div class="quarto-category">Open Source</div>
+                <div class="quarto-category">Pedagogy</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Christopher Fuhrman </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 27, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Open source student response system–ÉvalueTonSavoir</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">GIFT</div>
-    <div class="quarto-category">Open Source</div>
-    <div class="quarto-category">Pedagogy</div>
-  </div>
-  </div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Christopher Fuhrman </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">April 27, 2026</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <p>This blog entry is in French, and presents a summary report about ÉvalueTonSavoir (<a href="#0">GitHub</a>), an open source student response system.</p>
