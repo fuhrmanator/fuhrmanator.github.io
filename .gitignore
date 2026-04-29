@@ -3,3 +3,5 @@ _site/
 posts/**/index_files/mediabag/
 
 /.luarc.json
+
+**/*.quarto_ipynb
