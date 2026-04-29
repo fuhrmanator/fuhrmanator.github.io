@@ -35,8 +35,6 @@ Le format d’apprentissage par quiz est très largement plébiscité par les é
 - **Engagement :** Les quiz jouent un rôle crucial pour maintenir l’intérêt et la concentration en classe.\
 - **Collaboration :** L'impact sur la connaissance des collègues (format équipe) est jugé plus neutre.
 
-![](images/paste-2.png)
-
 ## **Évaluation de la plateforme Evalsa**
 
 ![](img-sondage/satisfaction.png)
