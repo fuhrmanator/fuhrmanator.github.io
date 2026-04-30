@@ -47,8 +47,8 @@ L'application affiche un excellent taux de satisfaction global de **7,70 / 10**.
 
 | Critère        | Appréciation majoritaire                      |
 |:---------------|:----------------------------------------------|
-| **Utilité**    | Excellente / Très bonne                       |
-| **Pertinence** | Excellente / Très bonne                       |
+| **Utilité**    | Satisfaisante / Très bonne                    |
+| **Pertinence** | Très bonne                                    |
 | **Rapidité**   | Très satisfaisante                            |
 | **Esthétique** | Satisfaisante (point d'amélioration possible) |
 
