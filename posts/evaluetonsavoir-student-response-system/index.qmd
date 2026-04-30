@@ -43,7 +43,7 @@ Le format d’apprentissage par quiz est très largement plébiscité par les é
 
 L'application affiche un excellent taux de satisfaction global de **7,70 / 10**.
 
-![](img-sondage/utilite-quiz.png)
+![](img-sondage/appreciation-elements.png)
 
 | Critère        | Appréciation majoritaire                      |
 |:---------------|:----------------------------------------------|
