@@ -1,172 +1,99 @@
 ---
 title: "From a Working Prototype to a Published VSCode Extension: ts2famix in Production"
-date: 2026-07-02
+date: 2026-07-22
 categories: [Moose, TypeScript, VSCode]
 author: Léo Mauré
 image: 'image.jpg'
 ---
 
-During my Mitacs Globalink 2026 internship at ÉTS Montréal, under the supervision of Christopher Fuhrman, I took over the ts2famix VSCode extension built by Lidiia Makarchuk during her own internship in 2025. Her work — described in [her post on incremental updates](../incremental-update-mitacs-2025/) — had already proven the core idea: a Language Server Protocol (LSP) client/server architecture that generates Famix models from TypeScript projects directly inside VSCode, and keeps them updated as the code changes.
+During my Mitacs Globalink 2026 internship at ÉTS Montréal, under the supervision of Christopher Fuhrman, I took over the ts2famix VSCode extension built by Lidiia Makarchuk during her own internship in 2025. Her work, described in [her post on incremental updates](../incremental-update-mitacs-2025/), had already proven the core idea: a Language Server Protocol (LSP) client/server architecture that generates Famix models from TypeScript projects directly inside VSCode, and keeps them updated as the code changes.
 
-My job for these 12 weeks was to take that working prototype and turn it into something a developer could actually install, trust, and run on any machine — Mac, Linux, or Windows — without having to clone a repository or run a build step by hand. This meant going deep into packaging, distribution, cross-platform CI, and eventually exposing the underlying `ts2famix` library as a proper API rather than a CLI tool wrapped around a child process.
+My contributions over these 12 weeks focused on making that prototype production-ready: extracting the extension into its own repository, publishing it on the VSCode Marketplace, exposing ts2famix as a proper library API, setting up a cross-platform CI pipeline, and adding a dedicated VSIX test workflow. This post covers the key technical decisions behind each of these contributions.
+
+## Assumptions
+
+This post assumes familiarity with [ts2famix](../typescript-in-moose/) and the Famix metamodel, as well as a basic understanding of how a VSCode extension is structured (client/server, LSP). The incremental update logic itself is already covered in detail in Lidiia's post.
+
+## Extracting the Extension into Its Own Repository
+
+The original extension lived inside the `FamixTypeScriptImporter` repository alongside the ts2famix library, which made it difficult to package, test, and distribute independently. One of the first structural contributions was extracting the extension into a dedicated repository, [FamixTypeScriptVSIX](https://github.com/Leoo-code/FamixTypeScriptVSIX), with its own dependency management, build pipeline, and CI configuration.
+
+This separation reflects a clean architectural boundary: ts2famix is a library, and the VSCode extension is a consumer of that library. Keeping them in the same repository blurred that boundary and made it harder to version and publish each one independently.
+
+The extraction also required fixing several setup issues that prevented the extension from running on any machine other than the original developer's: a missing `publisher` field in the configuration file, a version constraint requiring a newer VSCode than most users had, a symlink that the packaging tool `vsce` couldn't follow, and runtime dependencies installed in the wrong location.
+
+## Publishing on the VSCode Marketplace
+
+Once the extension was extracted and installable, the next step was making it publicly available through the VSCode Marketplace under the publisher account `Leo-maure`.
+
+The first packaged `.vsix` weighed around 500 MB, almost entirely `node_modules`. Bundling the client and server with esbuild brought this down to approximately 4 MB, which is a meaningful difference for users installing the extension on a slower connection.
+
+An early issue with the `.vscodeignore` configuration stripped out files the extension needed at runtime, breaking the `ts2famix.generateModelForProject` command after a fresh Marketplace install. This was a concrete illustration of the gap between "works in development" and "works after packaging": what `vsce` includes or excludes from the `.vsix` is not always what the development environment uses, and the only reliable way to catch this is to test the installed extension, not just the source.
+
+Releases are now automated: semantic versioning scripts bump the version, commit, and tag in one command, and a GitHub Actions workflow publishes to the Marketplace automatically on every tag push.
 
 ## Architecture: Two npm Packages, One Tool
 
 The extension is built around two separate npm packages, and understanding why they are separate is key to understanding the design.
 
-`ts2famix` is a TypeScript-to-Famix model generator. It was originally designed as a command-line tool: you give it a glob pattern or a `tsconfig.json`, it analyzes the source files, and it writes a `model.json`. That design made perfect sense for a standalone tool — but it created a problem the moment we wanted to embed it inside a long-running VSCode extension server.
+`ts2famix` is a TypeScript-to-Famix model generator. It was originally designed as a command-line tool: you give it a glob pattern or a `tsconfig.json`, it analyzes the source files, and it writes a `model.json`. That design made perfect sense for a standalone tool, but it created a problem the moment we wanted to embed it inside a long-running VSCode extension server.
 
-The core issue is that a CLI tool and a library have fundamentally different contracts:
+The core issue is that a CLI tool and a library have fundamentally different contracts. A CLI tool is invoked once, does its work, and exits: state can live at module level because the process is thrown away after each run. A library is imported once and called repeatedly: state that persists across calls becomes a source of bugs.
 
-- A **CLI tool** is invoked once, does its work, and exits. State can live at module level because the process is thrown away after each run.
-- A **library** is imported once and called repeatedly. State that persists across calls becomes a source of bugs.
+`ts2famix` was written entirely as a CLI tool. `entityDictionary`, the central object that maps every TypeScript element to its Famix counterpart, was a module-level global shared across the entire program. So were six tracking collections in `process_functions.ts`. This was fine for the CLI. It was a design flaw the moment we called `famixRepFromProject()` a second time from the extension server without the process restarting between calls.
 
-`ts2famix` was written entirely as a CLI tool. `entityDictionary` — the central object that maps every TypeScript element to its Famix counterpart — was a module-level global, shared across the entire program. So were six tracking collections in `process_functions.ts`. This was fine for the CLI. It was a design flaw the moment we called `famixRepFromProject()` a second time from the extension server without the process restarting between calls.
-
-Exposing `ts2famix` as a proper library API meant two things:
-
-1. **Changing the package entry point** — from `dist/ts2famix-cli.js` (the CLI) to a new `dist/index.ts` that explicitly exports only what a consumer needs: `Importer`, `SourceFileChangeType`, `getTsMorphProject`, and the helpers used by the incremental update logic.
-2. **Making repeated calls safe** — by adding `reset()` and `resetProcessFunctions()` to clear all shared state at the start of each `famixRepFromProject()` invocation, making the function behave correctly whether called once or a hundred times.
+Exposing `ts2famix` as a proper library API meant two things. First, changing the package entry point from `dist/ts2famix-cli.js` to a new `dist/index.ts` that explicitly exports only what a consumer needs: `Importer`, `SourceFileChangeType`, `getTsMorphProject`, and the helpers used by the incremental update logic. Second, making repeated calls safe by adding `reset()` and `resetProcessFunctions()` to clear all shared state at the start of each `famixRepFromProject()` invocation.
 
 The `npm link` mechanism bridges the two packages during development: instead of publishing `ts2famix` to npm for every change, `npm link` creates a symlink so the extension server resolves `ts2famix` directly from the local source tree. This lets both packages be developed and tested together without a publish step in between.
 
-## Assumptions
+## Exposing ts2famix as an API: Two Design Problems
 
-This post assumes familiarity with [`ts2famix`](../typescript-in-moose/) and the Famix metamodel, as well as a basic understanding of how a VSCode extension is structured (client/server, LSP). I'll focus on the packaging, distribution, and API-exposure work, since the incremental update logic itself is already covered in detail in Lidiia's post.
-
-## Starting Point: Getting the Existing Extension to Run At All
-
-The extension already worked — but only on Lidiia's own computer, set up exactly the way she'd left it. Just trying to get it running on my machine surfaced five separate problems, and none of them had anything to do with the extension's actual logic:
-
-- VSCode wouldn't even load the extension, because a required field (`publisher`) was missing from its configuration file.
-- The extension asked for a newer version of VSCode than I had installed.
-- One of its internal folders was a shortcut (`npm link` symlink) pointing to another folder on disk, instead of being a real copy. The tool used to package the extension (`vsce`) doesn't follow symlinks — so this folder quietly disappeared every time the extension was packaged, while still looking fine locally.
-- A couple of dependencies the server needed were installed in the wrong folder, so the server couldn't find them and crashed on startup.
-- The usual way to test a VSCode extension in development (pressing F5) didn't work reliably given everything above, so I built and installed it the same way an end user would instead.
-
-None of these were bugs in what the extension actually *does*. They were the kind of small, invisible friction that turns a perfectly working prototype into something only its original author can run — and fixing this kind of thing became a recurring theme of the internship.
-
-## From a Local Fork to the VSCode Marketplace
-
-### Cleaning Up Installation
-
-The first problem was installation. The server depended on `ts2famix` through a local `npm link`, which only worked on the machine where the link had been created. There was no way for a third party to `npm install` the project and have it just work.
-
-The fix was to point the server's dependency to `github:Leoo-code/FamixTypeScriptImporter#dev` instead of a local path, so `npm install` resolves and builds everything without manual steps. I also wrote a small `install.sh` script that automates the full setup in one command, with a portability check for the `code` CLI in `PATH` rather than any hardcoded, machine-specific path.
-
-### Publishing on the Marketplace
-
-Publishing required creating a publisher account (`Leo-maure`). Early versions hit a packaging issue where an overly aggressive `.vscodeignore` stripped out files the extension actually needed at runtime, breaking the `ts2famix.generateModelForProject` command after a fresh Marketplace install — a good early reminder that what works locally and what survives packaging are not the same thing.
-
-### Reducing Package Size
-
-The first packaged `.vsix` was around 500 MB, almost entirely `node_modules`. Bundling the client and server with esbuild brought this down to about 16 MB installed (around 4 MB for the `.vsix` itself).
-
-### Automating Releases
-
-To avoid repeating the same manual steps for every release, I set up:
-
-- Semantic versioning scripts (`release:patch`, `release:minor`, `release:major`) that bump the version, commit, tag, and trigger publication in one command.
-- A GitHub Actions workflow that publishes automatically to the Marketplace on every tag.
-- A cross-platform CI matrix running the test suite on Ubuntu, macOS, and Windows in parallel for every push, using `coactions/setup-xvfb` to provide a display for the Electron-based VSCode test host on Linux.
-
-## A Design Question: What Should Trigger an Update?
-
-Beyond packaging, there's an open design question worth mentioning: when should the model actually regenerate?
-
-Right now, the extension watches every change to any `.ts` file on disk using `onDidChangeWatchedFiles`. The problem is that this fires for a lot more than the developer typing code — a `git checkout`, a file changed by another tool, even VSCode writing something in the background all count as "a file changed." Lidiia had already flagged this as something to revisit in `eventHandlers.ts`.
-
-There's a more targeted option: `onDidSaveTextDocument`, which only reacts when the developer explicitly saves a file. The catch is that this alone misses file creation and deletion, which still need to be detected some other way.
-
-The two approaches don't have to compete — they can be combined: `onDidSaveTextDocument` for content changes, and `onDidChangeWatchedFiles` scoped to `WatchKind.Create | WatchKind.Delete` for everything else. This is close to how a tool like ESLint behaves: it checks your code when you save, not every time something touches a file on disk.
-
-## Stress-Testing the Smoke Tests Themselves
-
-Before going further, I wanted to know how much the smoke test suite could actually be trusted — so I ran three deliberate regression experiments:
-
-1. **Excluding `server/node_modules` from the `.vsix`.** The 7 tests still passed. It turned out esbuild already bundled every dependency directly into a single `server.js`, so `node_modules` wasn't actually needed in the package — the `.vscodeignore` rule excluding it was correct.
-2. **Downgrading to `ts2famix@1.0.1`.** The tests still passed, even though this version predates several fixes. The fixtures used in the test suite were too simple to exercise the import patterns that triggered bugs in the first place.
-3. **Installing the published `ts2famix@3.1.0` from npm** instead of the GitHub-pinned version. This one failed loudly — 5 of 7 tests failed with "Server is not running," because the published npm package's `main` field points at the CLI entry point (`ts2famix-cli.js`), not at the library API. esbuild bundled the CLI, the server tried to start it, and it crashed immediately.
-
-The contrast between experiments 2 and 3 was the useful part: the test suite reliably catches a *wrong dependency*, but not a *subtly incomplete* one.
-
-## Exposing ts2famix as an API
-
-### From CLI to Library
-
-The root problem was structural: `ts2famix`'s `package.json` declared `"main": "dist/ts2famix-cli.js"`, exposing only its command-line interface. The server needed direct access to library internals like `getTsMorphProject` and `famixRepFromProject` — functions that existed in the source but were never part of the published package's public surface.
-
-To fix this, I changed `"main"` to point at a new `dist/index.ts` entry point that explicitly exports the library API:
-
-```typescript
-export { Importer, SourceFileChangeType, getTsMorphProject } from './analyze';
-export * from './helpers';
-```
-
-To iterate on this without publishing intermediate versions to npm, I used `npm link` between two local repositories. `npm link`, run once in the library repo, registers it in a global symlink registry; running `npm link ts2famix` in the extension's server then points its `node_modules/ts2famix` at that symlink instead of resolving from npm — letting me iterate on the API surface and see the effect immediately.
-
-### When Tests Pass But Real Usage Fails
-
-After exposing the API, all 7 automated tests stayed green. But running the extension in debug mode against a real project — Emojiopoly — surfaced two bugs that no unit test had been designed to catch.
-
+After exposing the API, all 7 automated tests stayed green. But running the extension in debug mode against a real project, Emojiopoly, surfaced two bugs that no unit test had been designed to catch.
 
 ### Designing for Repeated Invocation
 
-The global-state problem was not a bug in the traditional sense — it was a design assumption that held perfectly for a CLI and broke entirely for a library. The solution wasn't just to add a reset() call; it was to recognize that famixRepFromProject() needed to behave like a pure function: given the same project, produce the same model, regardless of how many times it had been called before.
-This led to two additions to the API surface:
+The global-state problem was not a bug in the traditional sense: it was a design assumption that held perfectly for a CLI and broke entirely for a library. The solution was to recognize that `famixRepFromProject()` needed to behave like a pure function, producing the same model from the same project regardless of how many times it had been called before.
 
-EntityDictionary.reset() — recreates the FamixRepository and clears all internal maps (classes, interfaces, modules, variables, functions, import clauses, enums, inheritances).
-resetProcessFunctions() — clears the six module-level collections in process_functions.ts that track accesses, invocables, classes, interfaces, modules, and export maps between passes.
+This led to two additions to the API surface. `EntityDictionary.reset()` recreates the `FamixRepository` and clears all internal maps (classes, interfaces, modules, variables, functions, import clauses, enums, inheritances). `resetProcessFunctions()` clears the six module-level collections in `process_functions.ts` that track accesses, invocables, classes, interfaces, modules, and export maps between passes. Both are called at the start of every `famixRepFromProject()` invocation.
 
-Both are called at the start of every famixRepFromProject() invocation. The long-term design would go further: moving entityDictionary from module scope into the Importer class as a private property, making each Importer instance fully independent. That refactoring is noted as a next step.
+![Module-level state accumulates across repeated API calls](bug-global-state.png)
+
+*A command-line run starts fresh every time. The extension server stays running and calls the same function repeatedly: without clearing state between calls, entities accumulate until the model's consistency check catches the duplicates.*
 
 ### Bundling a Library, Not a CLI
 
-The second design issue was about what esbuild should include in the server bundle. With external: [], esbuild treated ts2famix as just another dependency to inline — which meant inlining its CLI entry point, including the yargs argument parser that runs immediately on require. The server wasn't importing a library; it was accidentally executing a program.
-The fix — external: ['ts2famix'] — reflects the correct mental model: ts2famix is a peer dependency that the runtime environment (via npm link in development, or node_modules in production) is responsible for resolving. The bundler should not own it.
+The second design issue was about what esbuild should include in the server bundle. With `external: []`, esbuild treated `ts2famix` as just another dependency to inline, which meant inlining its CLI entry point, including the `yargs` argument parser that runs immediately on `require`. The server was not importing a library; it was accidentally executing a program.
+
+The fix, `external: ['ts2famix']`, reflects the correct mental model: `ts2famix` is a peer dependency that the runtime environment is responsible for resolving, whether via `npm link` in development or `node_modules` in production. The bundler should not own it.
+
+![esbuild bundling with external:[] vs external:['ts2famix']](bug-esbuild.png)
+
+*With `external: []`, esbuild inlines ts2famix's CLI entry point into the bundle, where it executes on startup and crashes the server. Marking `ts2famix` external leaves it to be resolved at runtime instead.*
 
 ### Validation
 
-Both fixes were validated against the full test suite and against a real project:
+Both fixes were validated against the full test suite and against a real project. The 7 automated smoke tests passed, model generation against Emojiopoly succeeded with no crash and no FQN error, 886 entities were generated without error via direct CLI invocation on the same project, and the resulting `model.json` loaded successfully in Moose/Pharo.
 
-- 7/7 automated tests green (`npx vscode-test`).
-- Successful model generation against Emojiopoly in debug mode, no crash, no FQN error.
-- 886 entities generated without error via direct CLI invocation on the same project.
-- The resulting `model.json` loaded successfully in Moose/Pharo.
+## Testing the VSIX
 
-## Bug in the Existing Test Suite
+Testing the extension from source (pressing F5 in VSCode) is not the same as testing what a user actually installs. The packaged `.vsix` goes through `vsce`, which applies `.vscodeignore` rules, resolves dependencies differently, and produces a bundle that may behave differently from the development environment.
 
-While pushing these changes, the CI on PR #92 showed 16 failing tests across 7 test files — all with the same symptom: `sourceAnchor` was `undefined` on classes, variables, aliases, and types.
+To address this, a dedicated `npm run test:vsix` workflow was added alongside the existing smoke tests. This script packages the extension into a `.vsix`, installs it in an isolated VSCode instance, and runs the test suite against the installed version, the same way an end user would experience it. The workflow runs on the CI matrix (Ubuntu, macOS, Windows) on every push, giving early warning of packaging regressions before they reach the Marketplace.
 
-The root cause was in `makeFamixIndexFileAnchor()` in `EntityDictionary.ts`: the method correctly created an `IndexedFileAnchor` and populated its fields (`fileName`, `startPos`, `endPos`), but never assigned it back to the Famix element:
+Two build scripts support different development scenarios. `npm run build` installs `ts2famix` from npm and rebuilds the server bundle, which is the standard case for testing the extension against the published library. `npm run build:local` runs the full `npm link` workflow, building `ts2famix` from the local source tree and linking it into the extension server, which is the case for developing both packages simultaneously.
 
-```typescript
-// Missing line — sourceAnchor was never assigned
-famixElement.sourceAnchor = fmxIndexFileAnchor;  // fix
-this.famixRep.addElement(fmxIndexFileAnchor);
-```
+## Using AI Assistance: Contributions and Limits
 
-A second issue compounded this: in `sourced_entity.ts`, the `SourcedEntity` class overrode the `set sourceAnchor()` accessor without also overriding the corresponding `get`. In JavaScript/TypeScript, redefining only the setter of an inherited accessor property without redefining the getter causes the getter to be silently lost — reads always returned `undefined` even after a successful write.
+A significant part of the work during this internship was done in collaboration with an AI assistant (Claude, Copilot). This collaboration was genuinely productive for certain tasks: generating boilerplate, drafting documentation, suggesting fixes for well-defined bugs, and helping navigate unfamiliar APIs quickly.
 
-```typescript
-// Before — getter silently lost
-override set sourceAnchor(sourceAnchor: SourceAnchor) { ... }
+That said, working with an AI assistant on a real codebase surfaced clear limits that are worth documenting honestly.
 
-// After — getter explicitly preserved
-override get sourceAnchor() { return this._sourceAnchor; }
-override set sourceAnchor(sourceAnchor: SourceAnchor) { ... }
-```
+The most consistent issue was context. The AI assistant did not have access to the full repository history, the existing test suite, or the runtime behavior of the extension. This meant that suggested fixes sometimes addressed the symptom rather than the root cause, and had to be validated manually against the actual codebase. For example, the `sourceAnchor` bug required iterating through several hypotheses before identifying that the real issue was a missing `override get` paired with an `override set` in TypeScript's class hierarchy, something that only became clear by reading the compiled JavaScript output and adding diagnostic logs.
 
-Both fixes were pre-existing bugs in the inherited codebase — not introduced by the PR — and were confirmed by the fact that the reference implementation (`lidiia-repo`) had the same gap.
+A second limit was autonomy. AI agents tend to propose solutions and proceed without always waiting for confirmation, which can lead to changes accumulating faster than they can be reviewed. On a project where correctness matters (a published extension used by real users), this required actively slowing down the AI's suggestions and verifying each change independently before committing.
 
-## Lessons Learned
-
-The most consistent pattern across this internship is that **automated tests validate what they were designed to validate, and nothing more**. A green test suite tells you the code does what the tests check; it doesn't tell you the code survives being packaged, installed on a different OS, or called twice in a row as an API instead of once as a CLI.
-
-Concretely, this meant treating "it passes in CI" and "it works for someone else, in production-like conditions" as two separate questions — and specifically testing the second one at every stage where packaging, bundling, or invocation patterns changed.
+The practical takeaway is that AI assistance accelerates certain kinds of work significantly, particularly documentation, boilerplate, and first-pass debugging, but it does not replace the need for a developer who understands the system well enough to validate the output. The AI is as useful as the context it is given, and providing that context is itself a skill.
 
 ## What's Next
 
-- The global-state design in `entityDictionary` and `process_functions.ts` is now patched but remains fragile. A proper refactoring — where `entityDictionary` lives as a private property of the `Importer` class rather than at module scope — would make `Importer` instances properly independent.
-- The event-trigger question (`onDidChangeWatchedFiles` vs `onDidSaveTextDocument`) is still open.
-- CI for the extension itself should be updated to test against the npm-published version of `ts2famix`, not just the GitHub-pinned one — to catch the kind of API/CLI mismatch that regression experiment 3 revealed.
+Several directions remain open for future contributors. The global-state design in `entityDictionary` and `process_functions.ts` is now patched to work correctly under repeated invocation, but the long-term fix would move `entityDictionary` into the `Importer` class as a private property, making each instance fully independent. The event trigger question, `onDidChangeWatchedFiles` versus `onDidSaveTextDocument`, is still open and worth revisiting. The CI pipeline should be extended to test against the npm-published version of `ts2famix` rather than only the GitHub-pinned version, to catch API mismatches before they reach users.
