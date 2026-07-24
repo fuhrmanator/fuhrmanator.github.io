@@ -56,9 +56,6 @@ The global-state problem was not a bug in the traditional sense: it was a design
 
 This led to two additions to the API surface. `EntityDictionary.reset()` recreates the `FamixRepository` and clears all internal maps (classes, interfaces, modules, variables, functions, import clauses, enums, inheritances). `resetProcessFunctions()` clears the six module-level collections in `process_functions.ts` that track accesses, invocables, classes, interfaces, modules, and export maps between passes. Both are called at the start of every `famixRepFromProject()` invocation.
 
-![Module-level state accumulates across repeated API calls](bug-global-state.png)
-
-*A command-line run starts fresh every time. The extension server stays running and calls the same function repeatedly: without clearing state between calls, entities accumulate until the model's consistency check catches the duplicates.*
 
 ### Bundling a Library, Not a CLI
 
@@ -66,9 +63,6 @@ The second design issue was about what esbuild should include in the server bund
 
 The fix, `external: ['ts2famix']`, reflects the correct mental model: `ts2famix` is a peer dependency that the runtime environment is responsible for resolving, whether via `npm link` in development or `node_modules` in production. The bundler should not own it.
 
-![esbuild bundling with external:[] vs external:['ts2famix']](bug-esbuild.png)
-
-*With `external: []`, esbuild inlines ts2famix's CLI entry point into the bundle, where it executes on startup and crashes the server. Marking `ts2famix` external leaves it to be resolved at runtime instead.*
 
 ### Validation
 
