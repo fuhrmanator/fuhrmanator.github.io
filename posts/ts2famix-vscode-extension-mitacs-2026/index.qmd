@@ -24,7 +24,7 @@ The extraction also required fixing several setup issues that prevented the exte
 
 ## Publishing on the VSCode Marketplace
 
-Once the extension was extracted and installable, the next step was making it publicly available through the VSCode Marketplace under the publisher account `Leo-maure`.
+Once the extension was extracted and installable, the next step was making it publicly available through the VSCode Marketplace under the publisher account `Leo-maure`[^marketplace].
 
 The first packaged `.vsix` weighed around 500 MB, almost entirely `node_modules`. Bundling the client and server with esbuild brought this down to approximately 4 MB, which is a meaningful difference for users installing the extension on a slower connection.
 
@@ -91,3 +91,5 @@ The practical takeaway is that AI assistance accelerates certain kinds of work s
 ## What's Next
 
 Several directions remain open for future contributors. The global-state design in `entityDictionary` and `process_functions.ts` is now patched to work correctly under repeated invocation, but the long-term fix would move `entityDictionary` into the `Importer` class as a private property, making each instance fully independent. The event trigger question, `onDidChangeWatchedFiles` versus `onDidSaveTextDocument`, is still open and worth revisiting. The CI pipeline should be extended to test against the npm-published version of `ts2famix` rather than only the GitHub-pinned version, to catch API mismatches before they reach users.
+
+[^marketplace]: <https://marketplace.visualstudio.com/items?itemName=Leo-maure.ts2famix-vscode-extension>
