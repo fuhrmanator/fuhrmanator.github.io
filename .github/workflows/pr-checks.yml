@@ -5,14 +5,14 @@ on:
 name: PR link check
 
 jobs:
-  link-check:
+  check-links:
+    name: runner / linkspector
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Run shared Markdown link check
-        uses: ./.github/actions/link-check
+      - uses: actions/checkout@v5
+      - name: Run linkspector
+        uses: umbrelladocs/action-linkspector@v1
         with:
-          file-extension: '.qmd'
-          config-file: 'markdown-link-check-config.json'
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          fail_level: any
