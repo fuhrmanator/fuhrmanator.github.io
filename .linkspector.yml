@@ -1,6 +1,5 @@
 dirs:
-  - .
+  - ./
 fileExtensions:
-  - md
   - qmd
-useGitIgnore: true
+useGitIgnore: false
