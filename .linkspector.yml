@@ -1,7 +1,7 @@
 files:
-  - ./monets.qmd
+  - monets.qmd
 dirs:
-  - ./
+  - .
 fileExtensions:
   - qmd
   - md
