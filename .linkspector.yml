@@ -1,5 +1,7 @@
+files:
+  - ./monets.qmd
 dirs:
   - ./
-fileExxxxtensions:
+fileExtensions:
   - qmd
 useGitIgnore: false
