@@ -2,11 +2,12 @@
   {
     "listing": "/blogging-allowed.html",
     "items": [
+      "/posts/ts2famix-vscode-extension-mitacs-2026/index.html",
       "/posts/evaluetonsavoir-student-response-system/index.html",
       "/posts/incremental-update-mitacs-2025/index.html",
       "/posts/typescript-famix-generics/index.html",
-      "/posts/szz-unleashed-github-bugs/index.html",
       "/posts/typescript-in-moose/index.html",
+      "/posts/szz-unleashed-github-bugs/index.html",
       "/posts/oer-in-french/index.html",
       "/posts/markdown-in-gift/index.html",
       "/posts/creating-questions-quickly-gift/index.html",

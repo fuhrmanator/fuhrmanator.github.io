@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Christopher Fuhrman">
-<meta name="dcterms.date" content="2019-03-22">
+<meta name="author" content="Léo Mauré">
+<meta name="dcterms.date" content="2026-07-22">
 
-<title>Using the GitHub API in Pharo 7 – Christopher Fuhrman</title>
+<title>From a Working Prototype to a Published VSCode Extension: ts2famix in Production – Christopher Fuhrman</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -27,41 +27,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -165,14 +130,14 @@ background: #00000000;
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Using the GitHub API in Pharo 7 – Christopher Fuhrman">
-<meta property="og:description" content="In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine.">
-<meta property="og:image" content="https://fuhrmanator.github.io/posts/github-api-in-pharo/image.jpg">
+<meta property="og:title" content="From a Working Prototype to a Published VSCode Extension: ts2famix in Production – Christopher Fuhrman">
+<meta property="og:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/ts2famix-vscode-extension-mitacs-2026/image.jpg">
 <meta property="og:site_name" content="Christopher Fuhrman">
 <meta property="og:locale" content="en_US">
-<meta name="twitter:title" content="Using the GitHub API in Pharo 7 – Christopher Fuhrman">
-<meta name="twitter:description" content="In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine.">
-<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/github-api-in-pharo/image.jpg">
+<meta name="twitter:title" content="From a Working Prototype to a Published VSCode Extension: ts2famix in Production – Christopher Fuhrman">
+<meta name="twitter:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/ts2famix-vscode-extension-mitacs-2026/image.jpg">
 <meta name="twitter:creator" content="@thefuhrmanator">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -246,9 +211,13 @@ background: #00000000;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Using the GitHub API in Pharo 7</h1>
-            <p class="subtitle lead">In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine.</p>
-                      </div>
+      <h1 class="title">From a Working Prototype to a Published VSCode Extension: ts2famix in Production</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Moose</div>
+                <div class="quarto-category">TypeScript</div>
+                <div class="quarto-category">VSCode</div>
+              </div>
+                  </div>
   </div>
     
   
@@ -257,14 +226,14 @@ background: #00000000;
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Christopher Fuhrman </p>
+               <p>Léo Mauré </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">March 22, 2019</p>
+        <p class="date">July 22, 2026</p>
       </div>
     </div>
     
@@ -283,120 +252,80 @@ background: #00000000;
 
 
 
-<p>In my mining activities with Pharo, I found it useful to query GitHub to select projects to mine according to their popularity (e.g., forks and stars).</p>
-<section id="which-api-rest-or-graphql" class="level2">
-<h2 class="anchored" data-anchor-id="which-api-rest-or-graphql">Which API (REST or GraphQL)?</h2>
-<p>GitHub offers different ways to query its infrastructure. The traditional REST query is the v3 of its API, and a more powerful (which requires an authentication token) GraphQL v4 of its API.</p>
+<p>During my Mitacs Globalink 2026 internship at ÉTS Montréal, under the supervision of Christopher Fuhrman, I took over the ts2famix VSCode extension built by Lidiia Makarchuk during her own internship in 2025. Her work, described in <a href="../incremental-update-mitacs-2025/">her post on incremental updates</a>, had already proven the core idea: a Language Server Protocol (LSP) client/server architecture that generates Famix models from TypeScript projects directly inside VSCode, and keeps them updated as the code changes.</p>
+<p>My contributions over these 12 weeks focused on making that prototype production-ready: extracting the extension into its own repository, publishing it on the VSCode Marketplace, exposing ts2famix as a proper library API, setting up a cross-platform CI pipeline, and adding a dedicated VSIX test workflow. This post covers the key technical decisions behind each of these contributions.</p>
+<section id="assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions">Assumptions</h2>
+<p>This post assumes familiarity with <a href="../typescript-in-moose/">ts2famix</a> and the Famix metamodel, as well as a basic understanding of how a VSCode extension is structured (client/server, LSP). The incremental update logic itself is already covered in detail in Lidiia’s post.</p>
 </section>
-<section id="rest-v3-api" class="level2">
-<h2 class="anchored" data-anchor-id="rest-v3-api">REST (v3 API)</h2>
-<p>GitHub’s v3 API for REST is OK for getting info about projects, such as the ones that have lots of stars or forks.</p>
-<p>Here’s a snippet of code to show how to use it in Pharo:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>znClient := <span class="kw">ZnClient</span> <span class="fu">new</span>.</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>jsonString := znClient</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    get:</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">'https://api.github.com/search/repositories?q=language:java+stars:&gt;=500+forks:&gt;100&amp;sort=stars&amp;order=desc&amp;per_page=5'</span>.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Note the specifics in the query, e.g.&nbsp;<code>language:java</code> and <code>sort=stars</code>. You can read more about these options on <a href="https://developer.github.com/v3/">GitHub’s documentation for API v3</a>.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This query returns at most 5 results (<code>per_page=5</code>). Without this option, GitHub gives 30 results per query. It’s possible to get up to 100 results per query by setting <code>per_page=100</code>. To get multiple “pages”, you specify the page number (<code>page=2</code>, <code>page=3</code>, etc.) in queries.</p>
-</div>
-</div>
-<p>The <code>jsonString</code> is a JSON string response, which can be accessed nicely using <a href="https://github.com/svenvc/NeoJSON">NeoJSON</a> (which must be loaded in your Pharo image).</p>
-<section id="neojson-to-get-to-the-values" class="level3">
-<h3 class="anchored" data-anchor-id="neojson-to-get-to-the-values">NeoJSON to get to the values</h3>
-<p>Assuming you loaded NeoJSON, here’s how you could get to the values from the <code>jsonString</code> response above:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>queryDic := <span class="kw">NeoJSONReader</span> fromString: jsonString.</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>projectsColl := (queryDic at: <span class="st">'items'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    collect: [ :item | </span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        {(item at: <span class="st">'full_name'</span>).</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        (item at: <span class="st">'git_url'</span>).</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        (item at: <span class="st">'watchers_count'</span>).</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        (item at: <span class="st">'forks_count'</span>)} ].</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>projectsColl asString</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">"'#(#(''iluwatar/java-design-patterns'' ''git://github.com/iluwatar/java-design-patterns.git''</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">      45632 14784)</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">    #(''elastic/elasticsearch'' ''git://github.com/elastic/elasticsearch.git''</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">      39349 13141)</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    #(''ReactiveX/RxJava'' ''git://github.com/ReactiveX/RxJava.git''</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">      38107 6443)</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">    #(''spring-projects/spring-boot'' ''git://github.com/spring-projects/spring-boot.git''</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">      35550 23522)</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">    #(''kdn251/interviews'' ''git://github.com/kdn251/interviews.git''</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">      33272 6610))'"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>It’s not bad, but I was hoping to get data about how many issues (total) existed for projects. This proved troublesome with version 3 of the REST API. It’s possible, but requires multiple calls, which amounts to separate requests through each repo’s issues page. Googling this problem, I found the mention of GitHub encouraging people to move to GraphQL.</p>
+<section id="extracting-the-extension-into-its-own-repository" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-the-extension-into-its-own-repository">Extracting the Extension into Its Own Repository</h2>
+<p>The original extension lived inside the <code>FamixTypeScriptImporter</code> repository alongside the ts2famix library, which made it difficult to package, test, and distribute independently. One of the first structural contributions was extracting the extension into a dedicated repository, <a href="https://github.com/Leoo-code/FamixTypeScriptVSIX">FamixTypeScriptVSIX</a>, with its own dependency management, build pipeline, and CI configuration.</p>
+<p>This separation reflects a clean architectural boundary: ts2famix is a library, and the VSCode extension is a consumer of that library. Keeping them in the same repository blurred that boundary and made it harder to version and publish each one independently.</p>
+<p>The extraction also required fixing several setup issues that prevented the extension from running on any machine other than the original developer’s: a missing <code>publisher</code> field in the configuration file, a version constraint requiring a newer VSCode than most users had, a symlink that the packaging tool <code>vsce</code> couldn’t follow, and runtime dependencies installed in the wrong location.</p>
+</section>
+<section id="publishing-on-the-vscode-marketplace" class="level2">
+<h2 class="anchored" data-anchor-id="publishing-on-the-vscode-marketplace">Publishing on the VSCode Marketplace</h2>
+<p>Once the extension was extracted and installable, the next step was making it publicly available through the VSCode Marketplace under the publisher account <code>Leo-maure</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>The first packaged <code>.vsix</code> weighed around 500 MB, almost entirely <code>node_modules</code>. Bundling the client and server with esbuild brought this down to approximately 4 MB, which is a meaningful difference for users installing the extension on a slower connection.</p>
+<p>An early issue with the <code>.vscodeignore</code> configuration stripped out files the extension needed at runtime, breaking the <code>ts2famix.generateModelForProject</code> command after a fresh Marketplace install. This was a concrete illustration of the gap between “works in development” and “works after packaging”: what <code>vsce</code> includes or excludes from the <code>.vsix</code> is not always what the development environment uses, and the only reliable way to catch this is to test the installed extension, not just the source.</p>
+<p>Releases are now automated: semantic versioning scripts bump the version, commit, and tag in one command, and a GitHub Actions workflow publishes to the Marketplace automatically on every tag push.</p>
+</section>
+<section id="architecture-two-npm-packages-one-tool" class="level2">
+<h2 class="anchored" data-anchor-id="architecture-two-npm-packages-one-tool">Architecture: Two npm Packages, One Tool</h2>
+<p>The extension is built around two separate npm packages, and understanding why they are separate is key to understanding the design.</p>
+<p><code>ts2famix</code> is a TypeScript-to-Famix model generator. It was originally designed as a command-line tool: you give it a glob pattern or a <code>tsconfig.json</code>, it analyzes the source files, and it writes a <code>model.json</code>. That design made perfect sense for a standalone tool, but it created a problem the moment we wanted to embed it inside a long-running VSCode extension server.</p>
+<p>The core issue is that a CLI tool and a library have fundamentally different contracts. A CLI tool is invoked once, does its work, and exits: state can live at module level because the process is thrown away after each run. A library is imported once and called repeatedly: state that persists across calls becomes a source of bugs.</p>
+<p><code>ts2famix</code> was written entirely as a CLI tool. <code>entityDictionary</code>, the central object that maps every TypeScript element to its Famix counterpart, was a module-level global shared across the entire program. So were six tracking collections in <code>process_functions.ts</code>. This was fine for the CLI. It was a design flaw the moment we called <code>famixRepFromProject()</code> a second time from the extension server without the process restarting between calls.</p>
+<p>Exposing <code>ts2famix</code> as a proper library API meant two things. First, changing the package entry point from <code>dist/ts2famix-cli.js</code> to a new <code>dist/index.ts</code> that explicitly exports only what a consumer needs: <code>Importer</code>, <code>SourceFileChangeType</code>, <code>getTsMorphProject</code>, and the helpers used by the incremental update logic. Second, making repeated calls safe by adding <code>reset()</code> and <code>resetProcessFunctions()</code> to clear all shared state at the start of each <code>famixRepFromProject()</code> invocation.</p>
+<p>The <code>npm link</code> mechanism bridges the two packages during development: instead of publishing <code>ts2famix</code> to npm for every change, <code>npm link</code> creates a symlink so the extension server resolves <code>ts2famix</code> directly from the local source tree. This lets both packages be developed and tested together without a publish step in between.</p>
+</section>
+<section id="exposing-ts2famix-as-an-api-two-design-problems" class="level2">
+<h2 class="anchored" data-anchor-id="exposing-ts2famix-as-an-api-two-design-problems">Exposing ts2famix as an API: Two Design Problems</h2>
+<p>After exposing the API, all 7 automated tests stayed green. But running the extension in debug mode against a real project, Emojiopoly, surfaced two bugs that no unit test had been designed to catch.</p>
+<section id="designing-for-repeated-invocation" class="level3">
+<h3 class="anchored" data-anchor-id="designing-for-repeated-invocation">Designing for Repeated Invocation</h3>
+<p>The global-state problem was not a bug in the traditional sense: it was a design assumption that held perfectly for a CLI and broke entirely for a library. The solution was to recognize that <code>famixRepFromProject()</code> needed to behave like a pure function, producing the same model from the same project regardless of how many times it had been called before.</p>
+<p>This led to two additions to the API surface. <code>EntityDictionary.reset()</code> recreates the <code>FamixRepository</code> and clears all internal maps (classes, interfaces, modules, variables, functions, import clauses, enums, inheritances). <code>resetProcessFunctions()</code> clears the six module-level collections in <code>process_functions.ts</code> that track accesses, invocables, classes, interfaces, modules, and export maps between passes. Both are called at the start of every <code>famixRepFromProject()</code> invocation.</p>
+</section>
+<section id="bundling-a-library-not-a-cli" class="level3">
+<h3 class="anchored" data-anchor-id="bundling-a-library-not-a-cli">Bundling a Library, Not a CLI</h3>
+<p>The second design issue was about what esbuild should include in the server bundle. With <code>external: []</code>, esbuild treated <code>ts2famix</code> as just another dependency to inline, which meant inlining its CLI entry point, including the <code>yargs</code> argument parser that runs immediately on <code>require</code>. The server was not importing a library; it was accidentally executing a program.</p>
+<p>The fix, <code>external: ['ts2famix']</code>, reflects the correct mental model: <code>ts2famix</code> is a peer dependency that the runtime environment is responsible for resolving, whether via <code>npm link</code> in development or <code>node_modules</code> in production. The bundler should not own it.</p>
+</section>
+<section id="validation" class="level3">
+<h3 class="anchored" data-anchor-id="validation">Validation</h3>
+<p>Both fixes were validated against the full test suite and against a real project. The 7 automated smoke tests passed, model generation against Emojiopoly succeeded with no crash and no FQN error, 886 entities were generated without error via direct CLI invocation on the same project, and the resulting <code>model.json</code> loaded successfully in Moose/Pharo.</p>
 </section>
 </section>
-<section id="graphql-v4-api" class="level2">
-<h2 class="anchored" data-anchor-id="graphql-v4-api">GraphQL (v4 API)</h2>
-<p>GraphQL is more complex, but in theory more powerful. You have to do POST requests, and you need an authorization token (which means GitHub tracks what you are doing). Since the responses are still in JSON, NeoJSON can pick them apart for you as before.</p>
-<p>So, here’s what I did according to the <a href="https://developer.github.com/v4/guides/forming-calls/">instructions from GitHub</a>:</p>
-<ul>
-<li>I first <a href="https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line">created a token</a> with scope <code>repo</code> (and all repo sub-scopes). I described it as a GitHub repo mining token. For obvious reasons, I don’t reveal the token here in my examples.</li>
-<li>Before making the first query call, I <a href="https://developer.github.com/v4/guides/forming-calls/#communicating-with-graphql">make a call to login with the token</a>{:text-decoration=“underline”}.</li>
-<li>I specify the token on subsequent calls as before.</li>
-</ul>
-<p>Here’s a Playground script that could be converted easily to a class with methods:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode smalltalk code-with-copy"><code class="sourceCode smalltalk"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>| graphQLLoginString graphQLGetIssueCount doGraphQLQuery myAPIToken response queryDic issueCount |</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>graphQLLoginString :=</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'query { viewer { login }}'</span>.</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>graphQLGetIssueCount :=</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'query { repository(owner:"isaacs", name:"github") {issues(states:OPEN) {totalCount}}}'</span>.</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">"Get a token for repo scope</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"> at https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line"</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>myAPIToken := <span class="st">'GET_YOUR_TOKEN_FROM_GIT_HUB_AND_PUT_IT_HERE'</span>.</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">"block closure to be called like a method"</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>doGraphQLQuery := [ :authToken :graphQLquery | </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    | escaper |</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">"escape any double-quotes in the GraphQL query"</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    escaper := [ :stringToEscape | </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        stringToEscape copyWithRegex: <span class="st">'\"'</span> matchesReplacedWith: <span class="st">'\"'</span> ].</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">ZnClient</span> <span class="fu">new</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        url: <span class="st">'https://api.github.com/graphql'</span>;</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        headerAt: <span class="st">'Authorization'</span> put: <span class="st">'bearer '</span> , authToken;</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        entity:</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">ZnEntity</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                with: <span class="st">'{"query": "'</span> , (escaper value: graphQLquery) , <span class="st">'"}'</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                type: <span class="kw">ZnMimeType</span> applicationJson);</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        post ].</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">"Log in first, should check for errors in the response"</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>response := doGraphQLQuery</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    value: myAPIToken value: graphQLLoginString.</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">"Do the query to get the number of issues"</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>response := doGraphQLQuery</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    value: myAPIToken</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    value: graphQLGetIssueCount.</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">"Pull the number out of the JSON"</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>queryDic := <span class="kw">NeoJSONReader</span> fromString: response.</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>issueCount := ((((queryDic at: <span class="st">'data'</span>) at: <span class="st">'repository'</span>) at: <span class="st">'issues'</span>)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    at: <span class="st">'totalCount'</span>) asInteger</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><a href="https://pixabay.com/photos/fork-cutlery-metal-metal-fork-2390507/">Photo credit</a></p>
+<section id="testing-the-vsix" class="level2">
+<h2 class="anchored" data-anchor-id="testing-the-vsix">Testing the VSIX</h2>
+<p>Testing the extension from source (pressing F5 in VSCode) is not the same as testing what a user actually installs. The packaged <code>.vsix</code> goes through <code>vsce</code>, which applies <code>.vscodeignore</code> rules, resolves dependencies differently, and produces a bundle that may behave differently from the development environment.</p>
+<p>To address this, a dedicated <code>npm run test:vsix</code> workflow was added alongside the existing smoke tests. This script packages the extension into a <code>.vsix</code>, installs it in an isolated VSCode instance, and runs the test suite against the installed version, the same way an end user would experience it. The workflow runs on the CI matrix (Ubuntu, macOS, Windows) on every push, giving early warning of packaging regressions before they reach the Marketplace.</p>
+<p>Two build scripts support different development scenarios. <code>npm run build</code> installs <code>ts2famix</code> from npm and rebuilds the server bundle, which is the standard case for testing the extension against the published library. <code>npm run build:local</code> runs the full <code>npm link</code> workflow, building <code>ts2famix</code> from the local source tree and linking it into the extension server, which is the case for developing both packages simultaneously.</p>
+</section>
+<section id="using-ai-assistance-contributions-and-limits" class="level2">
+<h2 class="anchored" data-anchor-id="using-ai-assistance-contributions-and-limits">Using AI Assistance: Contributions and Limits</h2>
+<p>A significant part of the work during this internship was done in collaboration with an AI assistant (Claude, Copilot). This collaboration was genuinely productive for certain tasks: generating boilerplate, drafting documentation, suggesting fixes for well-defined bugs, and helping navigate unfamiliar APIs quickly.</p>
+<p>That said, working with an AI assistant on a real codebase surfaced clear limits that are worth documenting honestly.</p>
+<p>The most consistent issue was context. The AI assistant did not have access to the full repository history, the existing test suite, or the runtime behavior of the extension. This meant that suggested fixes sometimes addressed the symptom rather than the root cause, and had to be validated manually against the actual codebase. For example, the <code>sourceAnchor</code> bug required iterating through several hypotheses before identifying that the real issue was a missing <code>override get</code> paired with an <code>override set</code> in TypeScript’s class hierarchy, something that only became clear by reading the compiled JavaScript output and adding diagnostic logs.</p>
+<p>A second limit was autonomy. AI agents tend to propose solutions and proceed without always waiting for confirmation, which can lead to changes accumulating faster than they can be reviewed. On a project where correctness matters (a published extension used by real users), this required actively slowing down the AI’s suggestions and verifying each change independently before committing.</p>
+<p>The practical takeaway is that AI assistance accelerates certain kinds of work significantly, particularly documentation, boilerplate, and first-pass debugging, but it does not replace the need for a developer who understands the system well enough to validate the output. The AI is as useful as the context it is given, and providing that context is itself a skill.</p>
+</section>
+<section id="whats-next" class="level2">
+<h2 class="anchored" data-anchor-id="whats-next">What’s Next</h2>
+<p>Several directions remain open for future contributors. The global-state design in <code>entityDictionary</code> and <code>process_functions.ts</code> is now patched to work correctly under repeated invocation, but the long-term fix would move <code>entityDictionary</code> into the <code>Importer</code> class as a private property, making each instance fully independent. The event trigger question, <code>onDidChangeWatchedFiles</code> versus <code>onDidSaveTextDocument</code>, is still open and worth revisiting. The CI pipeline should be extended to test against the npm-published version of <code>ts2famix</code> rather than only the GitHub-pinned version, to catch API mismatches before they reach users.</p>
 
 
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://marketplace.visualstudio.com/items?itemName=Leo-maure.ts2famix-vscode-extension" class="uri">https://marketplace.visualstudio.com/items?itemName=Leo-maure.ts2famix-vscode-extension</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <div class="comments">
 	<div id="disqus_thread"></div>
 	<script type="text/javascript">
