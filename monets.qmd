@@ -18,14 +18,14 @@ description: Il était une fois un portail simple qui était le centre de l'univ
 - [CASA (examens ESH)](https://casa.etsmtl.ca/)
 - [EvalCours](https://evalcours.etsmtl.ca/)
 - [Réservation de salles (Prelude)](https://prelude.etsmtl.ca/)
-- [Réservation de salles (gestion) VPN!](https://reservlocaux-gestion.etsmtl.ca/)
+- [Réservation de salles (gestion) VPN!](https://reservlocaux-gestion.etsmtl.ca/) <!-- markdown-link-check-disable -->
 - [PAE-BAT (profs réguliers)](https://pae.etsmtl.ca/)
 - [PAE-BAT (profs enseignants)](https://eenseignant.etsmtl.ca/PB)
 
 ## Corps professoral
 
 - [Uniweb](http://uniweb.etsmtl.ca/)
-- [Téléphonie](https://telephonie.etsmtl.ca/)
+- [Téléphonie](https://telephonie.etsmtl.ca/) <!-- markdown-link-check-disable -->
 - [Messagerie (Outlook)](https://outlook.etsmtl.ca/)
 - [GIPPE](https://gippe.etsmtl.ca/)
 
