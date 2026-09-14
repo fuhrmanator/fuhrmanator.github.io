@@ -21,7 +21,7 @@ Here's a video of the features in Google Slides:
 
 ### Wireframe graphical interface (SALT)
 
-![Wireframe graphical interface (SALT) image](https://www.plantuml.com/plantuml/svg/LOx12i8m44Jl-nLBJ-rV5CIBPuL2I25j5X9CDoMxWOhuxrP1KPZB30_UzAAkQ5qIY4iATpXLKLoJYunAcu8vXoYuPxdXL5KpMsWxlF0SQBwIn-9ypD0E7Hx-5cD_e2blO0RxHLwzER9IULimK25iOFp87FgIrnH5HtX0J-ptYqy0)
+![Wireframe graphical interface (SALT) image](https://www.plantuml.com/plantuml/svg/LOx1oi8m48Jl-nHBJ-rR57x-YsU5GaWXRHOIZ4d9Jg4YlhjQA2ZCPOOFlkaLha9T0Ztej2fuIIvcXcmWSmvH-PtRdQSLADbIs_4bpq7cgtYkpiT2xT3ntyzYx1SqbOtCO0zaxyr_XjJTma6gS4FZ8NFiQrbIL8pqf5wo_znx0G00)
 
 ### ArchiMate
 
