@@ -2,4 +2,7 @@ dirs:
   - .
 fileExtensions:
   - qmd
+aliveStatusCodes:
+  - 403
+  - 999
 useGitIgnore: false
