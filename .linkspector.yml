@@ -1,0 +1,10 @@
+dirs:
+  - .
+fileExtensions:
+  - qmd
+aliveStatusCodes:
+  - 403
+  # PlantUML gives 509 (bandwidth exceeded)
+  - 509
+  - 999
+useGitIgnore: false
