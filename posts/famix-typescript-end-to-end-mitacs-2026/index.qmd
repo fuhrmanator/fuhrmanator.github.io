@@ -6,13 +6,29 @@ author: M Taha Makhdoom
 image: 'image.jpg'
 ---
 
-Every time [Moose](https://github.com/moosetechnology) evolves, the tools built on top of it have to evolve as well. So this summer, during my Mitacs Globalink internship at ÉTS Montréal under the supervision of Professor Christopher Fuhrman, I migrated the [FamixTypeScript](https://github.com/fuhrmanator/FamixTypeScript) metamodel and updated the importer/parser `ts2famix` (in the [FamixTypeScriptImporter](https://github.com/fuhrmanator/FamixTypeScriptImporter) repository) to the latest version, Moose 13, and set up a CI/CD pipeline that runs the tests for both.
+Every time [Moose](https://github.com/moosetechnology) evolves, the tools built on top of it have to evolve as well. So this summer, during my Mitacs Globalink internship at ÉTS Montréal under the supervision of Professor Christopher Fuhrman, I migrated the [FamixTypeScript](https://github.com/fuhrmanator/FamixTypeScript) metamodel and updated its companion importer [`ts2famix`](https://github.com/fuhrmanator/FamixTypeScriptImporter) to the latest version, Moose 13, while also setting up a CI/CD pipeline in Github Actions that automates tests across both environments, providing end-to-end validation for the changes.
 
 ## Assumptions
 
-This post assumes familiarity with [`ts2famix` and the Famix metamodel for TypeScript](../typescript-in-moose/), and a basic understanding of the two technology stacks involved: TypeScript/npm and Pharo Smalltalk/Moose. The modeling of generics and concretizations builds on the work described in Clotilde Toullec's post [Parametrics next generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/).
+This post assumes familiarity with [`ts2famix`](../typescript-in-moose/), and a basic understanding of the two techstacks involved: TypeScript and Pharo Smalltalk/Moose. The modeling of generics and concretizations builds on the work described in Clotilde Toullec's post [Parametrics next generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/).
 
-## Two Environments, One Pipeline
+## Automating End-To-End Testing
+
+ts2famix consists of basically two steps, first of all we use the importer to parse the project and create a model.json. The model is then loaded into the Pharo environment with FamixTypeScript as the metamodel.
+
+Before, both these steps were tested independently, while pharo tests were tested manually upon integration into the moose environment. Although these two were working independently, it did not guarantee that the model generated was actually able to import into the environment and that all the entities were correct as there could be discrepencies between the importer state and the metamodel state.
+
+This was addressed through the CI/CD pipeline,. Whenever a change is done to the importer, it starts a pipeline, it runs all the jest files inside the importer, ensuring that the importer itself is working as expected. Throught these jest files, a sample project is created, based on all the aspects checked inside the jest files. Using this sample project, we generate a model.json and import it into the Pharo environment. The environment itself has tests inside that validate if it contains all the entities.
+
+[Diagram]
+
+
+
+## Metamodel Migration
+## Updating the Importer for the New Metamodel
+## Adding TSX Support and Planning a TypeScript Famix Extension
+## AI Usage
+## What's Next
 
 The toolchain has an inherent seam: `ts2famix` parses TypeScript and emits a `model.json`, and that JSON only has value if it loads cleanly into the FamixTypeScript metamodel inside Moose. For a long time, each half was tested in isolation — the importer with Jest on the Node.js side, the metamodel with SUnit on the Pharo side — but nothing verified that the *output* of one was actually a valid *input* to the other.
 
