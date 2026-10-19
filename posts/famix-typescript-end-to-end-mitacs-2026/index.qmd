@@ -14,18 +14,167 @@ This post assumes familiarity with [`ts2famix`](../typescript-in-moose/), and a 
 
 ## Automating End-To-End Testing
 
-ts2famix consists of basically two steps, first of all we use the importer to parse the project and create a model.json. The model is then loaded into the Pharo environment with FamixTypeScript as the metamodel.
+`ts2famix` consists of two steps. First, we use the importer to parse the project and create a model.json. This file is then loaded into the Pharo environment with FamixTypeScript metamodel used to represent the project.
 
-Before, both these steps were tested independently, while pharo tests were tested manually upon integration into the moose environment. Although these two were working independently, it did not guarantee that the model generated was actually able to import into the environment and that all the entities were correct as there could be discrepencies between the importer state and the metamodel state.
+Previously, both these steps were tested independently. The importer was tested using jest, while the Pharo tests were run manually when importing the model into the moose environment. Although both steps were working independently, this did not guarantee that the model generated could be successfully imported into Pharo or that it contained all the expected entities. Discrepencies between the importer and metamodel might go undetected.
 
-This was addressed through the CI/CD pipeline,. Whenever a change is done to the importer, it starts a pipeline, it runs all the jest files inside the importer, ensuring that the importer itself is working as expected. Throught these jest files, a sample project is created, based on all the aspects checked inside the jest files. Using this sample project, we generate a model.json and import it into the Pharo environment. The environment itself has tests inside that validate if it contains all the entities.
+To address this, I implemented a CI/CD pipeline in Github Actions that automates testing across both environments. Whenever new code is pushed to the repository, the CI/CD kicks in and the follows steps occur:
+
+1. **Run the Jest test suite:** The importer’s Jest tests verify that different aspects of TypeScript syntax are correctly captured in the generated model.
+
+2. **Generate a sample project:** The pipeline combines the code snippets used in the test files into a sample project that tested the various TypeScript features.
+
+3. **Generate the model:** The importer processes this sample project and generates a `model.json` file.
+
+4. **Import the model into Pharo:** The generated model is loaded into the Pharo environment containing the FamixTypeScript metamodel.
+
+5. **Run the Pharo tests:** The Pharo test suite validates that the expected entities are successfully imported into the model.
 
 [Diagram]
 
+## Migrating FamixTypeScript metamodel and ts2famix Importer to Moose 13.
+
+The `FamixTypeScript metamodel` is build on top of Moose ecosystem. When Moose was updated from version 12 to 13, changes in the foundational moose entities meant that the existing metamodel was not compatible with the new version. For this reason, FamixTypeScript metamodel had to be updated for Moose 13.
+
+### Introducing Entity Typing
+
+Moose 13 introduced a new entity that replaced the direct relation between a Typed Entity and its Type called `EntityTyping`. This new type became relevant to adopt the new association structure and to represent TypeScript Types correctly. The new structure is illustrated in the following diagram:
+
+[diagram]
+
+Following are the entites that were altered to use the new EntityTyping structure:
+
+-Function
+-ParmetricFunction
+-ArrowFunction
+-ParmetricArrowFunction
+-Method
+-Accessor
+-ParametricMethod
+-EnumValue
+-Parameter
+-Property
+-Variable
+
+### Restructuring Concretizations
+### Parametric Associations
+
+A major change in the Moose metamodel was the replacement of the direct relationship between a typed entity and its type with a middle association called `EntityTyping`. This change brought
+
+This change was particularly relevant to the FamixTypeScript migration because the metamodel needed to adopt the new association structure while preserving the ability to represent TypeScript types correctly.
+
+As described in Clotilde Toullec's [*Parametrics Next Generation*](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/), the new structure also changes how declared types are accessed and assigned in the Pharo API. The `declaredType` getter remains available, but setting a declared type now requires creating an `EntityTyping` association and assigning the type as its target.
 
 
-## Metamodel Migration
+
+### Restructuring Concretizations
+
+In object-oriented programming, generic entities can be declared using type parameters and then used with specific types. For example, consider the following TypeScript code:
+
+```typescript
+class Box<T> {
+    value: T;
+}
+
+const box = new Box<string>();
+```
+
+Here, `Box` is a generic class with a type parameter `T`. When `Box<string>` is instantiated, `T` is associated with the concrete type `string`.
+
+The Famix model needs to represent both the generic entity and its usages seperately. Previously, representing a concretization involved creating a duplicate of the generic entity and linking the duplicate directly to the original. The updated Moose metamodel introduces a dedicated `Concretization` entity to represent this relationship explicitly.
+
+A concretization is modeled as a three-way association connecting the generic entity, the concrete type, and the kind of concretization being performed.
+
+The diagram below illustrates the new structure.
+
+<!-- [![Concretization model](images/concretization.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/) -->
+[diagram]
+
+### Parametric Associations
+
+Alongside with the changes to concretizations, the new metamodel now consists of four parametric associations.
+
+#### Parametric Inheritance
+
+Parametric inheritance represents inheritance with a generic type. For example:
+
+```typescript
+class Animal<T> {}
+
+class Dog extends Animal<string> {}
+```
+
+Here, `Dog` inherits from the concretized type `Animal<string>`.
+
+#### Parametric Implementation
+
+Parametric implementation represents a class implementing a generic interface. For example:
+
+```typescript
+interface Repository<T> {}
+
+class UserRepository implements Repository<string> {}
+```
+
+Here, `UserRepository` implements `Repository<string>`.
+
+#### Parametric Invocation
+
+Parametric invocation represents a call to a generic function or method with concrete type arguments. For example:
+
+```typescript
+function identity<T>(value: T): T {
+    return value;
+}
+
+identity<number>(42);
+```
+
+Here, the invocation supplies `number` as the type argument for `T`.
+
+#### Parametric Reference
+
+Parametric reference represents a reference involving a generic entity with specific type arguments. For example:
+
+```typescript
+class Box<T> {}
+
+let box: Box<string>;
+```
+
+Here, the reference uses the parameterized type `Box<string>`.
+
+[![Parametric associations](images/parametric-associations.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/)
+
+These changes required corresponding updates to the FamixTypeScript metamodel so that its entities and relationships conformed to the new Moose API. They also provided the foundation for updating `ts2famix` to generate models compatible with Moose 13.
+
+In the new version, an entity "concretization" has been defined. This is a 3 way association which connects a generic type (also called a type parameter in the context of Moose) to the type that concretizes it (example a string) and the type of concretization being performed, (explained in the parameterized entities section). A diagram below explains that.
+
+[diagram of th enew t concretization]
+
+//heading of parameterized associations.
+All parametric associations have been divided into 4 types in the new update.
+
+-Parametric inheritance (brief explanation of each with an example)
+-Parametric implementation
+-Parametric invocation
+-Parametric reference
+
+[diagram of the para ]
+
+
+
+ 
+
+-famix metamodel is implemented in pharo/moose
+-moose was updated from 12 to 13
+-new entities were added and a different concretization structure was added
+-mentioning the 4 parametric associations
+-diagram on chlothilds post (pic goes to the post)
+
 ## Updating the Importer for the New Metamodel
+npm releases
+
 ## Adding TSX Support and Planning a TypeScript Famix Extension
 ## AI Usage
 ## What's Next
