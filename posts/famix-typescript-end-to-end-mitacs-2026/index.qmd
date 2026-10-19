@@ -34,38 +34,29 @@ To address this, I implemented a CI/CD pipeline in Github Actions that automates
 
 ## Migrating FamixTypeScript metamodel and ts2famix Importer to Moose 13.
 
-The `FamixTypeScript metamodel` is build on top of Moose ecosystem. When Moose was updated from version 12 to 13, changes in the foundational moose entities meant that the existing metamodel was not compatible with the new version. For this reason, FamixTypeScript metamodel had to be updated for Moose 13.
+`FamixTypeScript` is build on top of Moose ecosystem. When Moose was updated from version 12 to 13, changes in the foundational moose entities meant that the existing metamodel is not compatible with the new version. For this reason, FamixTypeScript metamodel and subsequently, the importer, had to be updated for the new version.
 
 ### Introducing Entity Typing
 
-Moose 13 introduced a new entity that replaced the direct relation between a Typed Entity and its Type called `EntityTyping`. This new type became relevant to adopt the new association structure and to represent TypeScript Types correctly. The new structure is illustrated in the following diagram:
+Moose 13 introduced `EntityTyping`, an association that replaced the direct relationship between a typed entity and its type. This change brought type relationships in line with the new metamodel structure and provided a more flexible way to represent TypeScript types.
 
-[diagram]
+The new structure is shown in the following diagram:
 
-Following are the entites that were altered to use the new EntityTyping structure:
+[Diagram]
 
--Function
--ParmetricFunction
--ArrowFunction
--ParmetricArrowFunction
--Method
--Accessor
--ParametricMethod
--EnumValue
--Parameter
--Property
--Variable
+The following FamixTypeScript entities were updated to use the new `EntityTyping` structure:
 
-### Restructuring Concretizations
-### Parametric Associations
-
-A major change in the Moose metamodel was the replacement of the direct relationship between a typed entity and its type with a middle association called `EntityTyping`. This change brought
-
-This change was particularly relevant to the FamixTypeScript migration because the metamodel needed to adopt the new association structure while preserving the ability to represent TypeScript types correctly.
-
-As described in Clotilde Toullec's [*Parametrics Next Generation*](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/), the new structure also changes how declared types are accessed and assigned in the Pharo API. The `declaredType` getter remains available, but setting a declared type now requires creating an `EntityTyping` association and assigning the type as its target.
-
-
+- `Function`
+- `ParametricFunction`
+- `ArrowFunction`
+- `ParametricArrowFunction`
+- `Method`
+- `Accessor`
+- `ParametricMethod`
+- `EnumValue`
+- `Parameter`
+- `Property`
+- `Variable`
 
 ### Restructuring Concretizations
 
@@ -92,7 +83,7 @@ The diagram below illustrates the new structure.
 
 ### Parametric Associations
 
-Alongside with the changes to concretizations, the new metamodel now consists of four parametric associations.
+Alongside with the changes to concretizations, the new metamodel introducted 5 parametric assoociations. These associations specifically represent relationships involving generic entities being instantiated by a concrete types.
 
 #### Parametric Inheritance
 
@@ -144,7 +135,26 @@ let box: Box<string>;
 
 Here, the reference uses the parameterized type `Box<string>`.
 
-[![Parametric associations](images/parametric-associations.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/)
+#### Parametric Entity Typing
+
+Parametric entity typing represents a typing relationship involving a parameterized type, extending the `EntityTyping` association with support for concretizations.
+
+For example:
+
+```typescript
+class Box<T> {
+    value: T;
+}
+
+let box: Box<string>;
+```
+
+Here, entity typing binds the generic type parameter `T` to the concrete type `string`.
+
+This allows the metamodel to capture both the declared type of an entity and the concrete type arguments involved in that relationship.
+
+<!-- [![Parametric associations](images/parametric-associations.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/) -->
+[diagram]
 
 These changes required corresponding updates to the FamixTypeScript metamodel so that its entities and relationships conformed to the new Moose API. They also provided the foundation for updating `ts2famix` to generate models compatible with Moose 13.
 
