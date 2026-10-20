@@ -85,18 +85,6 @@ The diagram below illustrates the new structure.
 
 Alongside with the changes to concretizations, the new metamodel introducted 5 parametric assoociations. These associations specifically represent relationships involving generic entities being instantiated by a concrete types.
 
-#### Parametric Inheritance
-
-Parametric inheritance represents inheritance with a generic type. For example:
-
-```typescript
-class Animal<T> {}
-
-class Dog extends Animal<string> {}
-```
-
-Here, `Dog` inherits from the concretized type `Animal<string>`.
-
 #### Parametric Implementation
 
 Parametric implementation represents a class implementing a generic interface. For example:
@@ -108,6 +96,18 @@ class UserRepository implements Repository<string> {}
 ```
 
 Here, `UserRepository` implements `Repository<string>`.
+
+#### Parametric Inheritance
+
+Parametric inheritance represents inheritance with a generic type. For example:
+
+```typescript
+class Animal<T> {}
+
+class Dog extends Animal<string> {}
+```
+
+Here, `Dog` inherits from the concretized type `Animal<string>`.
 
 #### Parametric Invocation
 
@@ -125,15 +125,19 @@ Here, the invocation supplies `number` as the type argument for `T`.
 
 #### Parametric Reference
 
-Parametric reference represents a reference involving a generic entity with specific type arguments. For example:
+A parametric reference occurs when a generic entity is used in other places in code. For example:
 
 ```typescript
-class Box<T> {}
+class Box<T> {
+  value!: T;
+}
 
-let box: Box<string>;
+function createStringBox() {
+  const StringBox = Box<string>;
+}
 ```
 
-Here, the reference uses the parameterized type `Box<string>`.
+Here, the function `createStringBox` refers to the generic class `Box` with the type argument `string`. The concretization maps the type parameter `T` to `string`.
 
 #### Parametric Entity Typing
 
@@ -149,40 +153,15 @@ class Box<T> {
 let box: Box<string>;
 ```
 
-Here, entity typing binds the generic type parameter `T` to the concrete type `string`.
-
-This allows the metamodel to capture both the declared type of an entity and the concrete type arguments involved in that relationship.
+Here, entity typing binds the generic type parameter `T` to the concrete type `string` while declaring the Type of the Entity as `Box<string>`
 
 <!-- [![Parametric associations](images/parametric-associations.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/) -->
-[diagram]
-
-These changes required corresponding updates to the FamixTypeScript metamodel so that its entities and relationships conformed to the new Moose API. They also provided the foundation for updating `ts2famix` to generate models compatible with Moose 13.
-
-In the new version, an entity "concretization" has been defined. This is a 3 way association which connects a generic type (also called a type parameter in the context of Moose) to the type that concretizes it (example a string) and the type of concretization being performed, (explained in the parameterized entities section). A diagram below explains that.
-
-[diagram of th enew t concretization]
-
-//heading of parameterized associations.
-All parametric associations have been divided into 4 types in the new update.
-
--Parametric inheritance (brief explanation of each with an example)
--Parametric implementation
--Parametric invocation
--Parametric reference
-
 [diagram of the para ]
 
+### Progress in importer
+Among these associations being discussed, all of them have been incorporated into the metamodel. As for the importer, their model apis have been added. And Parametric Invocation, Parametric Entity Typing, Entity Typing, and Parametric Inheritance have been added into the logic and are now adding into the final model. Parametric reference is not added yet as it needs the presence of References inside the actual logic for parsing, and would be added based on that, and as for Parametric Implementation, it seems the importer treats both implementation and extention to be of the same type, later discussion with professor determined that these might be too similar and that their difference migth be due to the Chlothilds post referncing Java more than TyepScript and might not be needed for TypeScript. 
+## New Release for ts2famix npm package
 
-
- 
-
--famix metamodel is implemented in pharo/moose
--moose was updated from 12 to 13
--new entities were added and a different concretization structure was added
--mentioning the 4 parametric associations
--diagram on chlothilds post (pic goes to the post)
-
-## Updating the Importer for the New Metamodel
 npm releases
 
 ## Adding TSX Support and Planning a TypeScript Famix Extension
