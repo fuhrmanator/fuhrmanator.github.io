@@ -22,7 +22,7 @@ To address this, I implemented a CI/CD pipeline in Github Actions that automates
 
 1. **Run the Jest test suite:** The importer’s Jest tests verify that different aspects of TypeScript syntax are correctly captured in the generated model.
 
-2. **Generate a sample project:** The pipeline combines the code snippets used in the test files into a sample project that tested the various TypeScript features.
+2. **Generate a sample project:** The pipeline combines the code snippets tested in the test files into a sample project.
 
 3. **Generate the model:** The importer processes this sample project and generates a `model.json` file.
 
@@ -38,7 +38,7 @@ To address this, I implemented a CI/CD pipeline in Github Actions that automates
 
 ### Introducing Entity Typing
 
-Moose 13 introduced `EntityTyping`, an association that replaced the direct relationship between a typed entity and its type. This change brought type relationships in line with the new metamodel structure and provided a more flexible way to represent TypeScript types.
+Moose 13 introduced `EntityTyping`, an association that replaced the direct relationship between a typed entity and its type. This change made type relationships more in line with the lastest moose structure and gave a more flexible way to represent TypeScript types.
 
 The new structure is shown in the following diagram:
 
@@ -158,61 +158,36 @@ Here, entity typing binds the generic type parameter `T` to the concrete type `s
 <!-- [![Parametric associations](images/parametric-associations.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/) -->
 [diagram of the para ]
 
-### Progress in importer
-Among these associations being discussed, all of them have been incorporated into the metamodel. As for the importer, their model apis have been added. And Parametric Invocation, Parametric Entity Typing, Entity Typing, and Parametric Inheritance have been added into the logic and are now adding into the final model. Parametric reference is not added yet as it needs the presence of References inside the actual logic for parsing, and would be added based on that, and as for Parametric Implementation, it seems the importer treats both implementation and extention to be of the same type, later discussion with professor determined that these might be too similar and that their difference migth be due to the Chlothilds post referncing Java more than TyepScript and might not be needed for TypeScript. 
-## New Release for ts2famix npm package
+### Progress in the Importer and npm Release
 
-npm releases
+All of the associations discussed above have been incorporated into the metamodel, and their APIs have been added to the importer. Among these, Entity Typing, Parametric Entity Typing, Parametric Invocation, and Parametric Inheritance are implemented in the importer's logic and are now visible in the generated model.
+
+Parametric Reference has not been implemented yet. It is built on Reference, which is not yet handled in the parsing logic. The parametric conterpart would be added after References are in place.
+
+Parametric Implementation is also not implemented. The importer currently treats implementation and extension as the same kind of relationship. After discussing this with Professor Fuhrman, we concluded that the two may be too similar in TypeScript to need separate associations. Currently it is handled through inheritance.
+
+A new version of `ts2famix` including these changes have been published on npm. The latest version at the time of writing is [v3.3.0](https://www.npmjs.com/package/ts2famix).
 
 ## Adding TSX Support and Planning a TypeScript Famix Extension
-## AI Usage
-## What's Next
 
-The toolchain has an inherent seam: `ts2famix` parses TypeScript and emits a `model.json`, and that JSON only has value if it loads cleanly into the FamixTypeScript metamodel inside Moose. For a long time, each half was tested in isolation — the importer with Jest on the Node.js side, the metamodel with SUnit on the Pharo side — but nothing verified that the *output* of one was actually a valid *input* to the other.
+Another goal of my project was to add `TSX` support to the importer. `ts2famix` is built on top of [`ts-morph`](https://www.npmjs.com/package/ts-morph), and while experimenting with it, support for TSX syntax was found. This meant that ts2famix can be extended to support TSX syntax using the same tools the importer is built on.
 
-Closing that gap was one of my main contributions: an end-to-end testing pipeline in GitHub Actions that exercises the whole chain. The pipeline runs `ts2famix` against real TypeScript sources to produce a `model.json`, then loads that model into a Pharo image running the FamixTypeScript metamodel, and asserts that the model imports without error and contains the entities it should.
+Initially, we planned to incorporate the TSX extention into the `FamixTypeScript` metamodel itself. After furthur discussions, we concluded that a seperate metamodel built on top of `FamixTypeScript` might be a better approach. A draft of the metamodel, covering the entities specific to TSX, have been modeled and are shown below:
 
-The hard part is not either environment on its own; it is making them cooperate inside a single CI run. The TypeScript side needs Node.js and npm; the Pharo side needs a Moose image and a Smalltalk test runner. Getting both provisioned in the same workflow, passing the generated artifact from the Node step to the Pharo step, and surfacing a clear pass/fail from two very different test frameworks, was a genuinely cross-cutting problem. The payoff is that a change to the importer that would break model loading in Moose — or a change to the metamodel that no longer accepts the importer's output — now fails CI immediately, instead of being discovered by hand much later.
+[diagram of tsx]
 
-## Migrating the Metamodel to a Newer Moose API
+Right now the importer is able to accept `.tsx` files, but capturing TSX specific entities are yet to be added into the importer.
 
-The FamixTypeScript metamodel is written in Pharo and built on the Moose/FamixNG infrastructure, which evolves. Part of my work was migrating the metamodel to newer versions of the Moose API so that it keeps loading and generating correctly on current Moose images.
+## AI Assistance
 
-API migrations in a metamodel are deceptively subtle. The metamodel is largely *generated* from a definition, so a change in the underlying API can ripple through generated classes, traits, and relationship definitions. The parametric and concretization machinery — `ParametricClass`, `ParametricInterface`, the `Concretisation` and `ParameterConcretisation` relationships, and their supporting traits (described in detail in [the generics post](../typescript-famix-generics/)) — is exactly the kind of structure that is sensitive to API drift. The goal was to bring the definition up to date against the newer API while keeping the generated metamodel behaviorally identical, so that models produced by `ts2famix` continue to load the same way.
+AI tools were valuable throughout this project. The biggest challenge faced during development was the addition of the new concretization structure. This change touched many different entities and many parts of the codebase. With the help of AI, I was able to determine and implement the scope of this change. In this case, it helped me implement these changes at a quicker pace.
 
-Keeping the auto-generated UML documentation in sync was part of this: the repository's CI enforces that the committed UML reflects the current metamodel, so a migration isn't complete until the regenerated diagrams are committed and the checks pass.
+AI immensely helped me understand the structure of the metamodel and the importer's parsing logic. This understanding helped me to implement Parametric Associations and the Entity Typing changes. AI made certain tasks such as repetitive changes and large refactors easier, while the design decisions and much of the implementations were my own.
 
-## Migrating and Releasing the Importer on npm
+## Note for Future Contributors
 
-On the TypeScript side, I worked on migrating the `ts2famix` importer and, importantly, on the release process itself. `ts2famix` is published as an [npm package](https://www.npmjs.com/package/ts2famix), which means that "done" doesn't mean "merged" — it means a correct, versioned package that users can `npm install` and that produces a `model.json` the current metamodel accepts.
+There are many aspects of this proj that could be updated, first is the full implementation of all the parametric associations and the related entities. anoher is the creation of the new tsx pharo metamodel and using it inside the importer. [This](https://modularmoose.org/blog/2021-05-15-connecting-meta-models/) might be a great help for the tsx stuff. secondly, a refactor of the importer could happen, the importer has a cluster of different maps of different entities that are rarely used, these could be consolidated or more better served for the entity dictionary, 
 
-Cutting a release touches the whole chain at once: the code has to build, the Jest suite has to pass, the version has to be bumped coherently, and the published artifact has to stay compatible with the Moose-side metamodel. Doing this deliberately, rather than ad hoc, is what makes the two halves of the project move forward together instead of drifting apart.
-
-## A Test Suite of 300+ Tests, Across Two Frameworks
-
-Much of the internship came down to tests: creating new ones and correcting existing ones, across **more than 300 tests** written in two different frameworks — Jest on the TypeScript side and SUnit on the Pharo side.
-
-Having tests on both ends is what makes the end-to-end pipeline meaningful. The Jest tests pin down the importer's behavior: given a particular TypeScript construct, the generated model should contain particular entities and relationships. The SUnit tests pin down the metamodel: the Pharo classes, traits, and relationships behave as specified and load models correctly. Correcting tests was as valuable as adding them — a test that asserts the wrong thing is worse than no test, because it gives false confidence. A good share of the work was tracking down tests whose expectations no longer matched the intended modeling and bringing them back in line with reality.
-
-## Modeling Complex Abstractions: Generic Functions and Their Concretizations
-
-The most conceptually demanding part of the work was making sure the toolchain correctly models TypeScript's more abstract constructs — in particular, generic functions and the way they get *concretized* at call sites. Consider:
-
-```typescript
-function genericFunction<T, U>(first: T, second: U): void {}
-
-genericFunction<number>(42, "Hello");
-```
-
-There is a lot packed into these two lines. The declaration is a parametric function with two type parameters, `T` and `U`. The call site is a *concretization*: `T` is explicitly bound to `number`, while `U` is left to be inferred from the argument `"Hello"` (a `string`). Faithfully modeling this means representing not just the generic function and its parameters, but the concretization relationship between the generic declaration and its concrete use, and the parameter-level concretizations (`T` → `number`, `U` → `string`) — the same conceptual machinery introduced for generic *classes* in [the generics post](../typescript-famix-generics/), now applied to functions and call sites.
-
-Getting this right required understanding both how the TypeScript compiler API exposes these constructs and how they ought to be represented in the Famix metamodel — and then making the importer and the metamodel agree on that representation. This is precisely the kind of thing the end-to-end pipeline protects: it's easy to generate a `model.json` that *looks* plausible but encodes a concretization the metamodel doesn't expect.
-
-## Using AI Assistance: A Tool, Not a Replacement
-
-AI assistants (Claude, ChatGPT, and others) were part of my daily workflow, but as a tool for design and coding rather than something to delegate whole tasks to. They were genuinely useful for navigating two unfamiliar ecosystems at once, drafting boilerplate, explaining an unfamiliar Moose or TypeScript-compiler API, and offering first-pass hypotheses when debugging.
-
-The limits were just as instructive. On a project spanning two environments, an assistant rarely had the full picture — the state of the metamodel, the shape of the generated JSON, and the runtime behavior in Moose all at once — so suggestions often addressed a symptom rather than the root cause and had to be validated against the actual code and the actual test runs. The useful posture was to drive: use the AI to move faster on well-defined pieces, but keep ownership of design decisions and verify every change against the test suites rather than trusting output on faith.
 
 ## Conclusion
 
