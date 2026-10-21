@@ -30,7 +30,7 @@ To address this, I implemented a CI/CD pipeline in Github Actions that automates
 
 5. **Run the Pharo tests:** The Pharo test suite validates that the expected entities are successfully imported into the model.
 
-[Diagram]
+![End-to-end testing pipeline](ci-cd.png){.lightbox}
 
 ## Migrating FamixTypeScript metamodel and ts2famix Importer to Moose 13.
 
@@ -42,7 +42,7 @@ Moose 13 introduced `EntityTyping`, an association that replaced the direct rela
 
 The new structure is shown in the following diagram:
 
-[Diagram]
+![Entity Typing Structure from [Parametrics: Next Generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#entity-typing)](https://modularmoose.org/_astro/uml-entity-typing.DDPWOCX4_Z1xnFi4.webp){.lightbox}
 
 The following FamixTypeScript entities were updated to use the new `EntityTyping` structure:
 
@@ -78,12 +78,11 @@ A concretization is modeled as a three-way association connecting the generic en
 
 The diagram below illustrates the new structure.
 
-<!-- [![Concretization model](images/concretization.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/) -->
-[diagram]
+![Concretization Structure from [Parametrics: Next Generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#parametric-associations)](https://modularmoose.org/_astro/uml-parametric-association.fXCQF5U9_6Lk40.webp){.lightbox}
 
 ### Parametric Associations
 
-Alongside with the changes to concretizations, the new metamodel introducted 5 parametric assoociations. These associations specifically represent relationships involving generic entities being instantiated by a concrete types.
+Alongside with the changes to concretizations, the new metamodel introducted 5 parametric associations. These associations specifically represent relationships involving generic entities being instantiated by a concrete types.
 
 #### Parametric Implementation
 
@@ -155,8 +154,7 @@ let box: Box<string>;
 
 Here, entity typing binds the generic type parameter `T` to the concrete type `string` while declaring the Type of the Entity as `Box<string>`
 
-<!-- [![Parametric associations](images/parametric-associations.png)](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/) -->
-[diagram of the para ]
+![Parameterized Associations Structure from [Parametrics: Next Generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#summary)](https://modularmoose.org/_astro/uml-new-parametrics-mm.BTiU1iMv_1BpMeh.webp){.lightbox}
 
 ### Progress in the Importer and npm Release
 
@@ -174,7 +172,7 @@ Another goal of my project was to add `TSX` support to the importer. `ts2famix` 
 
 Initially, we planned to incorporate the TSX extention into the `FamixTypeScript` metamodel itself. After furthur discussions, we concluded that a seperate metamodel built on top of `FamixTypeScript` might be a better approach. A draft of the metamodel, covering the entities specific to TSX, have been modeled and are shown below:
 
-[diagram of tsx]
+![Proposed TSX Structure](tsx-metamodel-structure.png){.lightbox}
 
 Right now the importer is able to accept `.tsx` files, but capturing TSX specific entities are yet to be added into the importer.
 
