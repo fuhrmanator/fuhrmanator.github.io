@@ -164,7 +164,7 @@ Parametric Reference has not been implemented yet. It is built on Reference, whi
 
 Parametric Implementation is also not implemented. The importer currently treats implementation and extension as the same kind of relationship. After discussing this with Professor Fuhrman, we concluded that the two may be too similar in TypeScript to need separate associations. Currently it is handled through inheritance.
 
-A new version of `ts2famix` including these changes have been published on npm. The latest version at the time of writing is [v3.3.0](https://www.npmjs.com/package/ts2famix).
+In line to these changes, many of the tests inside the importer as well as inside the metamodel have been updated to reflect the new structures. A new version of `ts2famix` including these changes have been published on npm. The latest version at the time of writing is [v3.3.0](https://www.npmjs.com/package/ts2famix).
 
 ## Adding TSX Support and Planning a TypeScript Famix Extension
 
@@ -174,7 +174,108 @@ Initially, we planned to incorporate the TSX extention into the `FamixTypeScript
 
 ![Proposed TSX Structure](tsx-metamodel-structure.png){.lightbox}
 
-//description of the different entities here and how they can be used later.
+### TSX Entities
+
+Each entity described in the TSX metamodel corresponds to a JSX node inside `ts-morph`. They are described below, from more general ones to more specific.
+
+#### FamixTSXEntity
+
+`FamixTSXEntity` is the root of the TSX metamodel. It extends `FamixBaseElement`, so every TSX entity fits into the existing Famix infrastructure. It is never created directly, it only provides a base for all entities below.
+
+#### FamixTSXContainer
+
+`FamixTSXContainer` is an abstract entity for those TSX entities that can contain other TSX entities.
+
+#### FamixTSXElement
+
+`FamixTSXElement` represents a JSX element with an opening and a closing tag. It can contain text, expressions, and other elements as children.
+
+```jsx
+<div className="card">
+  <h1>Title</h1>
+</div>
+```
+
+Here, both `<div>` and `<h1>` are `FamixTSXElement`.
+
+#### FamixTSXFragment
+
+`FamixTSXFragment` represents a JSX fragment, which acts as placeholder to group children without adding an extra element to the output.
+
+```jsx
+<>
+  <h1>Title</h1>
+</>
+```
+
+The `<>...</>` wrapper is a `FamixTSXFragment`.
+
+#### FamixTSXExpression
+
+`FamixTSXExpression` represents a JavaScript expression inside JSX between curly braces.
+
+```jsx
+<ul>
+  {items.map(item => <li>{item.name}</li>)}
+</ul>
+```
+
+Both `{items.map(...)}` and `{item.name}` are `FamixTSXExpression`.
+
+#### FamixTSXText
+
+`FamixTSXText` represents the plain text between JSX tags.
+
+```jsx
+<p>Hello, world!</p>
+```
+
+The text `Hello, world!` is a `FamixTSXText`.
+
+#### FamixTSXSelfClosingElement
+
+`FamixTSXSelfClosingElement` represents a JSX element that closes itself and has no children.
+
+```jsx
+<img src="logo.png" />
+<UserCard user={user} />
+```
+
+Both `<img />` and `<UserCard />` are `FamixTSXSelfClosingElement`.
+
+#### FamixTSXAttribute
+
+`FamixTSXAttribute` represents a single named attribute (also called prop) on a JSX element. Its value can be a string literal or an expression.
+
+```jsx
+<button type="submit" onClick={handleClick}>Save</button>
+```
+
+Here, `type="submit"` and `onClick={handleClick}` are both `FamixTSXAttribute` of the `<button>` element.
+
+#### FamixTSXSpreadAttribute
+
+`FamixTSXSpreadAttribute` are a spread of an object's properties as attributes. It is still an attribute but its purpose is to apply many attributes at once.
+
+```jsx
+<Input {...inputProps} disabled />
+```
+
+Here, `{...inputProps}` is an `FamixTSXSpreadAttribute`.
+
+Following is a table mapping the TSX Entites to their tsmporph counterpart.
+
+| Famix TSX entity | ts-morph counterpart |
+|---|---|
+| `FamixTSXEntity` | No direct counterpart |
+| `FamixTSXContainer` | No direct counterpart |
+| `FamixTSXElement` | `JsxElement` |
+| `FamixTSXSelfClosingElement` | `JsxSelfClosingElement` |
+| `FamixTSXFragment` | `JsxFragment` |
+| `FamixTSXExpression` | `JsxExpression` |
+| `FamixTSXText` | `JsxText` |
+| `FamixTSXAttribute` | `JsxAttribute` |
+| `FamixTSXSpreadAttribute` | `JsxSpreadAttribute` |
 
 Right now the importer is able to accept `.tsx` files, but capturing TSX specific entities are yet to be added into the importer.
 
@@ -184,11 +285,6 @@ AI tools were valuable throughout this project. The biggest challenge faced duri
 
 AI immensely helped me understand the structure of the metamodel and the importer's parsing logic. This understanding helped me to implement Parametric Associations and the Entity Typing changes. AI made certain tasks such as repetitive changes and large refactors easier, while the design decisions and much of the implementations were my own.
 
-## Note for Future Contributors
+## Where to Go From Here
 
-There are many aspects of this proj that could be updated, first is the full implementation of all the parametric associations and the related entities. anoher is the creation of the new tsx pharo metamodel and using it inside the importer. [This](https://modularmoose.org/blog/2021-05-15-connecting-meta-models/) might be a great help for the tsx stuff. secondly, a refactor of the importer could happen, the importer has a cluster of different maps of different entities that are rarely used, these could be consolidated or more better served for the entity dictionary, 
-
-
-## Conclusion
-
-The through-line of this internship was connection: connecting TypeScript to Pharo, the importer to the metamodel, and Jest to SUnit, inside a single CI/CD pipeline that treats the toolchain as one system rather than two. Migrating the metamodel to a newer Moose API, migrating and releasing the importer on npm, and curating a suite of 300+ tests were all in service of that same goal — keeping both halves of the TypeScript–Famix toolchain correct, compatible, and moving forward together.
+There are lots of different directions this project could take. The most immediate would be to complete the parametric associations and their related entities, starting with References, on which Parametric Reference depends. After that, a separate Pharo metamodel for TSX, built on top of `FamixTypeScript`, can be created and integrated into the importer. The Moose post on [connecting and extending metamodels](https://modularmoose.org/blog/2021-05-15-connecting-meta-models/) could be of great help for this. Finally, the importer itself could benefit from a refactor. The `EntityDictionary` has many separate maps for different kinds of entities, several of which are rarely used. A redesign of these global maps to better serve the parser logic would be a great step in making the importer easier to maintain in the future.
