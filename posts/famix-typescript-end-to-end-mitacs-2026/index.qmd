@@ -1,6 +1,6 @@
 ---
 title: "Automating and updating ts2famix for Moose 13"
-date: 2026-10-06
+date: 2026-10-23
 categories: [TypeScript, Moose, Pharo, CI/CD]
 author: M Taha Makhdoom
 image: 'image.jpg'
