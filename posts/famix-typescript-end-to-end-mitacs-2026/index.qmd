@@ -293,7 +293,7 @@ Right now the importer is able to accept `.tsx` files, but capturing TSX specifi
 
 AI tools were valuable throughout this project. The biggest challenge during development was adding the new concretization structure, a change that touched many entities and many parts of the codebase. With the help of AI, I was able to determine the full scope of this change and implement it more quickly.
 
-AI also helped me understand the structure of the metamodel and the importer's parsing logic, which made it easier to implement the parametric associations and the Entity Typing changes. It made repetitive changes easier, while the design decisions and the decision to implement a certain piece of logic were my own.
+AI also helped me understand the structure of the metamodel and the importer's parsing logic, which made it easier to implement the parametric associations and the Entity Typing changes. It made repetitive changes easier, and helped me with options when making design decisions.
 
 ## Where to Go From Here
 
