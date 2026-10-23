@@ -6,23 +6,23 @@ author: M Taha Makhdoom
 image: 'image.jpg'
 ---
 
-Every time [Moose](https://github.com/moosetechnology) evolves, the tools built on top of it have to evolve as well. So this summer, during my Mitacs Globalink internship at ÉTS Montréal under the supervision of Professor Christopher Fuhrman, I migrated the [FamixTypeScript](https://github.com/fuhrmanator/FamixTypeScript) metamodel and updated its companion importer [`ts2famix`](https://github.com/fuhrmanator/FamixTypeScriptImporter) to the latest version, Moose 13, while also setting up a CI/CD pipeline in Github Actions that automates tests across both environments, providing end-to-end validation for the changes.
+Every time [Moose](https://github.com/moosetechnology) evolves, the tools built on top of it have to evolve as well. So this summer, during my Mitacs Globalink internship at ÉTS Montréal under the supervision of Professor Christopher Fuhrman, I migrated the [FamixTypeScript](https://github.com/fuhrmanator/FamixTypeScript) metamodel and its companion importer [`ts2famix`](https://github.com/fuhrmanator/FamixTypeScriptImporter) to the latest version of Moose, Moose 13, while also setting up a CI/CD pipeline in Github Actions that automates tests across both environments, providing end-to-end validation for the changes.
 
 ## Assumptions
 
-This post assumes familiarity with [`ts2famix`](../typescript-in-moose/), and a basic understanding of the two techstacks involved: TypeScript and Pharo Smalltalk/Moose. The modeling of generics and concretizations builds on the work described in Clotilde Toullec's post [Parametrics next generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/).
+This post assumes familiarity with [`ts2famix`](../typescript-in-moose/) and a basic understanding of the two tech stacks involved: TypeScript and Pharo Smalltalk/Moose. The modeling of generics and concretizations builds on the work described in Clotilde Toullec's post [Parametrics next generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/).
 
-## Automating End-To-End Testing
+## Automating End-to-End Testing
 
-`ts2famix` consists of two steps. First, we use the importer to parse the project and create a model.json. This file is then loaded into the Pharo environment with FamixTypeScript metamodel used to represent the project.
+Analyzing a TypeScript project with `ts2famix` involves two steps. First, the importer parses the project and generates a `model.json` file. This file is then loaded into a Pharo environment, where the FamixTypeScript metamodel is used to represent the project.
 
-Previously, both these steps were tested independently. The importer was tested using jest, while the Pharo tests were run manually when importing the model into the moose environment. Although both steps were working independently, this did not guarantee that the model generated could be successfully imported into Pharo or that it contained all the expected entities. Discrepencies between the importer and metamodel might go undetected.
+Previously, these two steps were tested independently. The importer was tested using Jest, while the Pharo tests were run manually after importing the model into the Moose environment. Although each step worked on its own, this did not guarantee that the generated model could be successfully imported into Pharo or that it contained all the expected entities. Discrepancies between the importer and the metamodel could go undetected.
 
-To address this, I implemented a CI/CD pipeline in Github Actions that automates testing across both environments. Whenever new code is pushed to the repository, the CI/CD kicks in and the follows steps occur:
+To address this, I implemented a CI/CD pipeline in GitHub Actions that automates testing across both environments. Whenever new code is pushed to the repository, the pipeline runs the following steps:
 
-1. **Run the Jest test suite:** The importer’s Jest tests verify that different aspects of TypeScript syntax are correctly captured in the generated model.
+1. **Run the Jest test suite:** The importer's Jest tests verify that different aspects of TypeScript syntax are correctly captured in the generated model.
 
-2. **Generate a sample project:** The pipeline combines the code snippets tested in the test files into a sample project.
+2. **Generate a sample project:** The pipeline combines the code snippets used in the test files into a sample project.
 
 3. **Generate the model:** The importer processes this sample project and generates a `model.json` file.
 
@@ -32,13 +32,13 @@ To address this, I implemented a CI/CD pipeline in Github Actions that automates
 
 ![End-to-end testing pipeline](ci-cd.png){.lightbox}
 
-## Migrating FamixTypeScript metamodel and ts2famix Importer to Moose 13.
+## Migrating the FamixTypeScript Metamodel and ts2famix Importer to Moose 13
 
-`FamixTypeScript` is build on top of Moose ecosystem. When Moose was updated from version 12 to 13, changes in the foundational moose entities meant that the existing metamodel is not compatible with the new version. For this reason, FamixTypeScript metamodel and subsequently, the importer, had to be updated for the new version.
+`FamixTypeScript` is built on top of the Moose ecosystem. When Moose was updated from version 12 to 13, changes to the foundational Moose entities meant that the existing metamodel was no longer compatible with the new version. For this reason, the FamixTypeScript metamodel, and subsequently the importer, had to be updated.
 
 ### Introducing Entity Typing
 
-Moose 13 introduced `EntityTyping`, an association that replaced the direct relationship between a typed entity and its type. This change made type relationships more in line with the lastest moose structure and gave a more flexible way to represent TypeScript types.
+Moose 13 introduced `EntityTyping`, an association that replaces the direct relationship between a typed entity and its type. This change brought type relationships in line with the latest Moose structure and provides a more flexible way to represent TypeScript types.
 
 The new structure is shown in the following diagram:
 
@@ -51,8 +51,8 @@ The following FamixTypeScript entities were updated to use the new `EntityTyping
 - `ArrowFunction`
 - `ParametricArrowFunction`
 - `Method`
-- `Accessor`
 - `ParametricMethod`
+- `Accessor`
 - `EnumValue`
 - `Parameter`
 - `Property`
@@ -72,9 +72,9 @@ const box = new Box<string>();
 
 Here, `Box` is a generic class with a type parameter `T`. When `Box<string>` is instantiated, `T` is associated with the concrete type `string`.
 
-The Famix model needs to represent both the generic entity and its usages seperately. Previously, representing a concretization involved creating a duplicate of the generic entity and linking the duplicate directly to the original. The updated Moose metamodel introduces a dedicated `Concretization` entity to represent this relationship explicitly.
+The Famix model needs to represent both the generic entity and its usages separately. Previously, representing a concretization involved creating a duplicate of the generic entity and linking the duplicate directly to the original. The updated Moose metamodel introduces a dedicated `Concretization` entity to represent this relationship explicitly.
 
-A concretization is modeled as a three-way association connecting the generic entity, the concrete type, and the kind of concretization being performed.
+A concretization is modeled as a three-way association connecting a type parameter, the concrete type argument that replaces it, and the parametric association that triggered the concretization.
 
 The diagram below illustrates the new structure.
 
@@ -82,7 +82,7 @@ The diagram below illustrates the new structure.
 
 ### Parametric Associations
 
-Alongside with the changes to concretizations, the new metamodel introducted 5 parametric associations. These associations specifically represent relationships involving generic entities being instantiated by a concrete types.
+Alongside the changes to concretizations, the new metamodel introduced five parametric associations. These associations represent relationships in which a generic entity is used with concrete types.
 
 #### Parametric Implementation
 
@@ -98,7 +98,7 @@ Here, `UserRepository` implements `Repository<string>`.
 
 #### Parametric Inheritance
 
-Parametric inheritance represents inheritance with a generic type. For example:
+Parametric inheritance represents inheritance from a generic type. For example:
 
 ```typescript
 class Animal<T> {}
@@ -152,7 +152,7 @@ class Box<T> {
 let box: Box<string>;
 ```
 
-Here, entity typing binds the generic type parameter `T` to the concrete type `string` while declaring the Type of the Entity as `Box<string>`
+Here, the parametric entity typing declares the type of `box` as `Box`, and its concretization maps the type parameter `T` to the concrete type `string`.
 
 ![Parameterized Associations Structure from [Parametrics: Next Generation](https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#summary)](https://modularmoose.org/_astro/uml-new-parametrics-mm.BTiU1iMv_1BpMeh.webp){.lightbox}
 
@@ -160,17 +160,27 @@ Here, entity typing binds the generic type parameter `T` to the concrete type `s
 
 All of the associations discussed above have been incorporated into the metamodel, and their APIs have been added to the importer. Among these, Entity Typing, Parametric Entity Typing, Parametric Invocation, and Parametric Inheritance are implemented in the importer's logic and are now visible in the generated model.
 
-Parametric Reference has not been implemented yet. It is built on Reference, which is not yet handled in the parsing logic. The parametric conterpart would be added after References are in place.
+Along with these changes, the way the importer resolves types was also improved. Previously, whenever an entity was given a type, the importer created a new generic `Type` entity and pointed the typing at it, even when the specific entity for that type, such as a `Class`, `Interface`, or `Enum`, already existed in the model. This resulted in duplicates and disconnected type entities. Now, the importer first checks whether the specific type already exists in the model and reuses it if it does. Otherwise, it creates that specific type instead of falling back to the abstract `Type`. For example:
 
-Parametric Implementation is also not implemented. The importer currently treats implementation and extension as the same kind of relationship. After discussing this with Professor Fuhrman, we concluded that the two may be too similar in TypeScript to need separate associations. Currently it is handled through inheritance.
+```typescript
+class User {}
 
-In line to these changes, many of the tests inside the importer as well as inside the metamodel have been updated to reflect the new structures. A new version of `ts2famix` including these changes have been published on npm. The latest version at the time of writing is [v3.3.0](https://www.npmjs.com/package/ts2famix).
+let user: User;
+```
+
+Previously, `user` would have been typed by a new `Type` entity named `User`. Now, its typing points directly to the existing `User` class.
+
+Among other things, Parametric Reference has not been implemented yet. It builds on Reference, which exists in the model but is not yet created by the importer's parsing logic, so the parametric counterpart will be added once References are in place.
+
+Parametric Implementation is also not implemented. The importer currently treats implementation and extension as the same kind of relationship. After discussing this with Professor Fuhrman, we concluded that the two may be too similar in TypeScript to need separate associations, so implementation is currently handled through inheritance.
+
+In line with these changes, many of the tests in both the importer and the metamodel have been updated to reflect the new structures. A new version of `ts2famix` including these changes has been published on npm. The latest version at the time of writing is [v3.3.0](https://www.npmjs.com/package/ts2famix).
 
 ## Adding TSX Support and Planning a TypeScript Famix Extension
 
-Another goal of my project was to add `TSX` support to the importer. `ts2famix` is built on top of [`ts-morph`](https://www.npmjs.com/package/ts-morph), and while experimenting with it, support for TSX syntax was found. This meant that ts2famix can be extended to support TSX syntax using the same tools the importer is built on.
+Another goal of my project was to add TSX support to the importer. `ts2famix` is built on top of [`ts-morph`](https://www.npmjs.com/package/ts-morph), and while experimenting with it, we found that it already supports JSX syntax. This means that `ts2famix` can be extended to handle TSX using the same tools the importer is already built on.
 
-Initially, we planned to incorporate the TSX extention into the `FamixTypeScript` metamodel itself. After furthur discussions, we concluded that a seperate metamodel built on top of `FamixTypeScript` might be a better approach. A draft of the metamodel, covering the entities specific to TSX, have been modeled and are shown below:
+Initially, we planned to incorporate the TSX extension into the `FamixTypeScript` metamodel itself. After further discussion, we concluded that a separate metamodel built on top of `FamixTypeScript` might be a better approach. A draft of this metamodel, covering the entities specific to TSX, has been modeled and is shown below:
 
 ![Proposed TSX Structure](tsx-metamodel-structure.png){.lightbox}
 
@@ -180,7 +190,7 @@ Each entity described in the TSX metamodel corresponds to a JSX node inside `ts-
 
 #### FamixTSXEntity
 
-`FamixTSXEntity` is the root of the TSX metamodel. It extends `FamixBaseElement`, so every TSX entity fits into the existing Famix infrastructure. It is never created directly, it only provides a base for all entities below.
+`FamixTSXEntity` is the abstract root of the TSX metamodel. It extends `FamixBaseElement`, so every TSX entity fits into the existing Famix infrastructure. It is never created directly; it only provides a base for all the entities below.
 
 #### FamixTSXContainer
 
@@ -196,11 +206,11 @@ Each entity described in the TSX metamodel corresponds to a JSX node inside `ts-
 </div>
 ```
 
-Here, both `<div>` and `<h1>` are `FamixTSXElement`.
+Here, both `<div>` and `<h1>` are `FamixTSXElement`s.
 
 #### FamixTSXFragment
 
-`FamixTSXFragment` represents a JSX fragment, which acts as placeholder to group children without adding an extra element to the output.
+`FamixTSXFragment` represents a JSX fragment, which acts as a wrapper to group children without adding an extra element to the output.
 
 ```jsx
 <>
@@ -245,7 +255,7 @@ Both `<img />` and `<UserCard />` are `FamixTSXSelfClosingElement`.
 
 #### FamixTSXAttribute
 
-`FamixTSXAttribute` represents a single named attribute (also called prop) on a JSX element. Its value can be a string literal or an expression.
+`FamixTSXAttribute` represents a single named attribute (also called a prop) on a JSX element. Its value can be a string literal or an expression.
 
 ```jsx
 <button type="submit" onClick={handleClick}>Save</button>
@@ -255,20 +265,20 @@ Here, `type="submit"` and `onClick={handleClick}` are both `FamixTSXAttribute` o
 
 #### FamixTSXSpreadAttribute
 
-`FamixTSXSpreadAttribute` are a spread of an object's properties as attributes. It is still an attribute but its purpose is to apply many attributes at once.
+`FamixTSXSpreadAttribute` represents a spread of an object's properties as attributes. It is still an attribute, but its purpose is to apply many attributes at once.
 
 ```jsx
 <Input {...inputProps} disabled />
 ```
 
-Here, `{...inputProps}` is an `FamixTSXSpreadAttribute`.
+Here, `{...inputProps}` is a `FamixTSXSpreadAttribute`.
 
-Following is a table mapping the TSX Entites to their tsmporph counterpart.
+The following table maps each TSX entity to its `ts-morph` counterpart.
 
 | Famix TSX entity | ts-morph counterpart |
 |---|---|
-| `FamixTSXEntity` | No direct counterpart |
-| `FamixTSXContainer` | No direct counterpart |
+| `FamixTSXEntity` | No direct counterpart (abstract) |
+| `FamixTSXContainer` | No direct counterpart (abstract) |
 | `FamixTSXElement` | `JsxElement` |
 | `FamixTSXSelfClosingElement` | `JsxSelfClosingElement` |
 | `FamixTSXFragment` | `JsxFragment` |
@@ -281,9 +291,9 @@ Right now the importer is able to accept `.tsx` files, but capturing TSX specifi
 
 ## AI Assistance
 
-AI tools were valuable throughout this project. The biggest challenge faced during development was the addition of the new concretization structure. This change touched many different entities and many parts of the codebase. With the help of AI, I was able to determine and implement the scope of this change. In this case, it helped me implement these changes at a quicker pace.
+AI tools were valuable throughout this project. The biggest challenge during development was adding the new concretization structure, a change that touched many entities and many parts of the codebase. With the help of AI, I was able to determine the full scope of this change and implement it more quickly.
 
-AI immensely helped me understand the structure of the metamodel and the importer's parsing logic. This understanding helped me to implement Parametric Associations and the Entity Typing changes. AI made certain tasks such as repetitive changes and large refactors easier, while the design decisions and much of the implementations were my own.
+AI also helped me understand the structure of the metamodel and the importer's parsing logic, which made it easier to implement the parametric associations and the Entity Typing changes. It made repetitive changes easier, while the design decisions and the decision to implement a certain piece of logic were my own.
 
 ## Where to Go From Here
 
