@@ -14,11 +14,18 @@ This post assumes familiarity with [`ts2famix`](../typescript-in-moose/) and a b
 
 ## Automating End-to-End Testing
 
-Analyzing a TypeScript project with `ts2famix` involves two steps. First, the importer parses the project and generates a `model.json` file. This file is then loaded into a Pharo environment, where the FamixTypeScript metamodel is used to represent the project.
+Analyzing a TypeScript project with `ts2famix` involves two steps. First, the importer parses the project and generates a model file, e.g., `model.json`. 
+Second, this model is loaded into a Pharo environment, where the FamixTypeScript metamodel is used to represent the project.
 
-Previously, these two steps were tested independently. The importer was tested using Jest, while the Pharo tests were run manually after importing the model into the Moose environment. Although each step worked on its own, this did not guarantee that the generated model could be successfully imported into Pharo or that it contained all the expected entities. Discrepancies between the importer and the metamodel could go undetected.
+Previously, the importer (model generation) and Pharo import steps were tested separately. 
+Jest tests confirmed that the importer created a Famix model (in memory), but they did not check whether the generated JSON could be imported into Pharo or contained the expected entities.
 
-To address this, I implemented a CI/CD pipeline in GitHub Actions that automates testing across both environments. Whenever new code is pushed to the repository, the pipeline runs the following steps:
+That check was done manually by running the importer on a TypeScript project and loading the JSON into Moose. 
+The process was slow and error-prone: it required loading the FamixTypeScript metamodel and navigating Moose's interface. 
+As a result, mismatches between the importer and the metamodel sometimes went unnoticed.
+
+To address this, I implemented a CI/CD pipeline in GitHub Actions that automates testing across both environments. 
+Whenever new importer code is pushed to the repository, the pipeline runs the following steps:
 
 1. **Run the Jest test suite:** The importer's Jest tests verify that different aspects of TypeScript syntax are correctly captured in the generated model.
 
@@ -30,7 +37,17 @@ To address this, I implemented a CI/CD pipeline in GitHub Actions that automates
 
 5. **Run the Pharo tests:** The Pharo test suite validates that the expected entities are successfully imported into the model.
 
-![End-to-end testing pipeline](ci-cd.png){.lightbox}
+![Testing Pipeline: Code samples in TypeScript are used to generate a model and test its import into Pharo, as well as validate the model's structure and content.](ci-cd.png){.lightbox}
+
+::: {.callout-note}
+The sunit tests in Pharo must evolve with the FamixTypeScript metamodel. 
+As the metamodel changes, the tests are updated to reflect the new structure and expected entities. 
+This ensures that the tests remain relevant and effective in validating the correctness of the generated models. 
+The CI/CD must be reconfigured whenever the metamodel is updated, so that the tests are run against the correct version of the metamodel.
+
+It is also worth noting that the [VerveineJ importer](https://github.com/moosetechnology/verveineJ), which generates Famix models for Java, does not do end-to-end testing.
+The reason is that the Famix metamodel code for Java used by VerveineJ is generated directly from the FamixJava metamodel. 
+:::
 
 ## Migrating the FamixTypeScript Metamodel and ts2famix Importer to Moose 13
 
