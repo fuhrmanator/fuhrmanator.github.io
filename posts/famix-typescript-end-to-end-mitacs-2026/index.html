@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.20">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="M Taha Makhdoom">
+<meta name="dcterms.date" content="2026-10-23">
+
+<title>Automating and updating ts2famix for Moose 13 – Christopher Fuhrman</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-29e00c98bbba659d91ab3844292f79dc.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-f31e62857f3e090a2b0fd88165d8404e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="application/json" class="js-hypothesis-config">
+{
+  "theme": "clean"
+}
+</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: rgba(255, 255, 255, 0.9);
+background: #00000000;
+      }
+</style>
+<style>
+#title-block-header.quarto-title-block.default .quarto-title-meta {
+  color: rgba(255, 255, 255, 0.9);
+}
+.quarto-title-block .quarto-title-banner {
+  height: 0; /* hide */
+}
+#title-block-header {
+  background: 
+    /* top, transparent black, faked with gradient */
+    linear-gradient(
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.7)
+    ),
+    /* bottom, image */ 
+    url(./image.jpg);
+  background-size: cover;
+  background-position-y: center;
+  height: 450px;
+  opacity: 0.7; /* image opacity, lower means lighter */
+  z-index: -1;
+}
+</style>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="Automating and updating ts2famix for Moose 13 – Christopher Fuhrman">
+<meta property="og:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
+<meta property="og:image" content="https://fuhrmanator.github.io/posts/famix-typescript-end-to-end-mitacs-2026/image.jpg">
+<meta property="og:site_name" content="Christopher Fuhrman">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:title" content="Automating and updating ts2famix for Moose 13 – Christopher Fuhrman">
+<meta name="twitter:description" content="Christopher Fuhrman, software developer and professor of software engineering.">
+<meta name="twitter:image" content="https://fuhrmanator.github.io/posts/famix-typescript-end-to-end-mitacs-2026/image.jpg">
+<meta name="twitter:creator" content="@thefuhrmanator">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Christopher Fuhrman</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Christopher Fuhrman</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blogging-allowed.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fuhrmanator"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/fuhrmanator/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://x.com/thefuhrmanator"> <i class="bi bi-twitter-x" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:christopher.fuhrman@etsmtl.ca"> <i class="bi bi-envelope" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../monets.html"> 
+<span class="menu-text">⚰</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Automating and updating ts2famix for Moose 13</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">TypeScript</div>
+                <div class="quarto-category">Moose</div>
+                <div class="quarto-category">Pharo</div>
+                <div class="quarto-category">CI/CD</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>M Taha Makhdoom </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 23, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>Every time <a href="https://github.com/moosetechnology">Moose</a> evolves, the tools built on top of it have to evolve as well. So this summer, during my Mitacs Globalink internship at ÉTS Montréal under the supervision of Professor Christopher Fuhrman, I migrated the <a href="https://github.com/fuhrmanator/FamixTypeScript">FamixTypeScript</a> metamodel and its companion importer <a href="https://github.com/fuhrmanator/FamixTypeScriptImporter"><code>ts2famix</code></a> to the latest version of Moose, Moose 13, while also setting up a CI/CD pipeline in Github Actions that automates tests across both environments, providing end-to-end validation for the changes.</p>
+<section id="assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="assumptions">Assumptions</h2>
+<p>This post assumes familiarity with <a href="../typescript-in-moose/"><code>ts2famix</code></a> and a basic understanding of the two tech stacks involved: TypeScript and Pharo Smalltalk/Moose. The modeling of generics and concretizations builds on the work described in Clotilde Toullec’s post <a href="https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/">Parametrics next generation</a>.</p>
+</section>
+<section id="automating-end-to-end-testing" class="level2">
+<h2 class="anchored" data-anchor-id="automating-end-to-end-testing">Automating End-to-End Testing</h2>
+<p>Analyzing a TypeScript project with <code>ts2famix</code> involves two steps. First, the importer parses the project and generates a model file, e.g., <code>model.json</code>. Second, this model is loaded into a Pharo environment, where the FamixTypeScript metamodel is used to represent the project.</p>
+<p>Previously, the importer (model generation) and Pharo import steps were tested separately. Jest tests confirmed that the importer created a Famix model (in memory), but they did not check whether the generated JSON could be imported into Pharo or contained the expected entities.</p>
+<p>That check was done manually by running the importer on a TypeScript project and loading the JSON into Moose. The process was slow and error-prone: it required loading the FamixTypeScript metamodel and navigating Moose’s interface. As a result, mismatches between the importer and the metamodel sometimes went unnoticed.</p>
+<p>To address this, I implemented a CI/CD pipeline in GitHub Actions that automates testing across both environments. Whenever new importer code is pushed to the repository, the pipeline runs the following steps:</p>
+<ol type="1">
+<li><p><strong>Run the Jest test suite:</strong> The importer’s Jest tests verify that different aspects of TypeScript syntax are correctly captured in the generated model.</p></li>
+<li><p><strong>Generate a sample project:</strong> The pipeline combines the code snippets used in the test files into a sample project.</p></li>
+<li><p><strong>Generate the model:</strong> The importer processes this sample project and generates a <code>model.json</code> file.</p></li>
+<li><p><strong>Import the model into Pharo:</strong> The generated model is loaded into the Pharo environment containing the FamixTypeScript metamodel.</p></li>
+<li><p><strong>Run the Pharo tests:</strong> The Pharo test suite validates that the expected entities are successfully imported into the model.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="ci-cd.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Testing Pipeline: Code samples in TypeScript are used to generate a model and test its import into Pharo, as well as validate the model’s structure and content."><img src="ci-cd.png" class="img-fluid figure-img" alt="Testing Pipeline: Code samples in TypeScript are used to generate a model and test its import into Pharo, as well as validate the model’s structure and content."></a></p>
+<figcaption>Testing Pipeline: Code samples in TypeScript are used to generate a model and test its import into Pharo, as well as validate the model’s structure and content.</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The sunit tests in Pharo must evolve with the FamixTypeScript metamodel. As the metamodel changes, the tests are updated to reflect the new structure and expected entities. This ensures that the tests remain relevant and effective in validating the correctness of the generated models. The CI/CD must be reconfigured whenever the metamodel is updated, so that the tests are run against the correct version of the metamodel.</p>
+<p>It is also worth noting that the <a href="https://github.com/moosetechnology/verveineJ">VerveineJ importer</a>, which generates Famix models for Java, does not do end-to-end testing. The reason is that the Famix metamodel code for Java used by VerveineJ is generated directly from the FamixJava metamodel.</p>
+</div>
+</div>
+</section>
+<section id="migrating-the-famixtypescript-metamodel-and-ts2famix-importer-to-moose-13" class="level2">
+<h2 class="anchored" data-anchor-id="migrating-the-famixtypescript-metamodel-and-ts2famix-importer-to-moose-13">Migrating the FamixTypeScript Metamodel and ts2famix Importer to Moose 13</h2>
+<p><code>FamixTypeScript</code> is built on top of the Moose ecosystem. When Moose was updated from version 12 to 13, changes to the foundational Moose entities meant that the existing metamodel was no longer compatible with the new version. For this reason, the FamixTypeScript metamodel, and subsequently the importer, had to be updated.</p>
+<section id="introducing-entity-typing" class="level3">
+<h3 class="anchored" data-anchor-id="introducing-entity-typing">Introducing Entity Typing</h3>
+<p>Moose 13 introduced <code>EntityTyping</code>, an association that replaces the direct relationship between a typed entity and its type. This change brought type relationships in line with the latest Moose structure and provides a more flexible way to represent TypeScript types.</p>
+<p>The new structure is shown in the following diagram:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://modularmoose.org/_astro/uml-entity-typing.DDPWOCX4_Z1xnFi4.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Entity Typing Structure from Parametrics: Next Generation"><img src="https://modularmoose.org/_astro/uml-entity-typing.DDPWOCX4_Z1xnFi4.webp" class="img-fluid figure-img" alt="Entity Typing Structure from Parametrics: Next Generation"></a></p>
+<figcaption>Entity Typing Structure from <a href="https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#entity-typing">Parametrics: Next Generation</a></figcaption>
+</figure>
+</div>
+<p>The following FamixTypeScript entities were updated to use the new <code>EntityTyping</code> structure:</p>
+<ul>
+<li><code>Function</code></li>
+<li><code>ParametricFunction</code></li>
+<li><code>ArrowFunction</code></li>
+<li><code>ParametricArrowFunction</code></li>
+<li><code>Method</code></li>
+<li><code>ParametricMethod</code></li>
+<li><code>Accessor</code></li>
+<li><code>EnumValue</code></li>
+<li><code>Parameter</code></li>
+<li><code>Property</code></li>
+<li><code>Variable</code></li>
+</ul>
+</section>
+<section id="restructuring-concretizations" class="level3">
+<h3 class="anchored" data-anchor-id="restructuring-concretizations">Restructuring Concretizations</h3>
+<p>In object-oriented programming, generic entities can be declared using type parameters and then used with specific types. For example, consider the following TypeScript code:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Box<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> box <span class="op">=</span> <span class="kw">new</span> <span class="fu">Box</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;</span>()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, <code>Box</code> is a generic class with a type parameter <code>T</code>. When <code>Box&lt;string&gt;</code> is instantiated, <code>T</code> is associated with the concrete type <code>string</code>.</p>
+<p>The Famix model needs to represent both the generic entity and its usages separately. Previously, representing a concretization involved creating a duplicate of the generic entity and linking the duplicate directly to the original. The updated Moose metamodel introduces a dedicated <code>Concretization</code> entity to represent this relationship explicitly.</p>
+<p>A concretization is modeled as a three-way association connecting a type parameter, the concrete type argument that replaces it, and the parametric association that triggered the concretization.</p>
+<p>The diagram below illustrates the new structure.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://modularmoose.org/_astro/uml-parametric-association.fXCQF5U9_6Lk40.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Concretization Structure from Parametrics: Next Generation"><img src="https://modularmoose.org/_astro/uml-parametric-association.fXCQF5U9_6Lk40.webp" class="img-fluid figure-img" alt="Concretization Structure from Parametrics: Next Generation"></a></p>
+<figcaption>Concretization Structure from <a href="https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#parametric-associations">Parametrics: Next Generation</a></figcaption>
+</figure>
+</div>
+</section>
+<section id="parametric-associations" class="level3">
+<h3 class="anchored" data-anchor-id="parametric-associations">Parametric Associations</h3>
+<p>Alongside the changes to concretizations, the new metamodel introduced five parametric associations. These associations represent relationships in which a generic entity is used with concrete types.</p>
+<section id="parametric-implementation" class="level4">
+<h4 class="anchored" data-anchor-id="parametric-implementation">Parametric Implementation</h4>
+<p>Parametric implementation represents a class implementing a generic interface. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> Repository<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> UserRepository <span class="kw">implements</span> Repository<span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;</span> {}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, <code>UserRepository</code> implements <code>Repository&lt;string&gt;</code>.</p>
+</section>
+<section id="parametric-inheritance" class="level4">
+<h4 class="anchored" data-anchor-id="parametric-inheritance">Parametric Inheritance</h4>
+<p>Parametric inheritance represents inheritance from a generic type. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Animal<span class="op">&lt;</span>T<span class="op">&gt;</span> {}</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Dog <span class="kw">extends</span> Animal<span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;</span> {}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, <code>Dog</code> inherits from the concretized type <code>Animal&lt;string&gt;</code>.</p>
+</section>
+<section id="parametric-invocation" class="level4">
+<h4 class="anchored" data-anchor-id="parametric-invocation">Parametric Invocation</h4>
+<p>Parametric invocation represents a call to a generic function or method with concrete type arguments. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">identity</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(value<span class="op">:</span> T)<span class="op">:</span> T {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> value<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">identity</span><span class="op">&lt;</span><span class="dt">number</span><span class="op">&gt;</span>(<span class="dv">42</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, the invocation supplies <code>number</code> as the type argument for <code>T</code>.</p>
+</section>
+<section id="parametric-reference" class="level4">
+<h4 class="anchored" data-anchor-id="parametric-reference">Parametric Reference</h4>
+<p>A parametric reference occurs when a generic entity is used in other places in code. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Box<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  value<span class="op">!:</span> T<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createStringBox</span>() {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> StringBox <span class="op">=</span> Box<span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, the function <code>createStringBox</code> refers to the generic class <code>Box</code> with the type argument <code>string</code>. The concretization maps the type parameter <code>T</code> to <code>string</code>.</p>
+</section>
+<section id="parametric-entity-typing" class="level4">
+<h4 class="anchored" data-anchor-id="parametric-entity-typing">Parametric Entity Typing</h4>
+<p>Parametric entity typing represents a typing relationship involving a parameterized type, extending the <code>EntityTyping</code> association with support for concretizations.</p>
+<p>For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Box<span class="op">&lt;</span>T<span class="op">&gt;</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    value<span class="op">:</span> T<span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> box<span class="op">:</span> Box<span class="op">&lt;</span><span class="dt">string</span><span class="op">&gt;;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, the parametric entity typing declares the type of <code>box</code> as <code>Box</code>, and its concretization maps the type parameter <code>T</code> to the concrete type <code>string</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://modularmoose.org/_astro/uml-new-parametrics-mm.BTiU1iMv_1BpMeh.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Parameterized Associations Structure from Parametrics: Next Generation"><img src="https://modularmoose.org/_astro/uml-new-parametrics-mm.BTiU1iMv_1BpMeh.webp" class="img-fluid figure-img" alt="Parameterized Associations Structure from Parametrics: Next Generation"></a></p>
+<figcaption>Parameterized Associations Structure from <a href="https://modularmoose.org/blog/2025-05-07-parametrics-next-generation/#summary">Parametrics: Next Generation</a></figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="progress-in-the-importer-and-npm-release" class="level3">
+<h3 class="anchored" data-anchor-id="progress-in-the-importer-and-npm-release">Progress in the Importer and npm Release</h3>
+<p>All of the associations discussed above have been incorporated into the metamodel, and their APIs have been added to the importer. Among these, Entity Typing, Parametric Entity Typing, Parametric Invocation, and Parametric Inheritance are implemented in the importer’s logic and are now visible in the generated model.</p>
+<p>Along with these changes, the way the importer resolves types was also improved. Previously, whenever an entity was given a type, the importer created a new generic <code>Type</code> entity and pointed the typing at it, even when the specific entity for that type, such as a <code>Class</code>, <code>Interface</code>, or <code>Enum</code>, already existed in the model. This resulted in duplicates and disconnected type entities. Now, the importer first checks whether the specific type already exists in the model and reuses it if it does. Otherwise, it creates that specific type instead of falling back to the abstract <code>Type</code>. For example:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode typescript code-with-copy"><code class="sourceCode typescript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> User {}</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> user<span class="op">:</span> User<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Previously, <code>user</code> would have been typed by a new <code>Type</code> entity named <code>User</code>. Now, its typing points directly to the existing <code>User</code> class.</p>
+<p>Among other things, Parametric Reference has not been implemented yet. It builds on Reference, which exists in the model but is not yet created by the importer’s parsing logic, so the parametric counterpart will be added once References are in place.</p>
+<p>Parametric Implementation is also not implemented. The importer currently treats implementation and extension as the same kind of relationship. After discussing this with Professor Fuhrman, we concluded that the two may be too similar in TypeScript to need separate associations, so implementation is currently handled through inheritance.</p>
+<p>In line with these changes, many of the tests in both the importer and the metamodel have been updated to reflect the new structures. A new version of <code>ts2famix</code> including these changes has been published on npm. The latest version at the time of writing is <a href="https://www.npmjs.com/package/ts2famix">v3.3.0</a>.</p>
+</section>
+</section>
+<section id="adding-tsx-support-and-planning-a-typescript-famix-extension" class="level2">
+<h2 class="anchored" data-anchor-id="adding-tsx-support-and-planning-a-typescript-famix-extension">Adding TSX Support and Planning a TypeScript Famix Extension</h2>
+<p>Another goal of my project was to add TSX support to the importer. <code>ts2famix</code> is built on top of <a href="https://www.npmjs.com/package/ts-morph"><code>ts-morph</code></a>, and while experimenting with it, we found that it already supports JSX syntax. This means that <code>ts2famix</code> can be extended to handle TSX using the same tools the importer is already built on.</p>
+<p>Initially, we planned to incorporate the TSX extension into the <code>FamixTypeScript</code> metamodel itself. After further discussion, we concluded that a separate metamodel built on top of <code>FamixTypeScript</code> might be a better approach. A draft of this metamodel, covering the entities specific to TSX, has been modeled and is shown below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="tsx-metamodel-structure.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Proposed TSX Structure"><img src="tsx-metamodel-structure.png" class="img-fluid figure-img" alt="Proposed TSX Structure"></a></p>
+<figcaption>Proposed TSX Structure</figcaption>
+</figure>
+</div>
+<section id="tsx-entities" class="level3">
+<h3 class="anchored" data-anchor-id="tsx-entities">TSX Entities</h3>
+<p>Each entity described in the TSX metamodel corresponds to a JSX node inside <code>ts-morph</code>. They are described below, from more general ones to more specific.</p>
+<section id="famixtsxentity" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxentity">FamixTSXEntity</h4>
+<p><code>FamixTSXEntity</code> is the abstract root of the TSX metamodel. It extends <code>FamixBaseElement</code>, so every TSX entity fits into the existing Famix infrastructure. It is never created directly; it only provides a base for all the entities below.</p>
+</section>
+<section id="famixtsxcontainer" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxcontainer">FamixTSXContainer</h4>
+<p><code>FamixTSXContainer</code> is an abstract entity for those TSX entities that can contain other TSX entities.</p>
+</section>
+<section id="famixtsxelement" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxelement">FamixTSXElement</h4>
+<p><code>FamixTSXElement</code> represents a JSX element with an opening and a closing tag. It can contain text, expressions, and other elements as children.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="ot">className</span><span class="op">=</span><span class="st">"card"</span><span class="kw">&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>Title<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, both <code>&lt;div&gt;</code> and <code>&lt;h1&gt;</code> are <code>FamixTSXElement</code>s.</p>
+</section>
+<section id="famixtsxfragment" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxfragment">FamixTSXFragment</h4>
+<p><code>FamixTSXFragment</code> represents a JSX fragment, which acts as a wrapper to group children without adding an extra element to the output.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;h1&gt;</span>Title<span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The <code>&lt;&gt;...&lt;/&gt;</code> wrapper is a <code>FamixTSXFragment</code>.</p>
+</section>
+<section id="famixtsxexpression" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxexpression">FamixTSXExpression</h4>
+<p><code>FamixTSXExpression</code> represents a JavaScript expression inside JSX between curly braces.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;ul&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">{</span>items<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt; &lt;li&gt;</span><span class="va">{</span>item<span class="op">.</span><span class="at">name</span><span class="va">}</span><span class="kw">&lt;/li&gt;</span>)<span class="va">}</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/ul&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both <code>{items.map(...)}</code> and <code>{item.name}</code> are <code>FamixTSXExpression</code>.</p>
+</section>
+<section id="famixtsxtext" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxtext">FamixTSXText</h4>
+<p><code>FamixTSXText</code> represents the plain text between JSX tags.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;p&gt;</span>Hello, world!<span class="kw">&lt;/p&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The text <code>Hello, world!</code> is a <code>FamixTSXText</code>.</p>
+</section>
+<section id="famixtsxselfclosingelement" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxselfclosingelement">FamixTSXSelfClosingElement</h4>
+<p><code>FamixTSXSelfClosingElement</code> represents a JSX element that closes itself and has no children.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;img</span> <span class="ot">src</span><span class="op">=</span><span class="st">"logo.png"</span> <span class="kw">/&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;UserCard</span> <span class="ot">user</span><span class="op">=</span><span class="va">{</span>user<span class="va">}</span> <span class="fu">/&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both <code>&lt;img /&gt;</code> and <code>&lt;UserCard /&gt;</code> are <code>FamixTSXSelfClosingElement</code>.</p>
+</section>
+<section id="famixtsxattribute" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxattribute">FamixTSXAttribute</h4>
+<p><code>FamixTSXAttribute</code> represents a single named attribute (also called a prop) on a JSX element. Its value can be a string literal or an expression.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;button</span> <span class="ot">type</span><span class="op">=</span><span class="st">"submit"</span> <span class="ot">onClick</span><span class="op">=</span><span class="va">{</span>handleClick<span class="va">}</span><span class="kw">&gt;</span>Save<span class="kw">&lt;/button&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, <code>type="submit"</code> and <code>onClick={handleClick}</code> are both <code>FamixTSXAttribute</code> of the <code>&lt;button&gt;</code> element.</p>
+</section>
+<section id="famixtsxspreadattribute" class="level4">
+<h4 class="anchored" data-anchor-id="famixtsxspreadattribute">FamixTSXSpreadAttribute</h4>
+<p><code>FamixTSXSpreadAttribute</code> represents a spread of an object’s properties as attributes. It is still an attribute, but its purpose is to apply many attributes at once.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode jsx code-with-copy"><code class="sourceCode javascriptreact"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;Input</span> <span class="va">{</span><span class="op">...</span>inputProps<span class="va">}</span> <span class="ot">disabled</span> <span class="fu">/&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here, <code>{...inputProps}</code> is a <code>FamixTSXSpreadAttribute</code>.</p>
+<p>The following table maps each TSX entity to its <code>ts-morph</code> counterpart.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Famix TSX entity</th>
+<th>ts-morph counterpart</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>FamixTSXEntity</code></td>
+<td>No direct counterpart (abstract)</td>
+</tr>
+<tr class="even">
+<td><code>FamixTSXContainer</code></td>
+<td>No direct counterpart (abstract)</td>
+</tr>
+<tr class="odd">
+<td><code>FamixTSXElement</code></td>
+<td><code>JsxElement</code></td>
+</tr>
+<tr class="even">
+<td><code>FamixTSXSelfClosingElement</code></td>
+<td><code>JsxSelfClosingElement</code></td>
+</tr>
+<tr class="odd">
+<td><code>FamixTSXFragment</code></td>
+<td><code>JsxFragment</code></td>
+</tr>
+<tr class="even">
+<td><code>FamixTSXExpression</code></td>
+<td><code>JsxExpression</code></td>
+</tr>
+<tr class="odd">
+<td><code>FamixTSXText</code></td>
+<td><code>JsxText</code></td>
+</tr>
+<tr class="even">
+<td><code>FamixTSXAttribute</code></td>
+<td><code>JsxAttribute</code></td>
+</tr>
+<tr class="odd">
+<td><code>FamixTSXSpreadAttribute</code></td>
+<td><code>JsxSpreadAttribute</code></td>
+</tr>
+</tbody>
+</table>
+<p>Right now the importer is able to accept <code>.tsx</code> files, but capturing TSX specific entities are yet to be added into the importer.</p>
+</section>
+</section>
+</section>
+<section id="ai-assistance" class="level2">
+<h2 class="anchored" data-anchor-id="ai-assistance">AI Assistance</h2>
+<p>AI tools were valuable throughout this project. The biggest challenge during development was adding the new concretization structure, a change that touched many entities and many parts of the codebase. With the help of AI, I was able to determine the full scope of this change and implement it more quickly.</p>
+<p>AI also helped me understand the structure of the metamodel and the importer’s parsing logic, which made it easier to implement the parametric associations and the Entity Typing changes. It made repetitive changes easier, and helped me with options when making design decisions.</p>
+</section>
+<section id="where-to-go-from-here" class="level2">
+<h2 class="anchored" data-anchor-id="where-to-go-from-here">Where to Go From Here</h2>
+<p>There are lots of different directions this project could take. The most immediate would be to complete the parametric associations and their related entities, starting with References, on which Parametric Reference depends. After that, a separate Pharo metamodel for TSX, built on top of <code>FamixTypeScript</code>, can be created and integrated into the importer. The Moose post on <a href="https://modularmoose.org/blog/2021-05-15-connecting-meta-models/">connecting and extending metamodels</a> could be of great help for this. Finally, the importer itself could benefit from a refactor. The <code>EntityDictionary</code> has many separate maps for different kinds of entities, several of which are rarely used. A redesign of these global maps to better serve the parser logic would be a great step in making the importer easier to maintain in the future.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'cfuhrman';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/fuhrmanator\.github\.io\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
